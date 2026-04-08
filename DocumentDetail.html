@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>รายละเอียดเอกสาร</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600;700&display=swap');
+
+      :root {
+        --bg: linear-gradient(180deg, #f7f5ef 0%, #eef6f5 100%);
+        --surface: rgba(255, 255, 255, 0.88);
+        --surface-soft: #fbfdfd;
+        --text: #1f2937;
+        --muted: #64748b;
+        --line: rgba(148, 163, 184, 0.18);
+        --brand: #0f766e;
+        --brand-strong: #115e59;
+        --brand-soft: #ccfbf1;
+        --blue-soft: #dbeafe;
+        --amber-soft: #fef3c7;
+        --rose-soft: #ffe4e6;
+        --shadow: 0 26px 60px rgba(15, 23, 42, 0.10);
+        --danger: #b91c1c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: 'Taviraj', serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .page {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 96px 16px 32px;
+      }
+
+      .floating-back {
+        position: fixed;
+        left: 22px;
+        top: 18px;
+        z-index: 2400;
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        min-width: 88px;
+        min-height: 56px;
+        padding: 12px 18px;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        box-shadow: 0 18px 32px rgba(15, 118, 110, 0.28);
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .panel,
+      .metric-card,
+      .detail-card,
+      .table-card {
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .notice,
+      .error,
+      .updated-at,
+      .subtle {
+        color: var(--muted);
+      }
+
+      .notice,
+      .error,
+      .updated-at {
+        margin-top: 10px;
+        font-size: 12px;
+      }
+
+      .notice,
+      .error {
+        display: none;
+        padding: 11px 12px;
+        border-radius: 14px;
+        font-weight: 600;
+      }
+
+      .notice {
+        background: var(--brand-soft);
+        color: var(--brand-strong);
+      }
+
+      .error {
+        background: var(--rose-soft);
+        color: var(--danger);
+      }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .hero-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .hero-sub {
+        margin-top: 8px;
+        max-width: 760px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .chip.pending { background: var(--amber-soft); color: #b45309; }
+      .chip.paid { background: #dcfce7; color: #166534; }
+      .chip.cancelled { background: var(--rose-soft); color: #b91c1c; }
+
+      .action-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .button.primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+      }
+
+      .button.secondary {
+        color: var(--brand-strong);
+        background: #ffffff;
+        border: 1px solid rgba(15, 118, 110, 0.18);
+      }
+
+      .button.danger {
+        color: #ffffff;
+        background: linear-gradient(135deg, #dc2626, #f97316);
+      }
+
+      .button.ghost {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.58);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+      }
+
+      .button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .metric-grid,
+      .detail-grid,
+      .table-grid {
+        display: grid;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .metric-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .metric-card {
+        padding: 16px;
+      }
+
+      .metric-label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .metric-value {
+        margin-top: 10px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .detail-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .detail-card {
+        padding: 18px;
+      }
+
+      .detail-title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .detail-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .detail-item {
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .detail-item:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+
+      .detail-label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .detail-value {
+        margin-top: 5px;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .table-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .table-card {
+        overflow: hidden;
+      }
+
+      .table-header {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .table-title {
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .table-sub {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .table-wrap {
+        overflow: auto;
+        background: #ffffff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+      }
+
+      th {
+        font-size: 12px;
+        color: var(--muted);
+        background: #f8fafc;
+      }
+
+      .empty-state {
+        padding: 18px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .loading {
+        opacity: 0.72;
+        pointer-events: none;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .page,
+      #app {
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.26s ease,
+          transform 0.3s ease;
+        will-change: opacity, transform;
+      }
+
+      body.page-ready .page,
+      body.page-ready #app {
+        opacity: 1;
+        transform: none;
+      }
+
+      body.page-leaving .page,
+      body.page-leaving #app {
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+      }
+
+      .button,
+      .floating-back,
+      .chip {
+        transition:
+          transform 0.14s ease,
+          box-shadow 0.14s ease,
+          border-color 0.14s ease,
+          background 0.14s ease,
+          opacity 0.14s ease;
+      }
+
+      body.is-busy .button,
+      body.is-busy .floating-back,
+      body.is-busy button {
+        cursor: progress !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .page,
+        #app,
+        .floating-back,
+        .chip,
+        .button {
+          transition: none !important;
+          transform: none !important;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .metric-grid,
+        .detail-grid,
+        .table-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .floating-back {
+          left: 14px;
+          top: 14px;
+          padding: 11px 14px;
+          min-width: 82px;
+          min-height: 52px;
+        }
+
+        .hero {
+          padding: 18px;
+        }
+
+        .hero-top {
+          flex-direction: column;
+        }
+
+        .hero-title {
+          font-size: 28px;
+        }
+      }
+    </style>
+    <script>
+      (function bootstrapStaticAssets() {
+        window.APP_STATIC_CONFIG = window.APP_STATIC_CONFIG || {};
+        window.__staticConfigReady = Promise.resolve();
+
+        const host = window.location.hostname || '';
+        const isAppsScriptHost = host.includes('script.google');
+        if (isAppsScriptHost) {
+          return;
+        }
+
+        const themeLink = document.createElement('link');
+        themeLink.rel = 'stylesheet';
+        themeLink.href = 'site.css';
+        document.head.appendChild(themeLink);
+
+        window.__staticConfigReady = new Promise((resolve) => {
+          const configScript = document.createElement('script');
+          configScript.src = 'config.js';
+          configScript.onload = resolve;
+          configScript.onerror = resolve;
+          document.head.appendChild(configScript);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <button class="floating-back" onclick="openDashboard()">กลับ</button>
+
+    <div class="page" id="app">
+
+      <div class="notice" id="noticeBox"></div>
+      <div class="error" id="errorBox"></div>
+      <div class="updated-at" id="updatedAt">กำลังโหลดรายละเอียดเอกสาร...</div>
+
+      <section class="panel hero">
+        <div class="hero-top">
+          <div>
+            <div class="hero-title" id="heroTitle">รายละเอียดเอกสาร</div>
+            <div class="hero-sub" id="heroSubtitle">กำลังเตรียมข้อมูลเอกสาร...</div>
+          </div>
+          <div id="statusChip" class="chip pending">กำลังโหลด</div>
+        </div>
+        <div class="action-row">
+          <button class="button primary" id="editBtn" onclick="editRecord()">แก้ไขข้อมูล</button>
+          <button class="button secondary" id="printRateBtn" onclick="printDocument('rateStatement')">พิมพ์ใบแจ้งอัตราค่าบริการ</button>
+          <button class="button secondary" id="printInvoiceBtn" onclick="printDocument('serviceInvoice')">พิมพ์ใบแจ้งค่าบริการ</button>
+          <button class="button danger" id="cancelBtn" onclick="cancelRecord()" hidden>ยกเลิกใบแจ้งหนี้</button>
+          <button class="button ghost" onclick="openLedgerSheet()">เปิดทะเบียนลูกหนี้</button>
+        </div>
+      </section>
+
+      <section class="metric-grid" id="metricGrid"></section>
+
+      <section class="detail-grid">
+        <div class="detail-card">
+          <div class="detail-title">ข้อมูลหัวเอกสาร</div>
+          <div class="detail-list" id="headerDetailList"></div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-title">ข้อมูลระบบและสถานะ</div>
+          <div class="detail-list" id="systemDetailList"></div>
+        </div>
+      </section>
+
+      <section class="table-grid">
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">รายการใบแจ้งอัตราค่าบริการ</div>
+            <div class="table-sub">ข้อมูลรายการที่ใช้สร้างเอกสารฝั่งอัตราค่าบริการ</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:56px">ลำดับ</th>
+                  <th>Test No.</th>
+                  <th>รายละเอียด</th>
+                  <th style="width:90px">จำนวน</th>
+                  <th style="width:130px">ราคาต่อหน่วย</th>
+                  <th style="width:130px">รวม</th>
+                </tr>
+              </thead>
+              <tbody id="rateItemsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <div class="table-title">รายการใบแจ้งค่าบริการ</div>
+            <div class="table-sub">ข้อมูลรายการที่ใช้สร้างเอกสารฝั่งค่าบริการ</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:56px">ลำดับ</th>
+                  <th>Test No.</th>
+                  <th>รายละเอียด</th>
+                  <th style="width:90px">จำนวน</th>
+                  <th style="width:130px">ราคาต่อหน่วย</th>
+                  <th style="width:130px">รวม</th>
+                </tr>
+              </thead>
+              <tbody id="invoiceItemsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      let appLinks = {};
+      let currentRecord = null;
+
+      function formatMoney(value) {
+        return Number(value || 0).toLocaleString('th-TH', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      function setLoading(loading) {
+        document.getElementById('app').classList.toggle('loading', loading);
+        document.body.classList.toggle('is-busy', loading);
+        ['editBtn', 'printRateBtn', 'printInvoiceBtn', 'cancelBtn'].forEach((id) => {
+          const button = document.getElementById(id);
+          if (button) {
+            button.disabled = loading;
+          }
+        });
+      }
+
+      function showError(message) {
+        const box = document.getElementById('errorBox');
+        box.textContent = message;
+        box.style.display = 'block';
+      }
+
+      function clearError() {
+        const box = document.getElementById('errorBox');
+        box.textContent = '';
+        box.style.display = 'none';
+      }
+
+      function showNotice(message) {
+        const box = document.getElementById('noticeBox');
+        box.textContent = message;
+        box.style.display = 'block';
+      }
+
+      function clearNotice() {
+        const box = document.getElementById('noticeBox');
+        box.textContent = '';
+        box.style.display = 'none';
+      }
+
+      function isAppsScriptRuntime() {
+        return Boolean(window.google && google.script && google.script.run);
+      }
+
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      function readStoredApiBase() {
+        try {
+          return window.localStorage.getItem('debtor_api_base') || '';
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function writeStoredApiBase(value) {
+        try {
+          window.localStorage.setItem('debtor_api_base', value);
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+
+      async function waitStaticConfigReady() {
+        if (window.__staticConfigReady) {
+          await window.__staticConfigReady;
+        }
+      }
+
+      function normalizeApiBase(value) {
+        const raw = String(value || '').trim();
+        if (!raw || raw.includes('PASTE_YOUR_DEPLOYMENT_ID')) {
+          return '';
+        }
+
+        try {
+          const url = new URL(raw, window.location.href);
+          url.searchParams.set('mode', 'api');
+          url.hash = '';
+          return url.toString();
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function getConfigApiBaseUrl() {
+        const configValue = normalizeApiBase(window.APP_STATIC_CONFIG && window.APP_STATIC_CONFIG.apiBase);
+        if (configValue) {
+          writeStoredApiBase(configValue);
+          return configValue;
+        }
+        return '';
+      }
+
+      function getApiBaseUrl() {
+        const queryValue = normalizeApiBase(getQueryParam('apiBase'));
+        if (queryValue) {
+          writeStoredApiBase(queryValue);
+          return queryValue;
+        }
+
+        const configValue = getConfigApiBaseUrl();
+        if (configValue) {
+          return configValue;
+        }
+
+        const storedValue = normalizeApiBase(readStoredApiBase());
+        if (storedValue) {
+          return storedValue;
+        }
+
+        return '';
+      }
+
+      function ensureApiBaseUrl() {
+        const existing = getApiBaseUrl();
+        if (existing) {
+          return existing;
+        }
+
+        const input = window.prompt(
+          'กรอกลิงก์ /exec ของ Apps Script Web App สำหรับเชื่อมกับระบบ เช่น https://script.google.com/macros/s/.../exec'
+        );
+        const normalized = normalizeApiBase(input);
+        if (!normalized) {
+          throw new Error('ยังไม่ได้ตั้งค่า API URL สำหรับใช้งานหน้าเว็บบน GitHub');
+        }
+
+        writeStoredApiBase(normalized);
+        return normalized;
+      }
+
+      function buildApiUrl(action, params) {
+        const url = new URL(ensureApiBaseUrl());
+        url.searchParams.set('mode', 'api');
+        if (action) {
+          url.searchParams.set('action', action);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
+      function buildStaticPageUrl(fileName, params) {
+        const url = new URL(fileName, window.location.href);
+        const apiBase = getApiBaseUrl();
+        if (apiBase) {
+          url.searchParams.set('apiBase', apiBase);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
+      function buildDashboardPageUrl() {
+        return isAppsScriptRuntime() ? appLinks.dashboardUrl : buildStaticPageUrl('Dashboard.html');
+      }
+
+      function buildFormPageUrl(recordId) {
+        return isAppsScriptRuntime()
+          ? `${currentRecord.links.editUrl}`
+          : buildStaticPageUrl('InvoiceForm.html', { recordId });
+      }
+
+      function buildDetailPageUrl(recordId) {
+        return isAppsScriptRuntime()
+          ? `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`
+          : buildStaticPageUrl('DocumentDetail.html', { recordId });
+      }
+
+      function parseApiPayload(text) {
+        try {
+          return JSON.parse(text);
+        } catch (error) {
+          throw new Error('API ตอบกลับไม่ถูกต้อง');
+        }
+      }
+
+      async function apiGetViaFetch(url) {
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'omit'
+        });
+        const payload = parseApiPayload(await response.text());
+        if (!response.ok || !payload.ok) {
+          throw new Error((payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้');
+        }
+        return payload.data;
+      }
+
+      function apiGetViaJsonp(url) {
+        return new Promise((resolve, reject) => {
+          const callbackName = '__debtorApiCb' + Date.now() + Math.floor(Math.random() * 1000);
+          const script = document.createElement('script');
+          let timeoutId = 0;
+
+          function cleanup() {
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            if (script.parentNode) {
+              script.parentNode.removeChild(script);
+            }
+          }
+
+          window[callbackName] = (payload) => {
+            cleanup();
+            if (!payload || !payload.ok) {
+              reject(new Error((payload && payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้'));
+              return;
+            }
+            resolve(payload.data);
+          };
+
+          script.onerror = () => {
+            cleanup();
+            reject(new Error('ไม่สามารถเชื่อมต่อ API ได้'));
+          };
+
+          timeoutId = window.setTimeout(() => {
+            cleanup();
+            reject(new Error('หมดเวลารอการตอบกลับจาก API'));
+          }, 20000);
+
+          const separator = url.includes('?') ? '&' : '?';
+          script.src = `${url}${separator}callback=${encodeURIComponent(callbackName)}`;
+          document.head.appendChild(script);
+        });
+      }
+
+      async function apiGet(action, params) {
+        const url = buildApiUrl(action, params);
+        try {
+          return await apiGetViaFetch(url);
+        } catch (error) {
+          return apiGetViaJsonp(url);
+        }
+      }
+
+      async function apiPost(action, body) {
+        const url = buildApiUrl(action);
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(body || {})
+          });
+          const payload = parseApiPayload(await response.text());
+          if (!response.ok || !payload.ok) {
+            throw new Error((payload.error && payload.error.message) || 'ไม่สามารถส่งคำขอไปยัง API ได้');
+          }
+          return payload.data;
+        } catch (error) {
+          if (error instanceof TypeError) {
+            const blockedError = new Error(
+              'เบราว์เซอร์ไม่สามารถส่งคำขอยกเลิกไปยัง Apps Script API ได้ อาจติดข้อจำกัด CORS ของการเปิดผ่าน GitHub Pages'
+            );
+            blockedError.code = 'cors_post_blocked';
+            throw blockedError;
+          }
+          throw error;
+        }
+      }
+
+      function submitCancelThroughForm(recordId, reason) {
+        const actionUrl = buildApiUrl('cancel', {
+          responseMode: 'redirect',
+          returnTo: buildStaticPageUrl('DocumentDetail.html', { recordId }),
+          errorTo: buildStaticPageUrl('DocumentDetail.html', { recordId })
+        });
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = actionUrl;
+        form.style.display = 'none';
+
+        [
+          { name: 'recordId', value: recordId || '' },
+          { name: 'reason', value: reason || '' }
+        ].forEach((field) => {
+          const input = document.createElement('textarea');
+          input.name = field.name;
+          input.value = field.value;
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+
+      function navigateTo(url) {
+        if (!url) {
+          showError('ยังไม่พบ URL ที่ต้องการใช้งาน กรุณา Deploy ใหม่อีกครั้ง');
+          return;
+        }
+        if (document.body.classList.contains('page-leaving')) {
+          return;
+        }
+        document.body.classList.remove('page-ready');
+        document.body.classList.add('page-leaving');
+        window.setTimeout(() => {
+          window.location.assign(url);
+        }, 130);
+      }
+
+      function initializePageMotion() {
+        const ready = () => {
+          document.body.classList.remove('page-leaving');
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+              document.body.classList.add('page-ready');
+            });
+          });
+        };
+
+        ready();
+        window.addEventListener('pageshow', ready);
+      }
+
+      function openUrl(url) {
+        if (!url) {
+          showError('ยังไม่พบลิงก์เอกสารที่ต้องการใช้งาน');
+          return;
+        }
+        window.open(url, '_blank', 'noopener');
+      }
+
+      function openDashboard() {
+        navigateTo(buildDashboardPageUrl());
+      }
+
+      function openLedgerSheet() {
+        openUrl(appLinks.ledgerUrl);
+      }
+
+      function editRecord() {
+        if (!currentRecord || !currentRecord.recordId) {
+          showError('ไม่พบข้อมูลเอกสารสำหรับแก้ไข');
+          return;
+        }
+        navigateTo(buildFormPageUrl(currentRecord.recordId));
+      }
+
+      async function cancelRecord() {
+        if (!currentRecord || !currentRecord.recordId) {
+          showError('ไม่พบข้อมูลเอกสารที่ต้องการยกเลิก');
+          return;
+        }
+
+        if (currentRecord.displayStatus === 'ยกเลิกใบแจ้งหนี้' || currentRecord.systemStatus === 'CANCELLED') {
+          showError('เอกสารนี้ถูกยกเลิกไปแล้ว');
+          return;
+        }
+
+        const confirmed = window.confirm(`ต้องการยกเลิกใบแจ้งหนี้เลขที่ ${currentRecord.invoiceNumber || '-'} ใช่หรือไม่`);
+        if (!confirmed) {
+          return;
+        }
+
+        const reasonInput = window.prompt('ระบุเหตุผลการยกเลิก (เว้นว่างได้)', currentRecord.cancelReason || '');
+        if (reasonInput === null) {
+          return;
+        }
+
+        const reason = String(reasonInput || '').trim();
+        setLoading(true);
+        clearError();
+        clearNotice();
+
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler(() => {
+              setLoading(false);
+              navigateTo(buildDetailPageUrl(currentRecord.recordId));
+            })
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            })
+            .cancelInvoiceFromWeb(currentRecord.recordId, reason);
+          return;
+        }
+
+        try {
+          await apiPost('cancel', {
+            recordId: currentRecord.recordId,
+            reason
+          });
+          setLoading(false);
+          navigateTo(buildDetailPageUrl(currentRecord.recordId));
+        } catch (error) {
+          if (error && error.code === 'cors_post_blocked') {
+            showNotice('กำลังสลับไปยกเลิกเอกสารผ่าน Apps Script โดยตรง');
+            submitCancelThroughForm(currentRecord.recordId, reason);
+            return;
+          }
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      async function printDocument(type) {
+        if (!currentRecord || !currentRecord.recordId) {
+          showError('ไม่พบข้อมูลเอกสารสำหรับพิมพ์');
+          return;
+        }
+        setLoading(true);
+        clearError();
+        clearNotice();
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler((url) => {
+              setLoading(false);
+              showNotice('เปิดไฟล์ PDF สำหรับพิมพ์เรียบร้อย');
+              openUrl(url);
+            })
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            })
+            .getStoredDocumentUrl(currentRecord.recordId, type);
+          return;
+        }
+
+        try {
+          const data = await apiGet('documentUrl', {
+            recordId: currentRecord.recordId,
+            type
+          });
+          setLoading(false);
+          showNotice('เปิดไฟล์ PDF สำหรับพิมพ์เรียบร้อย');
+          openUrl(data.url);
+        } catch (error) {
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function statusClass(status) {
+        if (status === 'ชำระแล้ว') {
+          return 'paid';
+        }
+        if (status === 'ยกเลิกใบแจ้งหนี้') {
+          return 'cancelled';
+        }
+        return 'pending';
+      }
+
+      function renderMetricCards(record) {
+        const cards = [
+          ['เลขที่ใบแจ้ง', record.invoiceNumber || '-'],
+          ['ยอดลูกหนี้', formatMoney(record.amount)],
+          ['ยอดค้างชำระ', formatMoney(record.outstandingAmount)],
+          ['วันที่ออกเอกสาร', record.issueDateThai || '-']
+        ];
+
+        document.getElementById('metricGrid').innerHTML = cards
+          .map(
+            (item, index) => `
+              <div class="metric-card" style="--enter-delay:${(0.06 + index * 0.05).toFixed(2)}s">
+                <div class="metric-label">${escapeHtml(item[0])}</div>
+                <div class="metric-value">${escapeHtml(item[1])}</div>
+              </div>
+            `
+          )
+          .join('');
+      }
+
+      function renderDetailList(targetId, items) {
+        const target = document.getElementById(targetId);
+        target.innerHTML = items
+          .map(
+            (item, index) => `
+              <div class="detail-item" style="animation:surfaceRise 0.58s ${(0.04 + index * 0.03).toFixed(2)}s cubic-bezier(0.22, 1, 0.36, 1) both">
+                <div class="detail-label">${escapeHtml(item.label)}</div>
+                <div class="detail-value">${escapeHtml(item.value || '-')}</div>
+              </div>
+            `
+          )
+          .join('');
+      }
+
+      function renderItems(targetId, items) {
+        const target = document.getElementById(targetId);
+        if (!Array.isArray(items) || !items.length) {
+          target.innerHTML = `<tr><td colspan="6" class="empty-state">ไม่มีรายการในเอกสารนี้</td></tr>`;
+          return;
+        }
+
+        target.innerHTML = items
+          .map(
+            (item, index) => `
+              <tr style="--row-delay:${(0.03 + index * 0.028).toFixed(2)}s">
+                <td>${item.line}</td>
+                <td>${escapeHtml(item.label || item.code || '-')}</td>
+                <td>${escapeHtml(item.detail || '-')}</td>
+                <td>${escapeHtml(String(item.quantity || 0))}</td>
+                <td>${formatMoney(item.unitPrice)}</td>
+                <td>${formatMoney(item.totalPrice)}</td>
+              </tr>
+            `
+          )
+          .join('');
+      }
+
+      function render(record, links) {
+        currentRecord = record;
+        appLinks = links || record.links || {};
+        clearError();
+        clearNotice();
+
+        document.getElementById('heroTitle').textContent = record.invoiceNumber || 'รายละเอียดเอกสาร';
+        document.getElementById('heroSubtitle').textContent =
+          'เอกสารนี้ถูกสร้างและเก็บ PDF ไว้ในระบบแล้ว คุณสามารถตรวจสอบรายละเอียด แก้ไขข้อมูล และพิมพ์เอกสารจากหน้านี้ได้ทันที';
+
+        const statusChip = document.getElementById('statusChip');
+        statusChip.className = 'chip ' + statusClass(record.displayStatus);
+        statusChip.textContent = record.displayStatus || 'ไม่ระบุสถานะ';
+        const cancelBtn = document.getElementById('cancelBtn');
+        cancelBtn.hidden = record.displayStatus === 'ยกเลิกใบแจ้งหนี้' || record.systemStatus === 'CANCELLED';
+
+        renderMetricCards(record);
+        renderDetailList('headerDetailList', [
+          { label: 'ชื่อผู้ใช้บริการ', value: record.customerName },
+          { label: 'ที่อยู่', value: record.customerAddress },
+          { label: 'วันที่ออกใบแจ้งหนี้', value: record.issueDateThai },
+          { label: 'วันที่ชำระหนี้', value: record.paidDate || '-' },
+          { label: 'ยอดใบแจ้งอัตราค่าบริการ', value: formatMoney(record.rateTotal) },
+          { label: 'ยอดใบแจ้งค่าบริการ (ยอดลูกหนี้)', value: formatMoney(record.invoiceTotal) }
+        ]);
+        renderDetailList('systemDetailList', [
+          { label: 'รหัสรายการ', value: record.recordId },
+          { label: 'สถานะเอกสาร', value: record.displayStatus },
+          { label: 'สร้างเมื่อ', value: record.createdAt || '-' },
+          { label: 'แก้ไขล่าสุด', value: record.updatedAt || '-' },
+          { label: 'ยกเลิกเมื่อ', value: record.cancelledAt || '-' },
+          { label: 'หมายเหตุยกเลิก', value: record.cancelReason || '-' }
+        ]);
+        renderItems('rateItemsBody', record.rateItems || []);
+        renderItems('invoiceItemsBody', record.invoiceItems || []);
+
+        document.getElementById('updatedAt').textContent = 'อัปเดตล่าสุด: ' + (record.updatedAt || record.createdAt || '-');
+        setLoading(false);
+      }
+
+      async function bootstrap() {
+        const recordId = getQueryParam('recordId');
+        if (!recordId) {
+          showError('ไม่พบรหัสเอกสารที่ต้องการเปิด');
+          return;
+        }
+
+        setLoading(true);
+        clearError();
+        clearNotice();
+        await waitStaticConfigReady();
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler((data) => {
+              render(data.record, data.links || {});
+            })
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            })
+            .getDocumentDetailBootstrap(recordId);
+          return;
+        }
+
+        try {
+          const data = await apiGet('detail', { recordId });
+          render(data.record, data.links || {});
+        } catch (error) {
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      initializePageMotion();
+      bootstrap();
+    </script>
+  </body>
+</html>

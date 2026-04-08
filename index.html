@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>กำลังเปิด Dashboard</title>
+    <meta http-equiv="refresh" content="0; url=Dashboard.html" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600;700&display=swap');
+
+      :root {
+        --bg: linear-gradient(180deg, #f8f5ef 0%, #eef6f5 100%);
+        --surface: rgba(255, 255, 255, 0.92);
+        --text: #1f2937;
+        --muted: #64748b;
+        --brand: #0f766e;
+        --brand-soft: #ccfbf1;
+        --line: rgba(148, 163, 184, 0.18);
+        --shadow: 0 22px 48px rgba(15, 23, 42, 0.10);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: 'Taviraj', serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(20, 184, 166, 0.12), transparent 28%),
+          radial-gradient(circle at top right, rgba(59, 130, 246, 0.10), transparent 24%),
+          var(--bg);
+      }
+
+      .card {
+        width: min(100%, 560px);
+        padding: 28px 24px;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        text-align: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--brand-soft);
+        color: var(--brand);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 14px 0 8px;
+        font-size: 32px;
+        line-height: 1.2;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .spinner {
+        width: 56px;
+        height: 56px;
+        margin: 22px auto 18px;
+        border-radius: 50%;
+        border: 4px solid rgba(15, 118, 110, 0.14);
+        border-top-color: var(--brand);
+        animation: spin 0.9s linear infinite;
+      }
+
+      .link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 14px;
+        color: var(--brand);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="eyebrow">ระบบทะเบียนคุมลูกหนี้</div>
+      <h1>กำลังเปิดหน้า Dashboard</h1>
+      <p>ถ้าเว็บยังไม่เปลี่ยนหน้าอัตโนมัติ ให้กดปุ่มด้านล่างเพื่อเข้าสู่หน้าหลักของระบบ</p>
+      <div class="spinner" aria-hidden="true"></div>
+      <a class="link" id="dashboardLink" href="Dashboard.html">เปิด Dashboard</a>
+    </main>
+
+    <script>
+      (function redirectToDashboard() {
+        const target = new URL('Dashboard.html', window.location.href);
+        target.search = window.location.search;
+        target.hash = window.location.hash;
+        const link = document.getElementById('dashboardLink');
+        if (link) {
+          link.href = target.toString();
+        }
+        window.location.replace(target.toString());
+      })();
+    </script>
+  </body>
+</html>

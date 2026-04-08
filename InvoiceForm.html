@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600;700&display=swap');
+
+      :root {
+        --page-bg: #f6f1e8;
+        --surface: rgba(255, 252, 247, 0.96);
+        --surface-soft: #fbf7f1;
+        --line: rgba(148, 163, 184, 0.22);
+        --text: #1f2937;
+        --muted: #64748b;
+        --brand: #0f766e;
+        --brand-strong: #115e59;
+        --brand-soft: #ccfbf1;
+        --blue-soft: #eff6ff;
+        --amber-soft: #ffedd5;
+        --rose-soft: #fee2e2;
+        --violet-soft: #ede9fe;
+        --ok: #15803d;
+        --danger: #b91c1c;
+        --shadow: 0 20px 42px rgba(148, 163, 184, 0.16);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: "Taviraj", serif;
+        background:
+          radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 28%),
+          radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 20%),
+          linear-gradient(180deg, #f8f5ef 0%, #f4efe6 100%);
+      }
+
+      body.is-date-picker-open {
+        overflow: hidden;
+      }
+
+      .page {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 96px 16px 32px;
+      }
+
+      .panel,
+      .summary-card {
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .panel-sub,
+      .hint,
+      .updated-at,
+      .helper {
+        color: var(--muted);
+      }
+
+      .form-actions,
+      .inline-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .button.primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+      }
+
+      .button.secondary {
+        color: var(--brand-strong);
+        background: #ffffff;
+        border: 1px solid rgba(15, 118, 110, 0.18);
+      }
+
+      .button.ghost {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.58);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+      }
+
+      .button.warn {
+        color: #ffffff;
+        background: linear-gradient(135deg, #dc2626, #f87171);
+      }
+
+      .button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
+      .button.big-save {
+        width: min(100%, 360px);
+        min-height: 62px;
+        font-size: 18px;
+        box-shadow: 0 18px 36px rgba(15, 118, 110, 0.22);
+      }
+
+      .notice,
+      .error,
+      .updated-at {
+        margin-top: 10px;
+        font-size: 12px;
+      }
+
+      .notice,
+      .error {
+        display: none;
+        padding: 11px 12px;
+        border-radius: 14px;
+        font-weight: 600;
+      }
+
+      .notice {
+        background: var(--brand-soft);
+        color: var(--brand-strong);
+      }
+
+      .error {
+        background: var(--rose-soft);
+        color: var(--danger);
+      }
+
+      .panel {
+        margin-top: 16px;
+        overflow: hidden;
+      }
+
+      .floating-back {
+        position: fixed;
+        left: 22px;
+        top: 18px;
+        z-index: 2400;
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        min-width: 88px;
+        min-height: 56px;
+        padding: 12px 18px;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        box-shadow: 0 18px 32px rgba(15, 118, 110, 0.28);
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .floating-back:hover {
+        transform: translateY(-1px);
+      }
+
+      .form-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 24px 24px 18px;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.9)),
+          linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(59, 130, 246, 0.06));
+      }
+
+      .form-hero::after {
+        content: "";
+        position: absolute;
+        right: -42px;
+        top: -46px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(20, 184, 166, 0.16), transparent 70%);
+        pointer-events: none;
+      }
+
+      .form-hero-top {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+        gap: 18px;
+        align-items: start;
+      }
+
+      .form-hero-copy,
+      .form-hero-side {
+        min-width: 0;
+      }
+
+      .form-hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 13px;
+        border-radius: 999px;
+        background: rgba(204, 251, 241, 0.92);
+        color: var(--brand-strong);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+
+      .form-hero-title {
+        margin-top: 14px;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1.08;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .form-hero-subtitle {
+        margin-top: 10px;
+        max-width: 48ch;
+        font-size: 14px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .form-hero-side {
+        display: grid;
+        gap: 12px;
+      }
+
+      .hero-badge {
+        padding: 16px 18px;
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        background: rgba(255, 255, 255, 0.86);
+      }
+
+      .hero-badge.mode {
+        background: linear-gradient(135deg, rgba(236, 253, 245, 0.96), rgba(255, 255, 255, 0.92));
+      }
+
+      .hero-badge-label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .hero-badge-value {
+        margin-top: 8px;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.2;
+        word-break: break-word;
+      }
+
+      .flash-area {
+        position: relative;
+        z-index: 1;
+        margin-top: 18px;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .panel-title {
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .panel-sub {
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
+      .panel-body {
+        padding: 16px;
+      }
+
+      .status-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .status-chip {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .status-chip .label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .status-chip .value {
+        margin-top: 8px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .document-meta-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+      }
+
+      .document-meta-grid > .field {
+        min-width: 0;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .field label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .field input,
+      .field textarea,
+      .field select {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 14px;
+        background: #ffffff;
+        color: var(--text);
+        padding: 11px 12px;
+        font: inherit;
+        outline: none;
+      }
+
+      .field input:not([type="hidden"]),
+      .field select,
+      .thai-date-trigger {
+        min-height: 50px;
+      }
+
+      .document-meta-grid input:not([type="hidden"]),
+      .document-meta-grid .thai-date-trigger,
+      .document-meta-grid .thai-date-field {
+        width: 100%;
+      }
+
+      .document-meta-grid input:not([type="hidden"]),
+      .document-meta-grid .thai-date-trigger {
+        height: 54px;
+        min-height: 54px;
+      }
+
+      .document-meta-grid input[readonly] {
+        background: #ffffff;
+      }
+
+      .field input[readonly] {
+        background: #f8fafc;
+      }
+
+      .field textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+
+      .thai-date-field {
+        position: relative;
+      }
+
+      .thai-date-trigger {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 11px 12px;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 14px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .thai-date-trigger-text {
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+
+      .thai-date-trigger-label {
+        display: block;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.15;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .thai-date-trigger-icon {
+        flex: 0 0 auto;
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(204, 251, 241, 0.85), rgba(239, 246, 255, 0.9));
+        color: var(--brand-strong);
+      }
+
+      .thai-date-trigger-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .thai-date-popover {
+        position: fixed;
+        inset: 0;
+        z-index: 3200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        padding: 24px 18px;
+        background: rgba(15, 23, 42, 0.28);
+        backdrop-filter: blur(12px) saturate(1.02);
+        -webkit-backdrop-filter: blur(12px) saturate(1.02);
+      }
+
+      .thai-date-popover[hidden] {
+        display: none;
+      }
+
+      .thai-date-dialog {
+        width: min(680px, 100%);
+        max-height: min(calc(100dvh - 48px), 820px);
+        overflow: auto;
+        padding: 20px;
+        border-radius: 24px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: rgba(255, 255, 255, 0.985);
+        box-shadow: 0 34px 74px rgba(15, 23, 42, 0.24);
+      }
+
+      .thai-date-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .thai-date-title {
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .thai-date-subtitle {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .thai-date-close {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 12px;
+        background: #ffffff;
+        color: var(--muted);
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .thai-date-selects {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .thai-date-select-field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .thai-date-select-field label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .thai-date-select-field select {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 14px;
+        background: #ffffff;
+        color: var(--text);
+        padding: 10px 12px;
+        font: inherit;
+        outline: none;
+      }
+
+      .thai-date-calendar {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(148, 163, 184, 0.14);
+      }
+
+      .thai-date-weekdays,
+      .thai-date-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .thai-date-weekdays {
+        margin-bottom: 10px;
+      }
+
+      .thai-date-weekday {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .thai-date-day,
+      .thai-date-empty {
+        min-height: 38px;
+      }
+
+      .thai-date-day {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        border-radius: 12px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        font-size: 13px;
+        cursor: pointer;
+      }
+
+      .thai-date-day.is-selected {
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        border-color: transparent;
+        color: #ffffff;
+        box-shadow: 0 12px 22px rgba(15, 118, 110, 0.22);
+      }
+
+      .thai-date-day.is-today:not(.is-selected) {
+        border-color: rgba(15, 118, 110, 0.34);
+        color: var(--brand-strong);
+      }
+
+      .thai-date-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .thai-date-ghost {
+        appearance: none;
+        border: 0;
+        background: none;
+        color: var(--brand-strong);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .summary-card.rate { background: linear-gradient(180deg, var(--blue-soft) 0%, #ffffff 100%); }
+      .summary-card.invoice { background: linear-gradient(180deg, var(--amber-soft) 0%, #ffffff 100%); }
+
+      .summary-card .label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .summary-card .big {
+        margin-top: 10px;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .table-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .table-card {
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: var(--surface-soft);
+        overflow: hidden;
+      }
+
+      .table-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .table-head-main {
+        min-width: 0;
+      }
+
+      .table-title {
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .table-sub {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .table-head-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 68px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(20, 184, 166, 0.10);
+        color: var(--brand-strong);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        max-height: 820px;
+        background: #ffffff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+      }
+
+      th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #fbfaf8;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      td select,
+      td input {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.26);
+        border-radius: 12px;
+        padding: 10px 11px;
+        font: inherit;
+        background: #ffffff;
+      }
+
+      .line-no {
+        width: 56px;
+        text-align: center;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .line-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 999px;
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+      }
+
+      .row-actions {
+        text-align: center;
+        width: 110px;
+      }
+
+      .row-remove {
+        appearance: none;
+        border: 1px solid rgba(239, 68, 68, 0.16);
+        background: #fff1f2;
+        color: #be123c;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .row-remove:hover {
+        background: #ffe4e6;
+      }
+
+      .footer-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .single-save-wrap {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 6px 0 2px;
+      }
+
+      .edit-context-note {
+        display: none;
+        margin-top: 12px;
+        text-align: center;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .chip.pending { background: var(--amber-soft); color: #c2410c; }
+      .chip.edit { background: var(--brand-soft); color: var(--brand-strong); }
+      .chip.cancelled { background: #fee2e2; color: #b91c1c; }
+
+      .loading {
+        opacity: 0.72;
+        pointer-events: none;
+      }
+
+      .link-row {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .link-row a {
+        color: var(--brand-strong);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .page,
+      #app {
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.26s ease,
+          transform 0.3s ease;
+        will-change: opacity, transform;
+      }
+
+      body.page-ready .page,
+      body.page-ready #app {
+        opacity: 1;
+        transform: none;
+      }
+
+      body.page-leaving .page,
+      body.page-leaving #app {
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+      }
+
+      .button,
+      .floating-back,
+      .row-remove,
+      input,
+      textarea,
+      select {
+        transition:
+          transform 0.14s ease,
+          box-shadow 0.14s ease,
+          border-color 0.14s ease,
+          background 0.14s ease,
+          opacity 0.14s ease;
+      }
+
+      body.is-busy .button,
+      body.is-busy .floating-back,
+      body.is-busy .row-remove,
+      body.is-busy button {
+        cursor: progress !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .page,
+        #app,
+        .button,
+        .row-remove,
+        input,
+        textarea,
+        select {
+          transition: none !important;
+          transform: none !important;
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .form-hero-top,
+        .table-grid,
+        .summary-grid,
+        .status-strip,
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .floating-back {
+          left: 14px;
+          top: 14px;
+          padding: 11px 14px;
+          min-width: 82px;
+          min-height: 52px;
+        }
+
+        .form-hero {
+          padding: 22px 18px 18px;
+        }
+
+        .form-hero-title {
+          font-size: 2rem;
+        }
+
+        .form-hero-subtitle {
+          font-size: 13px;
+        }
+
+        .hero-badge-value {
+          font-size: 19px;
+        }
+
+        .thai-date-popover {
+          padding: 14px 10px;
+        }
+
+        .thai-date-selects {
+          grid-template-columns: 1fr;
+        }
+
+        .thai-date-dialog {
+          padding: 16px;
+          border-radius: 22px;
+          max-height: min(calc(100dvh - 20px), 860px);
+        }
+
+        .table-card-header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .table-head-actions {
+          justify-content: space-between;
+        }
+      }
+    </style>
+    <script>
+      (function bootstrapStaticAssets() {
+        window.APP_STATIC_CONFIG = window.APP_STATIC_CONFIG || {};
+        window.__staticConfigReady = Promise.resolve();
+
+        const host = window.location.hostname || '';
+        const isAppsScriptHost = host.includes('script.google');
+        if (isAppsScriptHost) {
+          return;
+        }
+
+        const themeLink = document.createElement('link');
+        themeLink.rel = 'stylesheet';
+        themeLink.href = 'site.css';
+        document.head.appendChild(themeLink);
+
+        window.__staticConfigReady = new Promise((resolve) => {
+          const configScript = document.createElement('script');
+          configScript.src = 'config.js';
+          configScript.onload = resolve;
+          configScript.onerror = resolve;
+          document.head.appendChild(configScript);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <button class="floating-back" onclick="openDashboard()">กลับ</button>
+
+    <div class="page" id="app">
+      <section class="panel form-hero">
+        <div class="form-hero-top">
+          <div class="form-hero-copy">
+            <div class="form-hero-eyebrow">ระบบออกใบแจ้งหนี้</div>
+            <div class="form-hero-title" id="formHeroTitle">แบบฟอร์มเพิ่มใบแจ้งหนี้</div>
+            <div class="form-hero-subtitle" id="formHeroSubtitle">กรอกข้อมูลหัวเอกสาร รายการบริการ และบันทึกเพื่อสร้าง PDF ตามแม่แบบอัตโนมัติ</div>
+          </div>
+          <div class="form-hero-side">
+            <div class="hero-badge">
+              <div class="hero-badge-label">เลขที่เอกสาร</div>
+              <div class="hero-badge-value" id="heroInvoiceNumber">-</div>
+            </div>
+            <div class="hero-badge mode">
+              <div class="hero-badge-label">โหมดการทำงาน</div>
+              <div class="hero-badge-value" id="heroModeText">เพิ่มรายการใหม่</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flash-area">
+          <div class="notice" id="noticeBox"></div>
+          <div class="error" id="errorBox"></div>
+          <div class="updated-at" id="updatedAt">กำลังเตรียมฟอร์ม...</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">ข้อมูลหัวเอกสาร</div>
+            <div class="panel-sub">กรอกข้อมูลหลักของผู้ใช้บริการและเลขที่เอกสาร</div>
+          </div>
+          <div class="inline-actions">
+            <span class="chip pending" id="modeChip">โหมดเพิ่มรายการใหม่</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="status-strip">
+            <div class="status-chip">
+              <div class="label">เลขที่ใบแจ้ง</div>
+              <div class="value" id="invoiceNumberPreview">-</div>
+            </div>
+            <div class="status-chip">
+              <div class="label">วันที่เอกสาร</div>
+              <div class="value" id="issueDatePreview">-</div>
+            </div>
+            <div class="status-chip">
+              <div class="label">Record ID</div>
+              <div class="value" id="recordIdPreview">-</div>
+            </div>
+            <div class="status-chip">
+              <div class="label">สถานะ</div>
+              <div class="value" id="draftStatusPreview">ร่าง</div>
+            </div>
+          </div>
+
+          <div class="form-grid document-meta-grid" style="margin-top:16px">
+            <div class="field">
+              <label for="invoiceNumber">เลขที่ใบแจ้งอัตราค่าบริการ</label>
+              <input id="invoiceNumber" type="text" readonly />
+            </div>
+            <div class="field">
+              <label for="issueDate">วันที่ออกใบแจ้งหนี้</label>
+              <div class="thai-date-field" id="issueDateField">
+                <button
+                  id="issueDateDisplay"
+                  class="thai-date-trigger"
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-expanded="false"
+                  aria-controls="issueDatePopover"
+                  onclick="toggleIssueDatePicker()"
+                >
+                  <span class="thai-date-trigger-text">
+                    <span class="thai-date-trigger-label" id="issueDateDisplayText">วัน เดือน ปี</span>
+                  </span>
+                  <span class="thai-date-trigger-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <rect x="4.5" y="5" width="15" height="14" rx="2.2" stroke="currentColor" stroke-width="1.8"></rect>
+                      <path d="M8 3.8v3.1M16 3.8v3.1M4.5 9.2h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                    </svg>
+                  </span>
+                </button>
+
+                <input id="issueDate" type="hidden" />
+              </div>
+            </div>
+            <div class="field full">
+              <label for="customerName">ชื่อผู้ใช้บริการ</label>
+              <input id="customerName" type="text" placeholder="เช่น ผู้อำนวยการสถาบันโรคผิวหนัง" />
+            </div>
+            <div class="field full">
+              <label for="customerAddress">ที่อยู่</label>
+              <textarea id="customerAddress" placeholder="กรอกที่อยู่สำหรับพิมพ์ในเอกสาร"></textarea>
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card rate">
+              <div class="label">ยอดประมาณการใบแจ้งอัตราค่าบริการ</div>
+              <div class="big" id="rateTotalPreview">0.00</div>
+              <div class="helper">ใช้ประกอบเอกสารอัตราค่าบริการเท่านั้น ไม่นำไปเป็นยอดลูกหนี้</div>
+            </div>
+            <div class="summary-card invoice">
+              <div class="label">ยอดประมาณการใบแจ้งค่าบริการ</div>
+              <div class="big" id="invoiceTotalPreview">0.00</div>
+              <div class="helper">ยอดนี้จะถูกใช้เป็นยอดลูกหนี้ในระบบทะเบียนลูกหนี้</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="table-grid">
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-head-main">
+              <div class="table-title">ใบแจ้งอัตราค่าบริการ</div>
+              <div class="table-sub">รายการฝั่งซ้ายของเอกสารพิมพ์</div>
+            </div>
+            <div class="table-head-actions">
+              <div class="count-badge" id="rateCountBadge">0 / 20</div>
+              <button class="button secondary" type="button" onclick="addLineItem('rate')">เพิ่มรายการ</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="line-no">ลำดับ</th>
+                  <th>Test No.</th>
+                  <th>รายละเอียด</th>
+                  <th style="width:120px">จำนวน</th>
+                  <th class="row-actions">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="rateItemsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-head-main">
+              <div class="table-title">ใบแจ้งค่าบริการ</div>
+              <div class="table-sub">รายการฝั่งขวาของเอกสารพิมพ์</div>
+            </div>
+            <div class="table-head-actions">
+              <div class="count-badge" id="invoiceCountBadge">0 / 20</div>
+              <button class="button secondary" type="button" onclick="addLineItem('invoice')">เพิ่มรายการ</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="line-no">ลำดับ</th>
+                  <th>Test No.</th>
+                  <th>รายละเอียด</th>
+                  <th style="width:120px">จำนวน</th>
+                  <th class="row-actions">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="invoiceItemsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title" id="savePanelTitle">บันทึกเอกสาร</div>
+            <div class="panel-sub" id="savePanelSubtitle">เมื่อบันทึก ระบบจะสร้าง PDF ตามแม่แบบทันที แล้วพาไปหน้ารายละเอียดเอกสารเพื่อดูข้อมูล แก้ไข และพิมพ์เอกสาร</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="single-save-wrap">
+            <button class="button primary big-save" id="saveBtnMain" onclick="saveInvoice()">บันทึกข้อมูล</button>
+          </div>
+          <div class="edit-context-note" id="editContextNote"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="thai-date-popover" id="issueDatePopover" hidden onclick="handleIssueDateOverlayClick(event)">
+      <div class="thai-date-dialog" role="dialog" aria-modal="true" aria-label="เลือกวันที่แบบไทย">
+        <div class="thai-date-head">
+          <div>
+            <div class="thai-date-title">เลือกวัน เดือน ปี</div>
+            <div class="thai-date-subtitle">เลือกเดือนและปี จากนั้นกดวันที่ที่ต้องการจากปฏิทิน</div>
+          </div>
+          <button class="thai-date-close" type="button" onclick="closeIssueDatePicker()" aria-label="ปิด">×</button>
+        </div>
+
+        <div class="thai-date-selects">
+          <div class="thai-date-select-field">
+            <label for="issueDateMonth">เดือน</label>
+            <select id="issueDateMonth" onchange="handleIssueDateMonthYearChange()"></select>
+          </div>
+          <div class="thai-date-select-field">
+            <label for="issueDateYear">ปี พ.ศ.</label>
+            <select id="issueDateYear" onchange="handleIssueDateMonthYearChange()"></select>
+          </div>
+        </div>
+
+        <div class="thai-date-calendar">
+          <div class="thai-date-weekdays">
+            <div class="thai-date-weekday">อา</div>
+            <div class="thai-date-weekday">จ</div>
+            <div class="thai-date-weekday">อ</div>
+            <div class="thai-date-weekday">พ</div>
+            <div class="thai-date-weekday">พฤ</div>
+            <div class="thai-date-weekday">ศ</div>
+            <div class="thai-date-weekday">ส</div>
+          </div>
+          <div class="thai-date-grid" id="issueDateCalendarGrid"></div>
+        </div>
+
+        <div class="thai-date-actions">
+          <button class="thai-date-ghost" type="button" onclick="clearIssueDate()">ล้างวันที่</button>
+          <button class="thai-date-ghost" type="button" onclick="setIssueDateToday()">วันนี้</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let maxRows = 20;
+      let catalogOptions = [];
+      let catalogByCode = {};
+      let appLinks = {};
+      let currentDraft = null;
+      const THAI_MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+      const THAI_YEAR_OFFSET = 543;
+      let issueDatePickerState = {
+        selected: null,
+        viewYear: new Date().getFullYear(),
+        viewMonth: new Date().getMonth()
+      };
+
+      function formatMoney(value) {
+        return Number(value || 0).toLocaleString('th-TH', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      function pad2(value) {
+        return String(value).padStart(2, '0');
+      }
+
+      function parseIsoDateParts(value) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || '').trim());
+        if (!match) {
+          return null;
+        }
+        const year = Number(match[1]);
+        const month = Number(match[2]) - 1;
+        const day = Number(match[3]);
+        if (!year || month < 0 || month > 11 || !day) {
+          return null;
+        }
+        return { year, month, day };
+      }
+
+      function buildIsoDateString(year, month, day) {
+        return `${year}-${pad2(month + 1)}-${pad2(day)}`;
+      }
+
+      function getDaysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+      }
+
+      function getTodayDateParts() {
+        const now = new Date();
+        return {
+          year: now.getFullYear(),
+          month: now.getMonth(),
+          day: now.getDate()
+        };
+      }
+
+      function formatThaiDateParts(parts) {
+        if (!parts) {
+          return '';
+        }
+        return `${parts.day} ${THAI_MONTHS[parts.month]} พ.ศ. ${parts.year + THAI_YEAR_OFFSET}`;
+      }
+
+      function getIssueDateYearRange(selectedYear) {
+        const currentBe = new Date().getFullYear() + THAI_YEAR_OFFSET;
+        const selectedBe = (selectedYear || new Date().getFullYear()) + THAI_YEAR_OFFSET;
+        const startBe = Math.min(currentBe - 25, selectedBe - 10);
+        const endBe = Math.max(currentBe + 25, selectedBe + 10);
+        return { startBe, endBe };
+      }
+
+      function updateIssueDateDisplay(parts) {
+        const displayText = document.getElementById('issueDateDisplayText');
+        const previewCard = document.getElementById('issueDatePreview');
+        const trigger = document.getElementById('issueDateDisplay');
+        if (parts) {
+          const thaiText = formatThaiDateParts(parts);
+          displayText.textContent = thaiText;
+          trigger.title = thaiText;
+          previewCard.textContent = thaiText;
+          return;
+        }
+        displayText.textContent = 'วัน เดือน ปี';
+        trigger.title = 'วัน เดือน ปี';
+        previewCard.textContent = '-';
+      }
+
+      function renderIssueDatePicker() {
+        const hiddenInput = document.getElementById('issueDate');
+        const monthSelect = document.getElementById('issueDateMonth');
+        const yearSelect = document.getElementById('issueDateYear');
+        const grid = document.getElementById('issueDateCalendarGrid');
+        const selected = issueDatePickerState.selected;
+        const { viewYear, viewMonth } = issueDatePickerState;
+        const today = getTodayDateParts();
+        const yearRange = getIssueDateYearRange(viewYear);
+
+        monthSelect.innerHTML = THAI_MONTHS.map((label, index) => `<option value="${index}" ${index === viewMonth ? 'selected' : ''}>${label}</option>`).join('');
+        yearSelect.innerHTML = Array.from({ length: yearRange.endBe - yearRange.startBe + 1 }, (_, index) => {
+          const beYear = yearRange.startBe + index;
+          const gregorianYear = beYear - THAI_YEAR_OFFSET;
+          return `<option value="${gregorianYear}" ${gregorianYear === viewYear ? 'selected' : ''}>${beYear}</option>`;
+        }).join('');
+
+        const daysInMonth = getDaysInMonth(viewYear, viewMonth);
+        const firstWeekDay = new Date(viewYear, viewMonth, 1).getDay();
+        const gridItems = [];
+        for (let i = 0; i < firstWeekDay; i += 1) {
+          gridItems.push('<span class="thai-date-empty"></span>');
+        }
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const isSelected = selected && selected.year === viewYear && selected.month === viewMonth && selected.day === day;
+          const isToday = today.year === viewYear && today.month === viewMonth && today.day === day;
+          gridItems.push(
+            `<button type="button" class="thai-date-day${isSelected ? ' is-selected' : ''}${isToday ? ' is-today' : ''}" onclick="selectIssueDateDay(${day})">${day}</button>`
+          );
+        }
+        grid.innerHTML = gridItems.join('');
+
+        hiddenInput.value = selected ? buildIsoDateString(selected.year, selected.month, selected.day) : '';
+        updateIssueDateDisplay(selected);
+      }
+
+      function setIssueDateValue(isoValue, options) {
+        const settings = Object.assign({ close: false }, options || {});
+        issueDatePickerState.selected = parseIsoDateParts(isoValue);
+        if (issueDatePickerState.selected) {
+          issueDatePickerState.viewYear = issueDatePickerState.selected.year;
+          issueDatePickerState.viewMonth = issueDatePickerState.selected.month;
+        }
+        renderIssueDatePicker();
+        if (settings.close) {
+          closeIssueDatePicker();
+        }
+      }
+
+      function initializeIssueDatePicker() {
+        const initial = parseIsoDateParts(document.getElementById('issueDate').value) || getTodayDateParts();
+        issueDatePickerState.viewYear = initial.year;
+        issueDatePickerState.viewMonth = initial.month;
+        issueDatePickerState.selected = parseIsoDateParts(document.getElementById('issueDate').value);
+        renderIssueDatePicker();
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            closeIssueDatePicker();
+          }
+        });
+      }
+
+      function openIssueDatePicker() {
+        const popover = document.getElementById('issueDatePopover');
+        document.getElementById('issueDateDisplay').setAttribute('aria-expanded', 'true');
+        document.body.classList.add('is-date-picker-open');
+        popover.hidden = false;
+        window.setTimeout(() => {
+          const monthSelect = document.getElementById('issueDateMonth');
+          if (monthSelect) {
+            monthSelect.focus();
+          }
+        }, 0);
+      }
+
+      function closeIssueDatePicker() {
+        const popover = document.getElementById('issueDatePopover');
+        document.getElementById('issueDateDisplay').setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('is-date-picker-open');
+        popover.hidden = true;
+        const trigger = document.getElementById('issueDateDisplay');
+        if (trigger) {
+          trigger.focus();
+        }
+      }
+
+      function toggleIssueDatePicker() {
+        const popover = document.getElementById('issueDatePopover');
+        if (popover.hidden) {
+          openIssueDatePicker();
+          return;
+        }
+        closeIssueDatePicker();
+      }
+
+      function handleIssueDateMonthYearChange() {
+        const month = Number(document.getElementById('issueDateMonth').value);
+        const year = Number(document.getElementById('issueDateYear').value);
+        const selectedDay = issueDatePickerState.selected ? Number(issueDatePickerState.selected.day || 0) : 0;
+        issueDatePickerState.viewMonth = month;
+        issueDatePickerState.viewYear = year;
+        if (selectedDay) {
+          const safeDay = Math.min(selectedDay, getDaysInMonth(year, month));
+          setIssueDateValue(buildIsoDateString(year, month, safeDay));
+          return;
+        }
+        issueDatePickerState.selected = null;
+        renderIssueDatePicker();
+      }
+
+      function selectIssueDateDay(day) {
+        setIssueDateValue(buildIsoDateString(issueDatePickerState.viewYear, issueDatePickerState.viewMonth, day), { close: true });
+      }
+
+      function setIssueDateToday() {
+        const today = getTodayDateParts();
+        setIssueDateValue(buildIsoDateString(today.year, today.month, today.day), { close: true });
+      }
+
+      function clearIssueDate() {
+        issueDatePickerState.selected = null;
+        renderIssueDatePicker();
+        closeIssueDatePicker();
+      }
+
+      function handleIssueDateOverlayClick(event) {
+        if (event.target && event.target.id === 'issueDatePopover') {
+          closeIssueDatePicker();
+        }
+      }
+
+      function setLoading(loading) {
+        document.getElementById('app').classList.toggle('loading', loading);
+        document.body.classList.toggle('is-busy', loading);
+        const saveButton = document.getElementById('saveBtnMain');
+        const isCancelled = Boolean(
+          currentDraft &&
+            (currentDraft.systemStatus === 'CANCELLED' || currentDraft.displayStatus === 'ยกเลิกใบแจ้งหนี้')
+        );
+        if (saveButton) {
+          saveButton.disabled = loading || isCancelled;
+        }
+      }
+
+      function showError(message) {
+        const box = document.getElementById('errorBox');
+        box.textContent = message;
+        box.style.display = 'block';
+      }
+
+      function clearError() {
+        const box = document.getElementById('errorBox');
+        box.textContent = '';
+        box.style.display = 'none';
+      }
+
+      function showNotice(message, links) {
+        const box = document.getElementById('noticeBox');
+        let html = `<div>${message}</div>`;
+        if (Array.isArray(links) && links.length) {
+          html += `<div class="link-row">${links
+            .map((link) => `<a href="${link.url}" target="_blank" rel="noopener noreferrer">${link.label}</a>`)
+            .join('')}</div>`;
+        }
+        box.innerHTML = html;
+        box.style.display = 'block';
+      }
+
+      function clearNotice() {
+        const box = document.getElementById('noticeBox');
+        box.innerHTML = '';
+        box.style.display = 'none';
+      }
+
+      function navigateTo(url) {
+        if (!url) {
+          showError('ยังไม่พบ URL ที่ต้องการใช้งาน กรุณา Deploy ใหม่อีกครั้ง');
+          return;
+        }
+        if (document.body.classList.contains('page-leaving')) {
+          return;
+        }
+        document.body.classList.remove('page-ready');
+        document.body.classList.add('page-leaving');
+        window.setTimeout(() => {
+          window.location.assign(url);
+        }, 130);
+      }
+
+      function initializePageMotion() {
+        const ready = () => {
+          document.body.classList.remove('page-leaving');
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+              document.body.classList.add('page-ready');
+            });
+          });
+        };
+
+        ready();
+        window.addEventListener('pageshow', ready);
+      }
+
+      function openUrl(url) {
+        if (!url) {
+          showError('ยังไม่พบ URL ที่ต้องการใช้งาน กรุณา Deploy ใหม่อีกครั้ง');
+          return;
+        }
+        window.open(url, '_blank', 'noopener');
+      }
+
+      function openDashboard() {
+        navigateTo(buildDashboardPageUrl());
+      }
+
+      function isAppsScriptRuntime() {
+        return Boolean(window.google && google.script && google.script.run);
+      }
+
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      function readStoredApiBase() {
+        try {
+          return window.localStorage.getItem('debtor_api_base') || '';
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function writeStoredApiBase(value) {
+        try {
+          window.localStorage.setItem('debtor_api_base', value);
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+
+      async function waitStaticConfigReady() {
+        if (window.__staticConfigReady) {
+          await window.__staticConfigReady;
+        }
+      }
+
+      function normalizeApiBase(value) {
+        const raw = String(value || '').trim();
+        if (!raw || raw.includes('PASTE_YOUR_DEPLOYMENT_ID')) {
+          return '';
+        }
+
+        try {
+          const url = new URL(raw, window.location.href);
+          url.searchParams.set('mode', 'api');
+          url.hash = '';
+          return url.toString();
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function getConfigApiBaseUrl() {
+        const configValue = normalizeApiBase(window.APP_STATIC_CONFIG && window.APP_STATIC_CONFIG.apiBase);
+        if (configValue) {
+          writeStoredApiBase(configValue);
+          return configValue;
+        }
+        return '';
+      }
+
+      function getApiBaseUrl() {
+        const queryValue = normalizeApiBase(getQueryParam('apiBase'));
+        if (queryValue) {
+          writeStoredApiBase(queryValue);
+          return queryValue;
+        }
+
+        const configValue = getConfigApiBaseUrl();
+        if (configValue) {
+          return configValue;
+        }
+
+        const storedValue = normalizeApiBase(readStoredApiBase());
+        if (storedValue) {
+          return storedValue;
+        }
+
+        return '';
+      }
+
+      function ensureApiBaseUrl() {
+        const existing = getApiBaseUrl();
+        if (existing) {
+          return existing;
+        }
+
+        const input = window.prompt(
+          'กรอกลิงก์ /exec ของ Apps Script Web App สำหรับเชื่อมกับระบบ เช่น https://script.google.com/macros/s/.../exec'
+        );
+        const normalized = normalizeApiBase(input);
+        if (!normalized) {
+          throw new Error('ยังไม่ได้ตั้งค่า API URL สำหรับใช้งานหน้าเว็บบน GitHub');
+        }
+
+        writeStoredApiBase(normalized);
+        return normalized;
+      }
+
+      function buildApiUrl(action, params) {
+        const url = new URL(ensureApiBaseUrl());
+        url.searchParams.set('mode', 'api');
+        if (action) {
+          url.searchParams.set('action', action);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
+      function buildStaticPageUrl(fileName, params) {
+        const url = new URL(fileName, window.location.href);
+        const apiBase = getApiBaseUrl();
+        if (apiBase) {
+          url.searchParams.set('apiBase', apiBase);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
+      function buildDashboardPageUrl() {
+        return isAppsScriptRuntime() ? appLinks.dashboardUrl : buildStaticPageUrl('Dashboard.html');
+      }
+
+      function buildDetailPageUrl(recordId) {
+        return isAppsScriptRuntime()
+          ? `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`
+          : buildStaticPageUrl('DocumentDetail.html', { recordId });
+      }
+
+      function parseApiPayload(text) {
+        try {
+          return JSON.parse(text);
+        } catch (error) {
+          throw new Error('API ตอบกลับไม่ถูกต้อง');
+        }
+      }
+
+      async function apiGetViaFetch(url) {
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'omit'
+        });
+        const payload = parseApiPayload(await response.text());
+        if (!response.ok || !payload.ok) {
+          throw new Error((payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้');
+        }
+        return payload.data;
+      }
+
+      function apiGetViaJsonp(url) {
+        return new Promise((resolve, reject) => {
+          const callbackName = '__debtorApiCb' + Date.now() + Math.floor(Math.random() * 1000);
+          const script = document.createElement('script');
+          let timeoutId = 0;
+
+          function cleanup() {
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            if (script.parentNode) {
+              script.parentNode.removeChild(script);
+            }
+          }
+
+          window[callbackName] = (payload) => {
+            cleanup();
+            if (!payload || !payload.ok) {
+              reject(new Error((payload && payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้'));
+              return;
+            }
+            resolve(payload.data);
+          };
+
+          script.onerror = () => {
+            cleanup();
+            reject(new Error('ไม่สามารถเชื่อมต่อ API ได้'));
+          };
+
+          timeoutId = window.setTimeout(() => {
+            cleanup();
+            reject(new Error('หมดเวลารอการตอบกลับจาก API'));
+          }, 20000);
+
+          const separator = url.includes('?') ? '&' : '?';
+          script.src = `${url}${separator}callback=${encodeURIComponent(callbackName)}`;
+          document.head.appendChild(script);
+        });
+      }
+
+      async function apiGet(action, params) {
+        const url = buildApiUrl(action, params);
+        try {
+          return await apiGetViaFetch(url);
+        } catch (error) {
+          return apiGetViaJsonp(url);
+        }
+      }
+
+      async function apiPost(action, body) {
+        const url = buildApiUrl(action);
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(body || {})
+          });
+          const payload = parseApiPayload(await response.text());
+          if (!response.ok || !payload.ok) {
+            throw new Error((payload.error && payload.error.message) || 'ไม่สามารถบันทึกข้อมูลผ่าน API ได้');
+          }
+          return payload.data;
+        } catch (error) {
+          if (error instanceof TypeError) {
+            const blockedError = new Error(
+              'เบราว์เซอร์ไม่สามารถส่งคำขอบันทึกไปยัง Apps Script API ได้ อาจติดข้อจำกัด CORS ของการเปิดผ่าน GitHub Pages'
+            );
+            blockedError.code = 'cors_post_blocked';
+            throw blockedError;
+          }
+          throw error;
+        }
+      }
+
+      function submitSaveThroughForm(payload) {
+        const actionUrl = buildApiUrl('save', {
+          responseMode: 'redirect',
+          returnTo: buildStaticPageUrl('DocumentDetail.html'),
+          errorTo: buildStaticPageUrl('InvoiceForm.html', {
+            recordId: payload && payload.recordId ? payload.recordId : ''
+          })
+        });
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = actionUrl;
+        form.style.display = 'none';
+
+        const input = document.createElement('textarea');
+        input.name = 'payload';
+        input.value = JSON.stringify(payload || {});
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+
+      function buildOptionsHtml(selectedCode) {
+        const options = ['<option value="">เลือกรหัสทดสอบ</option>'];
+        catalogOptions.forEach((item) => {
+          const selected = item.code === selectedCode ? 'selected' : '';
+          options.push(`<option value="${escapeHtml(item.code)}" ${selected}>${escapeHtml(item.label)}</option>`);
+        });
+        return options.join('');
+      }
+
+      function createEmptyItem(line) {
+        return {
+          line: line || 1,
+          code: '',
+          detail: '',
+          quantity: ''
+        };
+      }
+
+      function normalizeVisibleItems(items) {
+        const source = Array.isArray(items) ? items : [];
+        const visible = source
+          .filter((item) => {
+            const quantityValue = item && item.quantity;
+            return Boolean(
+              String((item && item.code) || '').trim() ||
+                String((item && item.detail) || '').trim() ||
+                quantityValue === 0 ||
+                quantityValue === '0' ||
+                quantityValue === 0.0 ||
+                String(quantityValue || '').trim()
+            );
+          })
+          .slice(0, maxRows)
+          .map((item, index) => ({
+            line: index + 1,
+            code: String((item && item.code) || '').trim(),
+            detail: String((item && item.detail) || '').trim(),
+            quantity:
+              item && item.quantity !== '' && item.quantity !== null && typeof item.quantity !== 'undefined'
+                ? String(item.quantity)
+                : ''
+          }));
+
+        return visible.length ? visible : [createEmptyItem(1)];
+      }
+
+      function getSectionItems(sectionKey) {
+        if (!currentDraft) {
+          return [createEmptyItem(1)];
+        }
+        const key = sectionKey === 'rate' ? 'rateItems' : 'invoiceItems';
+        if (!Array.isArray(currentDraft[key]) || !currentDraft[key].length) {
+          currentDraft[key] = [createEmptyItem(1)];
+        }
+        return currentDraft[key];
+      }
+
+      function reindexItems(items) {
+        return (Array.isArray(items) ? items : []).map((item, index) => ({
+          line: index + 1,
+          code: String((item && item.code) || '').trim(),
+          detail: String((item && item.detail) || '').trim(),
+          quantity:
+            item && item.quantity !== '' && item.quantity !== null && typeof item.quantity !== 'undefined'
+              ? String(item.quantity)
+              : ''
+        }));
+      }
+
+      function renderCountBadge(sectionKey) {
+        const items = getSectionItems(sectionKey);
+        const targetId = sectionKey === 'rate' ? 'rateCountBadge' : 'invoiceCountBadge';
+        document.getElementById(targetId).textContent = `${items.length} / ${maxRows}`;
+      }
+
+      function renderLineRows(sectionKey, items) {
+        const body = document.getElementById(sectionKey === 'rate' ? 'rateItemsBody' : 'invoiceItemsBody');
+        body.innerHTML = items
+          .map(
+            (item, index) => `
+              <tr style="--row-delay:${(0.03 + index * 0.03).toFixed(2)}s">
+                <td class="line-no"><span class="line-pill">${index + 1}</span></td>
+                <td>
+                  <select data-section="${sectionKey}" data-row="${index}" data-field="code">
+                    ${buildOptionsHtml(item.code || '')}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    data-section="${sectionKey}"
+                    data-row="${index}"
+                    data-field="detail"
+                    value="${escapeHtml(item.detail || '')}"
+                    placeholder="รายละเอียด"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    data-section="${sectionKey}"
+                    data-row="${index}"
+                    data-field="quantity"
+                    value="${item.quantity === '' ? '' : escapeHtml(String(item.quantity))}"
+                    placeholder="0"
+                  />
+                </td>
+                <td class="row-actions">
+                  <button class="row-remove" type="button" onclick="removeLineItem('${sectionKey}', ${index})">ลบรายการ</button>
+                </td>
+              </tr>
+            `
+          )
+          .join('');
+        renderCountBadge(sectionKey);
+      }
+
+      function setDraft(draft) {
+        currentDraft = Object.assign({}, draft, {
+          rateItems: normalizeVisibleItems(draft.rateItems),
+          invoiceItems: normalizeVisibleItems(draft.invoiceItems)
+        });
+        const isEditing = !!draft.recordId;
+        const isCancelled = draft.systemStatus === 'CANCELLED' || draft.displayStatus === 'ยกเลิกใบแจ้งหนี้';
+        const modeChip = document.getElementById('modeChip');
+        const saveButton = document.getElementById('saveBtnMain');
+        const editContextNote = document.getElementById('editContextNote');
+        document.getElementById('invoiceNumber').value = draft.invoiceNumber || '';
+        setIssueDateValue(draft.issueDate || '');
+        document.getElementById('customerName').value = draft.customerName || '';
+        document.getElementById('customerAddress').value = draft.customerAddress || '';
+        document.getElementById('invoiceNumberPreview').textContent = draft.invoiceNumber || '-';
+        document.getElementById('recordIdPreview').textContent = draft.recordId || '-';
+        document.getElementById('draftStatusPreview').textContent = isCancelled ? 'ยกเลิกแล้ว' : isEditing ? 'กำลังแก้ไข' : 'ร่างใหม่';
+        modeChip.className = `chip ${isCancelled ? 'cancelled' : isEditing ? 'edit' : 'pending'}`;
+        modeChip.textContent = isCancelled ? 'เอกสารถูกยกเลิกแล้ว' : isEditing ? 'โหมดแก้ไขรายการเดิม' : 'โหมดเพิ่มรายการใหม่';
+        document.getElementById('formHeroTitle').textContent = isCancelled
+          ? 'หน้าแก้ไขเอกสารถูกยกเลิก'
+          : isEditing
+            ? 'หน้าแก้ไขใบแจ้งหนี้'
+            : 'แบบฟอร์มเพิ่มใบแจ้งหนี้';
+        document.getElementById('formHeroSubtitle').textContent = isEditing
+          ? isCancelled
+            ? 'เอกสารรายการนี้ถูกยกเลิกแล้ว คุณยังเปิดดูข้อมูลเดิมได้ แต่ระบบจะไม่อนุญาตให้บันทึกทับหรือยกเลิกซ้ำ'
+            : 'ปรับปรุงข้อมูลเอกสารและรายการบริการได้จากหน้านี้ เมื่อบันทึกแล้วระบบจะสร้าง PDF เวอร์ชันใหม่แทนข้อมูลเดิมทันที'
+          : 'กรอกข้อมูลหัวเอกสาร รายการบริการ และบันทึกเพื่อสร้าง PDF ตามแม่แบบอัตโนมัติ';
+        document.getElementById('heroInvoiceNumber').textContent = draft.invoiceNumber || '-';
+        document.getElementById('heroModeText').textContent = isCancelled ? 'เอกสารถูกยกเลิก' : isEditing ? 'แก้ไขรายการเดิม' : 'เพิ่มรายการใหม่';
+        document.getElementById('savePanelTitle').textContent = isEditing ? 'จัดการเอกสารนี้' : 'บันทึกเอกสาร';
+        document.getElementById('savePanelSubtitle').textContent = isEditing
+          ? isCancelled
+            ? 'เอกสารนี้ถูกยกเลิกแล้ว ระบบปิดการบันทึกแก้ไข แต่คุณยังตรวจสอบข้อมูลเดิมได้จากหน้านี้'
+            : 'เมื่อบันทึกการแก้ไข ระบบจะสร้าง PDF เวอร์ชันใหม่แทนไฟล์เดิมทันที และเก็บข้อมูลล่าสุดไว้ในระบบ'
+          : 'เมื่อบันทึก ระบบจะสร้าง PDF ตามแม่แบบทันที แล้วพาไปหน้ารายละเอียดเอกสารเพื่อดูข้อมูล แก้ไข และพิมพ์เอกสาร';
+        saveButton.textContent = isEditing ? 'บันทึกการแก้ไข' : 'บันทึกข้อมูล';
+        saveButton.disabled = isCancelled;
+        editContextNote.style.display = isEditing ? 'block' : 'none';
+        editContextNote.textContent = isCancelled
+          ? `สาเหตุที่ยกเลิก: ${draft.cancelReason || 'ไม่ระบุเหตุผล'}`
+          : isEditing
+            ? `แก้ไขล่าสุด ${draft.updatedAt || draft.createdAt || '-'} เมื่อบันทึกแล้วระบบจะอัปเดต PDF ของเลขที่ ${draft.invoiceNumber || '-'} ให้ทันที`
+            : '';
+        renderLineRows('rate', currentDraft.rateItems || []);
+        renderLineRows('invoice', currentDraft.invoiceItems || []);
+        updateTotalsPreview();
+      }
+
+      function collectDraftFromForm() {
+        const draft = {
+          recordId: currentDraft && currentDraft.recordId ? currentDraft.recordId : '',
+          row: currentDraft && currentDraft.row ? currentDraft.row : '',
+          revisionToken: currentDraft && currentDraft.revisionToken ? currentDraft.revisionToken : '',
+          invoiceNumber: document.getElementById('invoiceNumber').value.trim(),
+          issueDate: document.getElementById('issueDate').value,
+          customerName: document.getElementById('customerName').value.trim(),
+          customerAddress: document.getElementById('customerAddress').value.trim(),
+          rateItems: reindexItems(getSectionItems('rate')),
+          invoiceItems: reindexItems(getSectionItems('invoice'))
+        };
+
+        return draft;
+      }
+
+      function calculateSectionTotal(sectionKey) {
+        let total = 0;
+        getSectionItems(sectionKey).forEach((item) => {
+          const code = String(item.code || '').trim();
+          const quantityValue = String(item.quantity || '').trim();
+          const quantity = quantityValue === '' ? 0 : Number(quantityValue);
+          if (!code || !quantity || !catalogByCode[code]) {
+            return;
+          }
+          total += Number(catalogByCode[code].price || 0) * quantity;
+        });
+        return total;
+      }
+
+      function updateTotalsPreview() {
+        const rateTotal = calculateSectionTotal('rate');
+        const invoiceTotal = calculateSectionTotal('invoice');
+        document.getElementById('rateTotalPreview').textContent = formatMoney(rateTotal);
+        document.getElementById('invoiceTotalPreview').textContent = formatMoney(invoiceTotal);
+      }
+
+      function attachFormEvents() {
+        document.body.addEventListener('input', (event) => {
+          const target = event.target;
+          if (target && target.dataset && target.dataset.section) {
+            updateDraftItem(target.dataset.section, Number(target.dataset.row), target.dataset.field, target.value);
+            updateTotalsPreview();
+          }
+        });
+        document.body.addEventListener('change', (event) => {
+          const target = event.target;
+          if (target && target.dataset && target.dataset.section) {
+            updateDraftItem(target.dataset.section, Number(target.dataset.row), target.dataset.field, target.value);
+            updateTotalsPreview();
+          }
+        });
+      }
+
+      function updateDraftItem(sectionKey, rowIndex, field, value) {
+        const items = getSectionItems(sectionKey);
+        if (!items[rowIndex]) {
+          return;
+        }
+        items[rowIndex][field] = value;
+      }
+
+      function addLineItem(sectionKey) {
+        clearError();
+        clearNotice();
+        const items = getSectionItems(sectionKey);
+        if (items.length >= maxRows) {
+          showError(`เพิ่มได้สูงสุด ${maxRows} รายการต่อเอกสาร`);
+          return;
+        }
+        items.push(createEmptyItem(items.length + 1));
+        currentDraft[sectionKey === 'rate' ? 'rateItems' : 'invoiceItems'] = reindexItems(items);
+        renderLineRows(sectionKey, getSectionItems(sectionKey));
+        updateTotalsPreview();
+      }
+
+      function removeLineItem(sectionKey, rowIndex) {
+        clearError();
+        clearNotice();
+        const key = sectionKey === 'rate' ? 'rateItems' : 'invoiceItems';
+        const items = getSectionItems(sectionKey).slice();
+        if (items.length <= 1) {
+          currentDraft[key] = [createEmptyItem(1)];
+        } else {
+          items.splice(rowIndex, 1);
+          currentDraft[key] = reindexItems(items);
+        }
+        renderLineRows(sectionKey, currentDraft[key]);
+        updateTotalsPreview();
+      }
+
+      async function saveInvoice() {
+        setLoading(true);
+        clearError();
+        clearNotice();
+        const payload = collectDraftFromForm();
+
+        if (!payload.issueDate) {
+          setLoading(false);
+          showError('กรุณาเลือกวันที่ออกใบแจ้งหนี้เป็น วัน เดือน ปี พ.ศ. ก่อนบันทึกข้อมูล');
+          openIssueDatePicker();
+          return;
+        }
+
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler((result) => {
+              setLoading(false);
+              if (result && result.detailUrl) {
+                navigateTo(result.detailUrl);
+                return;
+              }
+              showError('บันทึกข้อมูลแล้ว แต่ไม่พบหน้ารายละเอียดเอกสาร');
+            })
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            })
+            .saveInvoiceAndOpenDetailFromWeb(payload);
+          return;
+        }
+
+        try {
+          const result = await apiPost('save', { payload });
+          setLoading(false);
+          if (result && result.recordId) {
+            navigateTo(buildDetailPageUrl(result.recordId));
+            return;
+          }
+          showError('บันทึกข้อมูลแล้ว แต่ไม่พบรหัสเอกสารสำหรับเปิดหน้ารายละเอียด');
+        } catch (error) {
+          if (error && error.code === 'cors_post_blocked') {
+            showNotice('กำลังสลับไปบันทึกผ่าน Apps Script โดยตรง');
+            submitSaveThroughForm(payload);
+            return;
+          }
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      async function bootstrap() {
+        setLoading(true);
+        clearError();
+        clearNotice();
+        await waitStaticConfigReady();
+        initializeIssueDatePicker();
+        attachFormEvents();
+        const recordId = getQueryParam('recordId');
+        const apiError = getQueryParam('apiError');
+
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler((data) => {
+              maxRows = Number(data.maxRows || 20);
+              catalogOptions = data.catalog || [];
+              catalogByCode = {};
+              catalogOptions.forEach((item) => {
+                catalogByCode[item.code] = item;
+              });
+              appLinks = data.links || {};
+              setDraft(data.draft);
+              document.getElementById('updatedAt').textContent = recordId
+                ? 'เปิดฟอร์มแก้ไขข้อมูลเรียบร้อย'
+                : 'เปิดฟอร์มเพิ่มใบแจ้งหนี้ใหม่เรียบร้อย';
+              setLoading(false);
+            })
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            })
+            .getInvoiceFormBootstrap(recordId);
+          return;
+        }
+
+        try {
+          const data = await apiGet('formBootstrap', { recordId });
+          maxRows = Number(data.maxRows || 20);
+          catalogOptions = data.catalog || [];
+          catalogByCode = {};
+          catalogOptions.forEach((item) => {
+            catalogByCode[item.code] = item;
+          });
+          appLinks = data.links || {};
+          setDraft(data.draft);
+          document.getElementById('updatedAt').textContent = recordId
+            ? 'เปิดฟอร์มแก้ไขข้อมูลเรียบร้อย'
+            : 'เปิดฟอร์มเพิ่มใบแจ้งหนี้ใหม่เรียบร้อย';
+          if (apiError) {
+            showError(apiError);
+          }
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      initializePageMotion();
+      bootstrap();
+    </script>
+  </body>
+</html>
