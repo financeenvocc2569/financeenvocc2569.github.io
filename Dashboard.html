@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600;700&display=swap');
+
+      :root {
+        --page-bg: #f6f1e8;
+        --surface: rgba(255, 252, 247, 0.95);
+        --line: rgba(148, 163, 184, 0.22);
+        --text: #1f2937;
+        --muted: #64748b;
+        --brand: #0f766e;
+        --brand-strong: #115e59;
+        --brand-soft: #ccfbf1;
+        --warn: #c2410c;
+        --warn-soft: #ffedd5;
+        --ok: #15803d;
+        --ok-soft: #dcfce7;
+        --danger: #b91c1c;
+        --danger-soft: #fee2e2;
+        --violet-soft: #ede9fe;
+        --shadow: 0 18px 36px rgba(148, 163, 184, 0.16);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: "Taviraj", serif;
+        background:
+          radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 28%),
+          radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 22%),
+          linear-gradient(180deg, #f8f5ef 0%, #f4efe6 100%);
+      }
+
+      .page {
+        padding: 20px 16px 28px;
+      }
+
+      .hero,
+      .panel,
+      .card {
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 22px;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(247, 250, 252, 0.86)),
+          linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(194, 65, 12, 0.08));
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -44px;
+        bottom: -80px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(20, 184, 166, 0.2), transparent 70%);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: var(--brand-soft);
+        color: var(--brand-strong);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 12px 0 8px;
+        font-size: 26px;
+        line-height: 1.08;
+      }
+
+      .hero p,
+      .panel-sub,
+      .updated-at,
+      .empty,
+      .row-sub {
+        color: var(--muted);
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 680px;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .button.primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+      }
+
+      .button.secondary {
+        color: var(--brand-strong);
+        background: #ffffff;
+        border: 1px solid rgba(15, 118, 110, 0.18);
+      }
+
+      .button.ghost {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.58);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+      }
+
+      .fab-create {
+        position: fixed;
+        right: 36px;
+        bottom: 28px;
+        z-index: 2000;
+        width: 72px;
+        height: 72px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        color: #ffffff;
+        box-shadow: 0 20px 36px rgba(15, 118, 110, 0.28);
+        cursor: pointer;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+      }
+
+      .fab-create:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 24px 42px rgba(15, 118, 110, 0.32);
+      }
+
+      .fab-create:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .fab-create .plus {
+        font-size: 42px;
+        line-height: 1;
+        font-weight: 400;
+        transform: translateY(-2px);
+      }
+
+      .search {
+        width: 100%;
+        margin-top: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--text);
+        padding: 12px 15px;
+        outline: none;
+      }
+
+      .notice,
+      .error,
+      .updated-at {
+        margin-top: 12px;
+        font-size: 12px;
+      }
+
+      .notice,
+      .error {
+        display: none;
+        padding: 11px 12px;
+        border-radius: 14px;
+        font-weight: 600;
+      }
+
+      .notice {
+        background: var(--brand-soft);
+        color: var(--brand-strong);
+      }
+
+      .error {
+        background: var(--danger-soft);
+        color: var(--danger);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .dashboard-card {
+        position: relative;
+        overflow: hidden;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.76);
+        min-height: 148px;
+      }
+
+      .dashboard-card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .dashboard-card-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .dashboard-card-label {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: #2d4353;
+        word-break: break-word;
+      }
+
+      .dashboard-card-value {
+        margin-top: 10px;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .dashboard-card-note {
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: #5f7283;
+        word-break: break-word;
+      }
+
+      .dashboard-card-icon,
+      .dashboard-meta-icon {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .dashboard-card-icon {
+        width: auto;
+        height: auto;
+        border: 0;
+        border-radius: 0;
+        background: none !important;
+        box-shadow: none;
+        opacity: 0.96;
+      }
+
+      .dashboard-card-icon svg,
+      .dashboard-meta-icon svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      .dashboard-card.debt {
+        background: linear-gradient(145deg, rgba(232, 241, 255, 0.98), rgba(255, 255, 255, 0.95));
+        color: #20313b;
+      }
+
+      .dashboard-card.debt .dashboard-card-label,
+      .dashboard-card.debt .dashboard-card-note {
+        color: #4e6880;
+      }
+
+      .dashboard-card.debt .dashboard-card-value,
+      .dashboard-card.debt .dashboard-card-icon {
+        color: #2563eb;
+      }
+
+      .dashboard-card.paid {
+        background: linear-gradient(145deg, rgba(219, 252, 231, 0.98), rgba(255, 255, 255, 0.95));
+        color: #20313b;
+      }
+
+      .dashboard-card.paid .dashboard-card-label,
+      .dashboard-card.paid .dashboard-card-note {
+        color: #4e6d59;
+      }
+
+      .dashboard-card.paid .dashboard-card-value,
+      .dashboard-card.paid .dashboard-card-icon {
+        color: #16a34a;
+      }
+
+      .dashboard-card.outstanding {
+        background: linear-gradient(145deg, rgba(255, 237, 213, 0.98), rgba(255, 255, 255, 0.95));
+        color: #20313b;
+      }
+
+      .dashboard-card.outstanding .dashboard-card-label,
+      .dashboard-card.outstanding .dashboard-card-note {
+        color: #7a6046;
+      }
+
+      .dashboard-card.outstanding .dashboard-card-value,
+      .dashboard-card.outstanding .dashboard-card-icon {
+        color: #ea580c;
+      }
+
+      .dashboard-card.usage {
+        background: linear-gradient(145deg, rgba(237, 233, 254, 0.98), rgba(255, 255, 255, 0.95));
+        color: #20313b;
+      }
+
+      .dashboard-card.usage .dashboard-card-label,
+      .dashboard-card.usage .dashboard-card-note {
+        color: #645d88;
+      }
+
+      .dashboard-card.usage .dashboard-card-value,
+      .dashboard-card.usage .dashboard-card-icon {
+        color: #7c3aed;
+      }
+
+      .label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .value {
+        margin-top: 8px;
+        font-size: 21px;
+        font-weight: 700;
+      }
+
+      .panel {
+        margin-top: 14px;
+        overflow: hidden;
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .panel-header > div {
+        min-width: 0;
+      }
+
+      .panel-title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .panel-sub {
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
+      .panel-body {
+        padding: 14px 16px 18px;
+      }
+
+      .progress-rail {
+        height: 14px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #e7e5e4;
+        margin-top: 14px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand), #34d399);
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .meta-pill {
+        padding: 12px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .dashboard-meta-pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 92px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.92));
+      }
+
+      .dashboard-meta-pill.pending {
+        background: linear-gradient(135deg, #fff7ed, #ffedd5);
+        border-color: rgba(249, 115, 22, 0.16);
+      }
+
+      .dashboard-meta-pill.pending .dashboard-meta-icon {
+        background: rgba(249, 115, 22, 0.14);
+        color: #c2410c;
+      }
+
+      .dashboard-meta-pill.paid {
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        border-color: rgba(16, 185, 129, 0.16);
+      }
+
+      .dashboard-meta-pill.paid .dashboard-meta-icon {
+        background: rgba(16, 185, 129, 0.14);
+        color: #047857;
+      }
+
+      .dashboard-meta-pill.cancelled {
+        background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+        border-color: rgba(244, 63, 94, 0.16);
+      }
+
+      .dashboard-meta-pill.cancelled .dashboard-meta-icon {
+        background: rgba(244, 63, 94, 0.14);
+        color: #be123c;
+      }
+
+      .meta-pill .name {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .meta-pill .num {
+        margin-top: 6px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .dashboard-shell {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        grid-template-areas:
+          "status status trend trend trend trend highlight highlight"
+          "monthly monthly monthly monthly ranking ranking ranking ranking"
+          "metrics metrics metrics metrics metrics metrics metrics metrics";
+        gap: 16px;
+        margin-top: 18px;
+        align-items: stretch;
+      }
+
+      .dashboard-panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        margin-top: 0;
+        border-color: rgba(220, 229, 239, 0.95);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(247, 250, 252, 0.94)),
+          linear-gradient(135deg, rgba(15, 118, 110, 0.05), rgba(37, 99, 235, 0.03));
+        box-shadow: 0 18px 42px rgba(148, 163, 184, 0.12);
+      }
+
+      .panel-status { grid-area: status; }
+      .panel-monthly { grid-area: monthly; }
+      .panel-trend { grid-area: trend; }
+      .panel-metrics { grid-area: metrics; }
+      .panel-highlight { grid-area: highlight; }
+      .panel-ranking { grid-area: ranking; }
+
+      .dashboard-panel .panel-header {
+        padding: 18px 18px 14px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(248, 250, 252, 0.74));
+      }
+
+      .dashboard-panel .panel-title {
+        font-size: 18px;
+        line-height: 1.22;
+        color: var(--text);
+        overflow-wrap: anywhere;
+      }
+
+      .dashboard-panel .panel-sub {
+        max-width: 44ch;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--muted);
+        overflow-wrap: anywhere;
+      }
+
+      .dashboard-panel .panel-body {
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        gap: 14px;
+        min-height: 0;
+      }
+
+      .compact-panel .panel-body {
+        padding: 14px;
+        min-height: 0;
+      }
+
+      .trend-panel .panel-body {
+        min-height: 100%;
+      }
+
+      .tables-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+        align-items: start;
+      }
+
+      .donut-layout {
+        display: grid;
+        grid-template-columns: minmax(150px, 170px) 1fr;
+        gap: 14px;
+        align-items: start;
+        flex: 0 0 auto;
+      }
+
+      .panel-status .panel-body {
+        justify-content: space-between;
+      }
+
+      .panel-status .donut-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        justify-items: stretch;
+        align-content: start;
+        height: 100%;
+      }
+
+      .donut-layout.single-empty {
+        grid-template-columns: 1fr;
+      }
+
+      .legend-list.is-empty {
+        display: none;
+      }
+
+      .donut-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .panel-status .donut-wrap {
+        padding: 6px 0 2px;
+      }
+
+      .donut-ring {
+        width: 158px;
+        height: 158px;
+        border-radius: 50%;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.08);
+      }
+
+      .donut-hole {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.94);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .donut-value {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .donut-caption {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .legend-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-height: 0;
+        width: 100%;
+      }
+
+      .panel-status .legend-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        align-content: start;
+      }
+
+      .legend-item {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.74);
+        border: 1px solid rgba(148, 163, 184, 0.14);
+      }
+
+      .legend-item > div {
+        min-width: 0;
+      }
+
+      .panel-status .legend-item:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+      }
+
+      .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .legend-name {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      .legend-meta {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+      }
+
+      .legend-value {
+        text-align: right;
+      }
+
+      .legend-count {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .legend-amount {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .mini-bars {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+        align-items: end;
+        min-height: 196px;
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 8px 2px 14px;
+      }
+
+      .mini-bar-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .mini-bar-value {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--brand-strong);
+      }
+
+      .mini-bar-track {
+        position: relative;
+        width: 100%;
+        max-width: 42px;
+        height: 122px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #eff6ff, #e2e8f0);
+        overflow: hidden;
+      }
+
+      .mini-bar-fill {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #38bdf8, #2563eb);
+      }
+
+      .mini-bar-label {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.35;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .trend-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+
+      .trend-summary-card {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: rgba(255, 255, 255, 0.76);
+      }
+
+      .trend-summary-label {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+
+      .trend-summary-value {
+        margin-top: 8px;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.05;
+      }
+
+      .trend-summary-card.tone-debt { background: linear-gradient(135deg, #eff6ff, #ffffff); }
+      .trend-summary-card.tone-paid { background: linear-gradient(135deg, #ecfdf5, #ffffff); }
+      .trend-summary-card.tone-outstanding { background: linear-gradient(135deg, #fff7ed, #ffffff); }
+      .trend-summary-card.tone-debt .trend-summary-value { color: #2563eb; }
+      .trend-summary-card.tone-paid .trend-summary-value { color: #16a34a; }
+      .trend-summary-card.tone-outstanding .trend-summary-value { color: #ea580c; }
+
+      .trend-chart {
+        margin-top: 16px;
+        min-height: 270px;
+        border-radius: 22px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.92));
+        overflow: hidden;
+        flex: 0 0 auto;
+      }
+
+      .trend-chart svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .trend-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+        min-height: 0;
+      }
+
+      .trend-month-card {
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(148, 163, 184, 0.12);
+      }
+
+      .trend-month-label {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      .trend-month-value {
+        margin-top: 7px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .trend-month-meta {
+        margin-top: 6px;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+      }
+
+      .ring-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 12px;
+        flex: 0 0 auto;
+        width: 100%;
+      }
+
+      .ring-card {
+        padding: 16px 14px;
+        border-radius: 22px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: rgba(255, 255, 255, 0.76);
+        text-align: center;
+      }
+
+      .ring-visual {
+        width: 114px;
+        height: 114px;
+        border-radius: 50%;
+        padding: 12px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ring-hole {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.94);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .ring-value {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .ring-label {
+        margin-top: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+
+      .ring-meta {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+
+      .highlight-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 0;
+        flex: 1 1 auto;
+        width: 100%;
+      }
+
+      .highlight-block {
+        padding: 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .highlight-block.latest {
+        background: linear-gradient(135deg, #eff6ff, #ffffff);
+      }
+
+      .highlight-block.alert {
+        background: linear-gradient(135deg, #fff7ed, #ffffff);
+      }
+
+      .highlight-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .highlight-block.latest .highlight-tag {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+
+      .highlight-block.alert .highlight-tag {
+        background: #ffedd5;
+        color: #c2410c;
+      }
+
+      .highlight-title {
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+
+      .highlight-sub {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+      }
+
+      .highlight-meta-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .highlight-metric {
+        padding: 10px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.84);
+      }
+
+      .highlight-metric .label {
+        font-size: 11px;
+      }
+
+      .highlight-metric .value {
+        margin-top: 5px;
+        font-size: 16px;
+      }
+
+      .highlight-actions {
+        margin-top: 12px;
+      }
+
+      .highlight-actions .action-link {
+        width: 100%;
+      }
+
+      .ranking-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 0;
+        flex: 1 1 auto;
+        width: 100%;
+      }
+
+      .dashboard-empty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 180px;
+        height: 100%;
+        flex: 1 1 auto;
+        padding: 24px 22px;
+        border-radius: 22px;
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 247, 251, 0.92)),
+          linear-gradient(135deg, rgba(15, 118, 110, 0.03), rgba(37, 99, 235, 0.02));
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+        text-align: center;
+      }
+
+      .dashboard-empty-icon {
+        width: 58px;
+        height: 58px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(20, 184, 166, 0.18));
+        color: var(--brand-strong);
+      }
+
+      .dashboard-empty-icon svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      .dashboard-empty-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .dashboard-empty-sub {
+        max-width: 440px;
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--muted);
+        word-break: break-word;
+      }
+
+      .dashboard-empty .action-link {
+        display: none;
+      }
+
+      .mini-bars > .dashboard-empty,
+      .trend-strip > .dashboard-empty,
+      .trend-chart > .dashboard-empty,
+      .ring-grid > .dashboard-empty,
+      .legend-list > .dashboard-empty {
+        grid-column: 1 / -1;
+      }
+
+      .highlight-stack > .dashboard-empty,
+      .ranking-list > .dashboard-empty {
+        flex: 1 1 auto;
+      }
+
+      .ranking-item {
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .ranking-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: baseline;
+      }
+
+      .ranking-name {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+
+      .ranking-amount {
+        font-size: 14px;
+        font-weight: 700;
+        color: #ea580c;
+      }
+
+      .ranking-meta {
+        margin-top: 5px;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+      }
+
+      .ranking-bar {
+        margin-top: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #e2e8f0;
+        overflow: hidden;
+      }
+
+      .ranking-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #38bdf8, #2563eb);
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #ffffff;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 11px 12px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+      }
+
+      th {
+        background: #fbfaf8;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .row-title {
+        font-weight: 700;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .chip.pending { background: var(--warn-soft); color: var(--warn); }
+      .chip.paid { background: var(--ok-soft); color: var(--ok); }
+      .chip.cancelled { background: var(--danger-soft); color: var(--danger); }
+
+      .action-link {
+        border: 1px solid rgba(15, 118, 110, 0.18);
+        background: #ffffff;
+        color: var(--brand-strong);
+        border-radius: 999px;
+        padding: 8px 11px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .empty {
+        padding: 18px 0 6px;
+        text-align: center;
+      }
+
+      .loading {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .page,
+      #app {
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.26s ease,
+          transform 0.3s ease;
+      }
+
+      body.page-ready .page,
+      body.page-ready #app {
+        opacity: 1;
+        transform: none;
+      }
+
+      body.page-leaving .page,
+      body.page-leaving #app {
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+      }
+
+      .button,
+      .fab-create,
+      .action-link,
+      .search {
+        transition:
+          transform 0.14s ease,
+          box-shadow 0.14s ease,
+          border-color 0.14s ease,
+          background 0.14s ease,
+          opacity 0.14s ease;
+      }
+
+      body.is-busy .button,
+      body.is-busy .fab-create,
+      body.is-busy .action-link,
+      body.is-busy button {
+        cursor: progress !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+
+        .page,
+        #app,
+        .button,
+        .fab-create,
+        .action-link,
+        .chip {
+          transition: none !important;
+          transform: none !important;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .cards,
+        .meta-grid,
+        .tables-grid,
+        .ring-grid,
+        .trend-summary,
+        .trend-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .mini-bars {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 12px;
+          padding: 8px 0 10px;
+        }
+
+        .donut-layout,
+        .highlight-meta-row {
+          grid-template-columns: 1fr;
+        }
+
+        .donut-layout {
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .panel-status .donut-layout {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
+
+        .donut-ring {
+          width: 170px;
+          height: 170px;
+          margin: 0 auto;
+        }
+
+        .legend-list {
+          gap: 12px;
+        }
+
+        .legend-item {
+          padding: 12px 14px;
+        }
+
+        .panel-status .legend-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .trend-chart {
+          min-height: 236px;
+        }
+
+        .mini-bar-track {
+          max-width: 40px;
+          height: 104px;
+        }
+
+        .mini-bar-label {
+          font-size: 10px;
+        }
+
+        .dashboard-panel .panel-header {
+          padding: 16px 16px 14px;
+        }
+
+        .dashboard-panel .panel-body,
+        .compact-panel .panel-body {
+          padding: 16px;
+        }
+
+        .dashboard-empty {
+          min-height: 198px;
+          padding: 20px 18px;
+        }
+
+        .dashboard-shell {
+          grid-template-columns: 1fr;
+          grid-template-areas:
+            "status"
+            "monthly"
+            "trend"
+            "highlight"
+            "ranking"
+            "metrics";
+        }
+
+        .fab-create {
+          right: 26px;
+          bottom: 24px;
+          width: 64px;
+          height: 64px;
+        }
+
+        .fab-create .plus {
+          font-size: 38px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .panel-status .legend-list {
+          grid-template-columns: 1fr;
+        }
+
+        .panel-status .legend-item:last-child:nth-child(odd) {
+          grid-column: auto;
+        }
+      }
+
+      @media (max-width: 1120px) {
+        .dashboard-shell {
+          grid-template-columns: 1fr;
+          grid-template-areas:
+            "status"
+            "monthly"
+            "trend"
+            "highlight"
+            "ranking"
+            "metrics";
+        }
+
+        .tables-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <script>
+      (function bootstrapStaticAssets() {
+        window.APP_STATIC_CONFIG = window.APP_STATIC_CONFIG || {};
+        window.__staticConfigReady = Promise.resolve();
+
+        const host = window.location.hostname || '';
+        const isAppsScriptHost = host.includes('script.google');
+        if (isAppsScriptHost) {
+          return;
+        }
+
+        const themeLink = document.createElement('link');
+        themeLink.rel = 'stylesheet';
+        themeLink.href = 'site.css';
+        document.head.appendChild(themeLink);
+
+        window.__staticConfigReady = new Promise((resolve) => {
+          const configScript = document.createElement('script');
+          configScript.src = 'config.js';
+          configScript.onload = resolve;
+          configScript.onerror = resolve;
+          document.head.appendChild(configScript);
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <section class="hero">
+        <div class="eyebrow">ระบบทะเบียนคุมลูกหนี้เงินบำรุง</div>
+        <h1>Dashboard ภาพรวมลูกหนี้</h1>
+
+        <div class="hero-actions">
+          <button class="button secondary" onclick="openLedgerSheet()">เปิดทะเบียนลูกหนี้</button>
+          <button class="button ghost" onclick="refreshData()">รีเฟรช</button>
+        </div>
+
+        <input
+          id="searchInput"
+          class="search"
+          type="text"
+          placeholder="ค้นหาจากชื่อลูกหนี้, เลขที่ใบแจ้ง, สถานะ"
+          oninput="handleSearch(event)"
+        />
+
+        <div class="notice" id="noticeBox"></div>
+        <div class="error" id="errorBox"></div>
+        <div class="updated-at" id="updatedAt">กำลังโหลดข้อมูล...</div>
+      </section>
+
+      <section class="cards" id="cards"></section>
+
+      <section class="dashboard-shell">
+        <section class="panel dashboard-panel compact-panel panel-status">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">สัดส่วนสถานะเอกสาร</div>
+              <div class="panel-sub">ดูจำนวนและมูลค่าตามสถานะของใบแจ้งหนี้ในระบบ</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="donut-layout">
+              <div id="statusDonut" class="donut-wrap"></div>
+              <div id="statusLegend" class="legend-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel dashboard-panel compact-panel panel-monthly">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">จำนวนรายการรายเดือน</div>
+              <div class="panel-sub">ดูจำนวนเอกสารที่ถูกออกในแต่ละเดือนล่าสุด</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="miniBars" class="mini-bars"></div>
+          </div>
+        </section>
+
+        <section class="panel dashboard-panel trend-panel panel-trend">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">แนวโน้มยอดลูกหนี้และการรับชำระ</div>
+              <div class="panel-sub">เปรียบเทียบยอดออกใบแจ้งกับยอดรับชำระในช่วงหลายเดือนล่าสุด</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="trend-summary">
+              <div class="trend-summary-card tone-debt">
+                <div class="trend-summary-label">ยอดออกใบแจ้งเดือนล่าสุด</div>
+                <div class="trend-summary-value" id="trendIssuedValue">0.00</div>
+              </div>
+              <div class="trend-summary-card tone-paid">
+                <div class="trend-summary-label">ยอดรับชำระเดือนล่าสุด</div>
+                <div class="trend-summary-value" id="trendPaidValue">0.00</div>
+              </div>
+              <div class="trend-summary-card tone-outstanding">
+                <div class="trend-summary-label">ยอดค้างจากเดือนล่าสุด</div>
+                <div class="trend-summary-value" id="trendOutstandingValue">0.00</div>
+              </div>
+            </div>
+            <div id="trendChart" class="trend-chart"></div>
+            <div id="trendStrip" class="trend-strip"></div>
+          </div>
+        </section>
+
+        <section class="panel dashboard-panel compact-panel panel-highlight">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">บล็อกสรุปสำคัญ</div>
+              <div class="panel-sub">ดูรายการล่าสุดและลูกหนี้ที่ต้องติดตามมากที่สุดทันที</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="highlightCard" class="highlight-stack"></div>
+          </div>
+        </section>
+
+        <section class="panel dashboard-panel compact-panel panel-ranking">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">อันดับลูกหนี้ค้างชำระ</div>
+              <div class="panel-sub">เรียงลำดับจากยอดค้างชำระสูงสุดเพื่อใช้ติดตามงาน</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="rankingList" class="ranking-list"></div>
+          </div>
+        </section>
+
+        <section class="panel dashboard-panel panel-metrics">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">อัตราสำคัญของระบบ</div>
+              <div class="panel-sub">สรุปผลการเก็บหนี้และสัดส่วนการติดตามในรูปแบบอ่านง่าย</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="ringGrid" class="ring-grid"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="tables-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">ลูกหนี้ค้างชำระ</div>
+              <div class="panel-sub">เปิดฟอร์มเพื่อแก้ไขหรือพิมพ์ซ้ำได้จากปุ่มในตาราง</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ลูกหนี้</th>
+                    <th>เลขที่</th>
+                    <th>ยอดค้าง</th>
+                    <th>เปิดฟอร์ม</th>
+                  </tr>
+                </thead>
+                <tbody id="outstandingBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">รายการล่าสุด</div>
+              <div class="panel-sub">ตรวจสอบสถานะและเปิดไปยังหน้าฟอร์มได้ทันที</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ลูกหนี้</th>
+                    <th>เลขที่</th>
+                    <th>สถานะ</th>
+                    <th>ชำระ</th>
+                    <th>เปิดฟอร์ม</th>
+                  </tr>
+                </thead>
+                <tbody id="recentBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </section>
+
+    </div>
+
+    <button
+      id="createFab"
+      class="fab-create"
+      type="button"
+      title="เพิ่มใบแจ้งหนี้"
+      aria-label="เพิ่มใบแจ้งหนี้"
+      onclick="openCreateForm()"
+    >
+      <span class="plus">+</span>
+    </button>
+
+    <script>
+      let searchTimer = null;
+      let appLinks = {};
+
+      function formatMoney(value) {
+        return Number(value || 0).toLocaleString('th-TH', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      function statusClass(status) {
+        if (status === 'ชำระแล้ว') return 'paid';
+        if (status === 'ยกเลิกใบแจ้งหนี้') return 'cancelled';
+        return 'pending';
+      }
+
+      function setLoading(loading) {
+        document.getElementById('app').classList.toggle('loading', loading);
+        document.body.classList.toggle('is-busy', loading);
+        document.getElementById('createFab').disabled = loading;
+      }
+
+      function showError(message) {
+        const box = document.getElementById('errorBox');
+        box.textContent = message;
+        box.style.display = 'block';
+      }
+
+      function clearError() {
+        const box = document.getElementById('errorBox');
+        box.textContent = '';
+        box.style.display = 'none';
+      }
+
+      function showNotice(message) {
+        const box = document.getElementById('noticeBox');
+        box.textContent = message;
+        box.style.display = 'block';
+      }
+
+      function clearNotice() {
+        const box = document.getElementById('noticeBox');
+        box.textContent = '';
+        box.style.display = 'none';
+      }
+
+      function isAppsScriptRuntime() {
+        return Boolean(window.google && google.script && google.script.run);
+      }
+
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      function readStoredApiBase() {
+        try {
+          return window.localStorage.getItem('debtor_api_base') || '';
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function writeStoredApiBase(value) {
+        try {
+          window.localStorage.setItem('debtor_api_base', value);
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+
+      async function waitStaticConfigReady() {
+        if (window.__staticConfigReady) {
+          await window.__staticConfigReady;
+        }
+      }
+
+      function normalizeApiBase(value) {
+        const raw = String(value || '').trim();
+        if (!raw || raw.includes('PASTE_YOUR_DEPLOYMENT_ID')) {
+          return '';
+        }
+
+        try {
+          const url = new URL(raw, window.location.href);
+          url.searchParams.set('mode', 'api');
+          url.hash = '';
+          return url.toString();
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function getConfigApiBaseUrl() {
+        const configValue = normalizeApiBase(window.APP_STATIC_CONFIG && window.APP_STATIC_CONFIG.apiBase);
+        if (configValue) {
+          writeStoredApiBase(configValue);
+          return configValue;
+        }
+        return '';
+      }
+
+      function getApiBaseUrl() {
+        const queryValue = normalizeApiBase(getQueryParam('apiBase'));
+        if (queryValue) {
+          writeStoredApiBase(queryValue);
+          return queryValue;
+        }
+
+        const configValue = getConfigApiBaseUrl();
+        if (configValue) {
+          return configValue;
+        }
+
+        const storedValue = normalizeApiBase(readStoredApiBase());
+        if (storedValue) {
+          return storedValue;
+        }
+
+        return '';
+      }
+
+      function ensureApiBaseUrl() {
+        const existing = getApiBaseUrl();
+        if (existing) {
+          return existing;
+        }
+
+        const input = window.prompt(
+          'กรอกลิงก์ /exec ของ Apps Script Web App สำหรับเชื่อมกับระบบ เช่น https://script.google.com/macros/s/.../exec'
+        );
+        const normalized = normalizeApiBase(input);
+        if (!normalized) {
+          throw new Error('ยังไม่ได้ตั้งค่า API URL สำหรับใช้งานหน้าเว็บบน GitHub');
+        }
+
+        writeStoredApiBase(normalized);
+        return normalized;
+      }
+
+      function buildApiUrl(action, params) {
+        const url = new URL(ensureApiBaseUrl());
+        url.searchParams.set('mode', 'api');
+        if (action) {
+          url.searchParams.set('action', action);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
+      function buildStaticPageUrl(fileName, params) {
+        const url = new URL(fileName, window.location.href);
+        const apiBase = getApiBaseUrl();
+        if (apiBase) {
+          url.searchParams.set('apiBase', apiBase);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
+      function buildFormPageUrl() {
+        return isAppsScriptRuntime() ? appLinks.formUrl : buildStaticPageUrl('InvoiceForm.html');
+      }
+
+      function buildDetailPageUrl(recordId) {
+        return isAppsScriptRuntime()
+          ? `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`
+          : buildStaticPageUrl('DocumentDetail.html', { recordId });
+      }
+
+      function parseApiPayload(text) {
+        try {
+          return JSON.parse(text);
+        } catch (error) {
+          throw new Error('API ตอบกลับไม่ถูกต้อง');
+        }
+      }
+
+      async function apiGetViaFetch(url) {
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'omit'
+        });
+        const payload = parseApiPayload(await response.text());
+        if (!response.ok || !payload.ok) {
+          throw new Error((payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้');
+        }
+        return payload.data;
+      }
+
+      function apiGetViaJsonp(url) {
+        return new Promise((resolve, reject) => {
+          const callbackName = '__debtorApiCb' + Date.now() + Math.floor(Math.random() * 1000);
+          const script = document.createElement('script');
+          let timeoutId = 0;
+
+          function cleanup() {
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            if (script.parentNode) {
+              script.parentNode.removeChild(script);
+            }
+          }
+
+          window[callbackName] = (payload) => {
+            cleanup();
+            if (!payload || !payload.ok) {
+              reject(new Error((payload && payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้'));
+              return;
+            }
+            resolve(payload.data);
+          };
+
+          script.onerror = () => {
+            cleanup();
+            reject(new Error('ไม่สามารถเชื่อมต่อ API ได้'));
+          };
+
+          timeoutId = window.setTimeout(() => {
+            cleanup();
+            reject(new Error('หมดเวลารอการตอบกลับจาก API'));
+          }, 20000);
+
+          const separator = url.includes('?') ? '&' : '?';
+          script.src = `${url}${separator}callback=${encodeURIComponent(callbackName)}`;
+          document.head.appendChild(script);
+        });
+      }
+
+      async function apiGet(action, params) {
+        const url = buildApiUrl(action, params);
+        try {
+          return await apiGetViaFetch(url);
+        } catch (error) {
+          return apiGetViaJsonp(url);
+        }
+      }
+
+      function openUrl(url) {
+        if (!url) {
+          showError('ยังไม่พบ URL ที่ต้องการใช้งาน');
+          return;
+        }
+        window.open(url, '_blank', 'noopener');
+      }
+
+      function navigateTo(url) {
+        if (!url) {
+          showError('ยังไม่พบ URL ที่ต้องการใช้งาน');
+          return;
+        }
+        if (document.body.classList.contains('page-leaving')) {
+          return;
+        }
+        document.body.classList.remove('page-ready');
+        document.body.classList.add('page-leaving');
+        window.setTimeout(() => {
+          window.location.assign(url);
+        }, 130);
+      }
+
+      function initializePageMotion() {
+        const ready = () => {
+          document.body.classList.remove('page-leaving');
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+              document.body.classList.add('page-ready');
+            });
+          });
+        };
+
+        ready();
+        window.addEventListener('pageshow', ready);
+      }
+
+      function openCreateForm() {
+        navigateTo(buildFormPageUrl());
+      }
+
+      function openLedgerSheet() {
+        openUrl(appLinks.ledgerUrl);
+      }
+
+      function openRecordDetail(recordId) {
+        navigateTo(buildDetailPageUrl(recordId));
+      }
+
+      function handleSearch(event) {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+          refreshData(event.target.value);
+        }, 250);
+      }
+
+      function iconSvg(name) {
+        const icons = {
+          debt: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7.5h16M6.5 4.5h11a1.5 1.5 0 0 1 1.5 1.5v12A1.5 1.5 0 0 1 17.5 19.5h-11A1.5 1.5 0 0 1 5 18V6A1.5 1.5 0 0 1 6.5 4.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 9.5v5M9.5 12h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          `,
+          paid: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <path d="m8.5 12.3 2.3 2.3 4.7-5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          `,
+          outstanding: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5.2v7.1l4.4 2.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          `,
+          usage: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4.5" y="5" width="15" height="14" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 9h8M8 12h8M8 15h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          `,
+          pending: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 6v6l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          `,
+          cancelled: `
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <path d="m9 9 6 6M15 9l-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          `
+        };
+        return icons[name] || icons.usage;
+      }
+
+      function renderCards(summary) {
+        const cards = [
+          {
+            label: 'ยอดลูกหนี้รวม',
+            value: formatMoney(summary.totalAmount),
+            note: 'ยอดหนี้จากใบแจ้งค่าบริการทั้งหมดในระบบ',
+            variant: 'debt',
+            icon: 'debt'
+          },
+          {
+            label: 'ยอดชำระแล้ว',
+            value: formatMoney(summary.paidAmount),
+            note: 'ยอดที่ระบบยืนยันการชำระเรียบร้อยแล้ว',
+            variant: 'paid',
+            icon: 'paid'
+          },
+          {
+            label: 'ยอดค้างชำระ',
+            value: formatMoney(summary.outstandingAmount),
+            note: 'ยอดหนี้ที่ยังต้องติดตามการชำระเงิน',
+            variant: 'outstanding',
+            icon: 'outstanding'
+          },
+          {
+            label: 'จำนวนรายการใช้งาน',
+            value: String(summary.invoiceCount),
+            note: 'นับเฉพาะรายการที่ยังใช้งานอยู่ในระบบ',
+            variant: 'usage',
+            icon: 'usage'
+          }
+        ];
+
+        document.getElementById('cards').innerHTML = cards
+          .map(
+            (card, index) => `
+              <div class="card dashboard-card ${card.variant}" style="--enter-delay:${(0.08 + index * 0.06).toFixed(2)}s">
+                <div class="dashboard-card-head">
+                  <div>
+                    <div class="dashboard-card-label">${card.label}</div>
+                    <div class="dashboard-card-value">${card.value}</div>
+                  </div>
+                  <div class="dashboard-card-icon" aria-hidden="true">${iconSvg(card.icon)}</div>
+                </div>
+                <div class="dashboard-card-note">${card.note}</div>
+              </div>
+            `
+          )
+          .join('');
+      }
+
+      function formatPercent(value) {
+        return Number(value || 0).toLocaleString('th-TH', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 1
+        }) + '%';
+      }
+
+      function formatCompactMoney(value) {
+        const amount = Number(value || 0);
+        if (Math.abs(amount) >= 1000000) {
+          return (amount / 1000000).toLocaleString('th-TH', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }) + ' ล.';
+        }
+        if (Math.abs(amount) >= 1000) {
+          return (amount / 1000).toLocaleString('th-TH', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 1
+          }) + ' พัน';
+        }
+        return formatMoney(amount);
+      }
+
+      function renderDashboardEmpty(title, subtitle, actionLabel, action) {
+        return `
+          <div class="dashboard-empty">
+            <div class="dashboard-empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="4.5" y="5" width="15" height="14" rx="2.2" stroke="currentColor" stroke-width="1.8"></rect>
+                <path d="M8 9h8M8 12h8M8 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <div class="dashboard-empty-title">${escapeHtml(title)}</div>
+            <div class="dashboard-empty-sub">${escapeHtml(subtitle)}</div>
+          </div>
+        `;
+      }
+
+      function buildConicGradient(items, totalCount) {
+        let cursor = 0;
+        const segments = (items || []).map((item) => {
+          const portion = totalCount > 0 ? Number(item.count || 0) / totalCount : 0;
+          const start = (cursor * 360).toFixed(2);
+          cursor += portion;
+          const end = (cursor * 360).toFixed(2);
+          return `${item.color} ${start}deg ${end}deg`;
+        });
+        segments.push(`#e2e8f0 ${(cursor * 360).toFixed(2)}deg 360deg`);
+        return `conic-gradient(${segments.join(', ')})`;
+      }
+
+      function renderStatusBreakdown(breakdown) {
+        const items = (breakdown && breakdown.items) || [];
+        const totalCount = Number((breakdown && breakdown.totalCount) || 0);
+        const donut = document.getElementById('statusDonut');
+        const legend = document.getElementById('statusLegend');
+        const layout = donut && donut.parentElement;
+
+        if (!items.length) {
+          if (layout) {
+            layout.classList.add('single-empty');
+          }
+          if (legend) {
+            legend.classList.add('is-empty');
+            legend.innerHTML = '';
+          }
+          donut.innerHTML = renderDashboardEmpty(
+            'ยังไม่มีข้อมูลสถานะ',
+            'เพิ่มหรือบันทึกใบแจ้งหนี้ก่อน แล้วระบบจะสรุปสัดส่วนสถานะของเอกสารให้อัตโนมัติ',
+            'เพิ่มใบแจ้งหนี้',
+            'openCreateForm()'
+          );
+          return;
+        }
+
+        if (layout) {
+          layout.classList.remove('single-empty');
+        }
+        legend.classList.remove('is-empty');
+
+        donut.innerHTML = `
+          <div class="donut-ring" style="background:${buildConicGradient(items, totalCount)}">
+            <div class="donut-hole">
+              <div class="donut-value">${totalCount}</div>
+              <div class="donut-caption">เอกสารในระบบ</div>
+            </div>
+          </div>
+        `;
+
+        legend.innerHTML = items.length
+          ? items
+              .map(
+                (item) => `
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:${item.color}"></div>
+                    <div>
+                      <div class="legend-name">${escapeHtml(item.label)}</div>
+                      <div class="legend-meta">ยอด ${formatMoney(item.amount)}</div>
+                    </div>
+                    <div class="legend-value">
+                      <div class="legend-count">${item.count}</div>
+                      <div class="legend-amount">${totalCount > 0 ? formatPercent((item.count / totalCount) * 100) : '0%'}</div>
+                    </div>
+                  </div>
+                `
+              )
+              .join('')
+          : '';
+      }
+
+      function buildTrendPoints(items, key, width, height, padding, maxValue) {
+        const chartWidth = width - padding.left - padding.right;
+        const chartHeight = height - padding.top - padding.bottom;
+        return items.map((item, index) => {
+          const step = items.length > 1 ? chartWidth / (items.length - 1) : chartWidth / 2;
+          const value = Number(item[key] || 0);
+          return {
+            x: padding.left + (items.length > 1 ? step * index : step),
+            y: padding.top + chartHeight - (value / maxValue) * chartHeight,
+            value
+          };
+        });
+      }
+
+      function buildLinePath(points) {
+        return points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(' ');
+      }
+
+      function buildAreaPath(points, bottomY) {
+        if (!points.length) {
+          return '';
+        }
+        const first = points[0];
+        const last = points[points.length - 1];
+        return `${buildLinePath(points)} L ${last.x.toFixed(2)} ${bottomY.toFixed(2)} L ${first.x.toFixed(2)} ${bottomY.toFixed(2)} Z`;
+      }
+
+      function buildTrendSvg(items) {
+        if (!Array.isArray(items) || !items.length) {
+          return renderDashboardEmpty(
+            'ยังไม่มีข้อมูลแนวโน้มรายเดือน',
+            'เมื่อมีการออกเอกสารหลายเดือน ระบบจะแสดงกราฟเปรียบเทียบยอดออกใบแจ้ง ยอดรับชำระ และยอดค้างในส่วนนี้',
+            'เพิ่มใบแจ้งหนี้',
+            'openCreateForm()'
+          );
+        }
+
+        const width = 720;
+        const height = 280;
+        const padding = { top: 22, right: 18, bottom: 44, left: 50 };
+        const maxValue = Math.max(
+          1,
+          ...items.map((item) => Math.max(Number(item.issuedAmount || 0), Number(item.paidAmount || 0), Number(item.outstandingAmount || 0)))
+        );
+        const bottomY = height - padding.bottom;
+        const issuedPoints = buildTrendPoints(items, 'issuedAmount', width, height, padding, maxValue);
+        const paidPoints = buildTrendPoints(items, 'paidAmount', width, height, padding, maxValue);
+        const outstandingPoints = buildTrendPoints(items, 'outstandingAmount', width, height, padding, maxValue);
+
+        const grid = Array.from({ length: 5 }).map((_, index) => {
+          const value = (maxValue / 4) * (4 - index);
+          const y = padding.top + ((height - padding.top - padding.bottom) / 4) * index;
+          return `
+            <line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="rgba(148, 163, 184, 0.18)" stroke-dasharray="4 6"/>
+            <text x="${padding.left - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="#64748b">${formatCompactMoney(value)}</text>
+          `;
+        }).join('');
+
+        const xLabels = items.map((item, index) => {
+          const point = issuedPoints[index];
+          return `<text x="${point.x}" y="${height - 16}" text-anchor="middle" font-size="11" fill="#64748b">${escapeHtml(item.label)}</text>`;
+        }).join('');
+
+        const issuedArea = buildAreaPath(issuedPoints, bottomY);
+        const paidArea = buildAreaPath(paidPoints, bottomY);
+        const outstandingLine = buildLinePath(outstandingPoints);
+
+        const pointCircles = (points, color) =>
+          points.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="3.5" fill="${color}" />`).join('');
+
+        return `
+          <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="issuedFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(37, 99, 235, 0.30)" />
+                <stop offset="100%" stop-color="rgba(37, 99, 235, 0.04)" />
+              </linearGradient>
+              <linearGradient id="paidFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(34, 197, 94, 0.26)" />
+                <stop offset="100%" stop-color="rgba(34, 197, 94, 0.04)" />
+              </linearGradient>
+            </defs>
+            ${grid}
+            <path d="${issuedArea}" fill="url(#issuedFill)"></path>
+            <path d="${paidArea}" fill="url(#paidFill)"></path>
+            <path d="${buildLinePath(issuedPoints)}" fill="none" stroke="#2563eb" stroke-width="3"></path>
+            <path d="${buildLinePath(paidPoints)}" fill="none" stroke="#16a34a" stroke-width="3"></path>
+            <path d="${outstandingLine}" fill="none" stroke="#ea580c" stroke-width="2.5" stroke-dasharray="6 6"></path>
+            ${pointCircles(issuedPoints, '#2563eb')}
+            ${pointCircles(paidPoints, '#16a34a')}
+            ${xLabels}
+          </svg>
+        `;
+      }
+
+      function renderTrendPanel(monthlyTrend) {
+        const trend = Array.isArray(monthlyTrend) ? monthlyTrend : [];
+        const latestMonth = trend.length ? trend[trend.length - 1] : null;
+        const trendChart = document.getElementById('trendChart');
+        const trendStrip = document.getElementById('trendStrip');
+        document.getElementById('trendIssuedValue').textContent = formatMoney(latestMonth ? latestMonth.issuedAmount : 0);
+        document.getElementById('trendPaidValue').textContent = formatMoney(latestMonth ? latestMonth.paidAmount : 0);
+        document.getElementById('trendOutstandingValue').textContent = formatMoney(latestMonth ? latestMonth.outstandingAmount : 0);
+        trendChart.innerHTML = buildTrendSvg(trend);
+
+        if (!trend.length) {
+          trendStrip.style.display = 'none';
+          trendStrip.innerHTML = '';
+          return;
+        }
+
+        trendStrip.style.display = 'grid';
+        trendStrip.innerHTML = trend
+          .slice(-4)
+          .map(
+            (item) => `
+              <div class="trend-month-card">
+                <div class="trend-month-label">${escapeHtml(item.label)}</div>
+                <div class="trend-month-value">${formatCompactMoney(item.issuedAmount)}</div>
+                <div class="trend-month-meta">รับชำระ ${formatCompactMoney(item.paidAmount)} | ${item.documentCount} รายการ</div>
+              </div>
+            `
+          )
+          .join('');
+      }
+
+      function renderMiniBars(items) {
+        const stats = Array.isArray(items) ? items : [];
+        const maxValue = Math.max(1, ...stats.map((item) => Number(item.documentCount || 0)));
+        document.getElementById('miniBars').innerHTML = stats.length
+          ? stats
+              .map((item) => {
+                const ratio = Math.max(0.12, Number(item.documentCount || 0) / maxValue);
+                return `
+                  <div class="mini-bar-item">
+                    <div class="mini-bar-value">${item.documentCount}</div>
+                    <div class="mini-bar-track">
+                      <div class="mini-bar-fill" style="height:${(ratio * 100).toFixed(2)}%"></div>
+                    </div>
+                    <div class="mini-bar-label">${escapeHtml(item.label)}</div>
+                  </div>
+                `;
+              })
+              .join('')
+          : renderDashboardEmpty(
+              'ยังไม่มีจำนวนรายการรายเดือน',
+              'เพิ่มเอกสารในระบบเพื่อเริ่มสร้างกราฟจำนวนรายการรายเดือน',
+              'เพิ่มใบแจ้งหนี้',
+              'openCreateForm()'
+            );
+      }
+
+      function renderRingMetrics(metrics) {
+        const toneMap = {
+          debt: '#2563eb',
+          paid: '#16a34a',
+          outstanding: '#ea580c'
+        };
+
+        const items = Array.isArray(metrics) ? metrics : [];
+        document.getElementById('ringGrid').innerHTML = items.length
+          ? items
+          .map((item) => {
+            const color = toneMap[item.tone] || '#2563eb';
+            const progress = Math.min(Math.max(Number(item.value || 0), 0), 100);
+            return `
+              <div class="ring-card">
+                <div class="ring-visual" style="background:conic-gradient(${color} ${(progress * 3.6).toFixed(2)}deg, #e2e8f0 0deg)">
+                  <div class="ring-hole">
+                    <div class="ring-value" style="color:${color}">${formatPercent(progress)}</div>
+                  </div>
+                </div>
+                <div class="ring-label">${escapeHtml(item.label)}</div>
+                <div class="ring-meta">อัปเดตตามข้อมูลล่าสุดในระบบทะเบียนลูกหนี้</div>
+              </div>
+            `;
+          })
+          .join('')
+          : renderDashboardEmpty(
+              'ยังไม่มีอัตราสำคัญของระบบ',
+              'เมื่อมีข้อมูลใบแจ้งหนี้ในระบบ ส่วนนี้จะแสดงอัตราการเก็บหนี้และสัดส่วนสำคัญให้อัตโนมัติ',
+              'เพิ่มใบแจ้งหนี้',
+              'openCreateForm()'
+            );
+      }
+
+      function renderHighlightPanel(latestRecord, topDebtors) {
+        const topDebtor = Array.isArray(topDebtors) && topDebtors.length ? topDebtors[0] : null;
+        const blocks = [];
+
+        if (latestRecord) {
+          blocks.push(`
+            <div class="highlight-block latest">
+              <div class="highlight-tag">รายการล่าสุด</div>
+              <div class="highlight-title">${escapeHtml(latestRecord.invoiceNumber || '-')}</div>
+              <div class="highlight-sub">${escapeHtml(latestRecord.customerName || 'ไม่ระบุชื่อ')}</div>
+              <div class="highlight-meta-row">
+                <div class="highlight-metric">
+                  <div class="label">สถานะ</div>
+                  <div class="value">${escapeHtml(latestRecord.displayStatus || '-')}</div>
+                </div>
+                <div class="highlight-metric">
+                  <div class="label">อัปเดตล่าสุด</div>
+                  <div class="value">${escapeHtml(latestRecord.updatedAt || latestRecord.invoiceDate || '-')}</div>
+                </div>
+              </div>
+              <div class="highlight-actions">
+                <button class="action-link" onclick="openRecordDetail('${latestRecord.recordId}')">เปิดรายการล่าสุด</button>
+              </div>
+            </div>
+          `);
+        }
+
+        if (topDebtor) {
+          blocks.push(`
+            <div class="highlight-block alert">
+              <div class="highlight-tag">ลูกหนี้ที่ต้องติดตาม</div>
+              <div class="highlight-title">${escapeHtml(topDebtor.customerName)}</div>
+              <div class="highlight-sub">ยอดค้าง ${formatMoney(topDebtor.outstandingAmount)} จาก ${topDebtor.documentCount} รายการ</div>
+              <div class="highlight-meta-row">
+                <div class="highlight-metric">
+                  <div class="label">สัดส่วนยอดค้าง</div>
+                  <div class="value">${formatPercent(topDebtor.share)}</div>
+                </div>
+                <div class="highlight-metric">
+                  <div class="label">เลขที่ล่าสุด</div>
+                  <div class="value">${escapeHtml(topDebtor.latestInvoiceNumber || '-')}</div>
+                </div>
+              </div>
+              ${topDebtor.latestRecordId ? `
+                <div class="highlight-actions">
+                  <button class="action-link" onclick="openRecordDetail('${topDebtor.latestRecordId}')">เปิดรายการค้างล่าสุด</button>
+                </div>
+              ` : ''}
+            </div>
+          `);
+        }
+
+        document.getElementById('highlightCard').innerHTML = blocks.length
+          ? blocks.join('')
+          : renderDashboardEmpty(
+              'ยังไม่มีบล็อกสรุปสำคัญ',
+              'เมื่อมีรายการล่าสุดหรือลูกหนี้ค้างชำระ ระบบจะแสดงกล่องสรุปในส่วนนี้',
+              'เพิ่มใบแจ้งหนี้',
+              'openCreateForm()'
+            );
+      }
+
+      function renderRanking(topDebtors) {
+        const items = Array.isArray(topDebtors) ? topDebtors : [];
+        const maxAmount = items.length ? Number(items[0].outstandingAmount || 0) : 0;
+        document.getElementById('rankingList').innerHTML = items.length
+          ? items
+              .map(
+                (item, index) => `
+                  <div class="ranking-item">
+                    <div class="ranking-head">
+                      <div class="ranking-name">${index + 1}. ${escapeHtml(item.customerName)}</div>
+                      <div class="ranking-amount">${formatMoney(item.outstandingAmount)}</div>
+                    </div>
+                    <div class="ranking-meta">ค้าง ${item.documentCount} รายการ | ล่าสุด ${escapeHtml(item.latestInvoiceDate || '-')}</div>
+                    <div class="ranking-bar">
+                      <div class="ranking-fill" style="width:${maxAmount > 0 ? ((Number(item.outstandingAmount || 0) / maxAmount) * 100).toFixed(2) : 0}%"></div>
+                    </div>
+                  </div>
+                `
+              )
+              .join('')
+          : renderDashboardEmpty(
+              'ยังไม่มีอันดับลูกหนี้ค้างชำระ',
+              'เมื่อมีรายการค้างชำระ ระบบจะจัดอันดับลูกหนี้ที่ต้องติดตามในส่วนนี้',
+              'เพิ่มใบแจ้งหนี้',
+              'openCreateForm()'
+            );
+      }
+
+      function renderOutstanding(rows) {
+        const body = document.getElementById('outstandingBody');
+        if (!rows.length) {
+          body.innerHTML = `<tr><td colspan="4" class="empty">ไม่มีรายการค้างชำระ</td></tr>`;
+          return;
+        }
+
+        body.innerHTML = rows
+          .map(
+            (row, index) => `
+              <tr style="--row-delay:${(0.03 + index * 0.035).toFixed(2)}s">
+                <td>
+                  <div class="row-title">${escapeHtml(row.customerName)}</div>
+                  <div class="row-sub">${escapeHtml(row.invoiceDate || '')}</div>
+                </td>
+                <td>${escapeHtml(row.invoiceNumber)}</td>
+                <td>${formatMoney(row.outstandingAmount)}</td>
+                <td><button class="action-link" onclick="openRecordDetail('${row.recordId}')">ดูรายละเอียด</button></td>
+              </tr>
+            `
+          )
+          .join('');
+      }
+
+      function renderRecent(rows) {
+        const body = document.getElementById('recentBody');
+        if (!rows.length) {
+          body.innerHTML = `<tr><td colspan="5" class="empty">ยังไม่มีรายการในระบบ</td></tr>`;
+          return;
+        }
+
+        body.innerHTML = rows
+          .map(
+            (row, index) => `
+              <tr style="--row-delay:${(0.03 + index * 0.03).toFixed(2)}s">
+                <td>${escapeHtml(row.customerName)}</td>
+                <td>${escapeHtml(row.invoiceNumber)}</td>
+                <td><span class="chip ${statusClass(row.displayStatus)}">${escapeHtml(row.displayStatus)}</span></td>
+                <td>${escapeHtml(row.paidDate || '-')}</td>
+                <td><button class="action-link" onclick="openRecordDetail('${row.recordId}')">ดูเอกสาร</button></td>
+              </tr>
+            `
+          )
+          .join('');
+      }
+
+      function render(data) {
+        clearError();
+        clearNotice();
+        appLinks = data.links || {};
+        renderCards(data.summary);
+        renderStatusBreakdown(data.statusBreakdown || {});
+        renderMiniBars(data.monthlyDocStats || []);
+        renderTrendPanel(data.monthlyTrend || []);
+        renderRingMetrics(data.ringMetrics || []);
+        renderHighlightPanel(data.latestRecord || null, data.topDebtors || []);
+        renderRanking(data.topDebtors || []);
+        renderOutstanding(data.outstanding || []);
+        renderRecent(data.recent || []);
+        document.getElementById('updatedAt').textContent = 'อัปเดตล่าสุด: ' + (data.lastUpdated || '-');
+        setLoading(false);
+      }
+
+      async function refreshData(query) {
+        setLoading(true);
+        clearError();
+        const search = typeof query === 'string' ? query : document.getElementById('searchInput').value;
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler(render)
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            })
+            .getDashboardData(search);
+          return;
+        }
+
+        try {
+          const data = await apiGet('dashboard', { query: search });
+          render(data);
+        } catch (error) {
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      async function bootstrap() {
+        await waitStaticConfigReady();
+        refreshData('');
+      }
+
+      initializePageMotion();
+      bootstrap();
+    </script>
+  </body>
+</html>
