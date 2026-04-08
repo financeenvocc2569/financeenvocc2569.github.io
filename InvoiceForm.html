@@ -978,7 +978,7 @@
     </script>
   </head>
   <body>
-    <button class="floating-back" onclick="openDashboard()">กลับ</button>
+    <button class="floating-back" onclick="handleBack()">กลับ</button>
 
     <div class="page" id="app">
       <section class="panel form-hero">
@@ -1505,8 +1505,21 @@
         window.open(url, '_blank', 'noopener');
       }
 
-      function openDashboard() {
-        navigateTo(buildDashboardPageUrl());
+      function buildRuntimePageUrl(page, params) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        url.hash = '';
+        url.searchParams.set('page', page);
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
       }
 
       function isAppsScriptRuntime() {
@@ -1640,13 +1653,58 @@
       }
 
       function buildDashboardPageUrl() {
-        return isAppsScriptRuntime() ? appLinks.dashboardUrl : buildStaticPageUrl('Dashboard.html');
+        if (isAppsScriptRuntime()) {
+          return appLinks.dashboardUrl || buildRuntimePageUrl('dashboard');
+        }
+        return buildStaticPageUrl('Dashboard.html');
       }
 
       function buildDetailPageUrl(recordId) {
-        return isAppsScriptRuntime()
-          ? `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`
-          : buildStaticPageUrl('DocumentDetail.html', { recordId });
+        if (isAppsScriptRuntime()) {
+          if (appLinks.detailUrl) {
+            return `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`;
+          }
+          return buildRuntimePageUrl('detail', { recordId });
+        }
+        return buildStaticPageUrl('DocumentDetail.html', { recordId });
+      }
+
+      function handleBack() {
+        const recordId = (currentDraft && currentDraft.recordId) || getQueryParam('recordId');
+        if (recordId) {
+          navigateTo(buildDetailPageUrl(recordId));
+          return;
+        }
+        navigateTo(buildDashboardPageUrl());
+      }
+
+      function applyPendingFormContext(recordId) {
+        const isEditing = Boolean(recordId);
+        const modeChip = document.getElementById('modeChip');
+        const heroTitle = document.getElementById('formHeroTitle');
+        const heroSubtitle = document.getElementById('formHeroSubtitle');
+        const heroModeText = document.getElementById('heroModeText');
+        const updatedAt = document.getElementById('updatedAt');
+        const draftStatusPreview = document.getElementById('draftStatusPreview');
+
+        if (isEditing) {
+          heroTitle.textContent = 'หน้าแก้ไขใบแจ้งหนี้';
+          heroSubtitle.textContent = 'กำลังโหลดข้อมูลเอกสารเดิมจากระบบ เพื่อให้คุณตรวจสอบและแก้ไขข้อมูลล่าสุดได้ทันที';
+          heroModeText.textContent = 'กำลังโหลดรายการเดิม';
+          modeChip.className = 'chip edit';
+          modeChip.textContent = 'โหมดแก้ไขรายการเดิม';
+          draftStatusPreview.textContent = 'กำลังโหลด';
+          updatedAt.textContent = 'กำลังเปิดหน้าแก้ไขเอกสาร...';
+          return;
+        }
+
+        heroTitle.textContent = 'แบบฟอร์มเพิ่มใบแจ้งหนี้';
+        heroSubtitle.textContent = 'กรอกข้อมูลหัวเอกสาร รายการบริการ และบันทึกเพื่อสร้าง PDF ตามแม่แบบอัตโนมัติ';
+        heroModeText.textContent = 'เพิ่มรายการใหม่';
+        modeChip.className = 'chip pending';
+        modeChip.textContent = 'โหมดเพิ่มรายการใหม่';
+        draftStatusPreview.textContent = 'ร่างใหม่';
+        updatedAt.textContent = 'กำลังเตรียมฟอร์ม...';
       }
 
       function parseApiPayload(text) {
@@ -2091,11 +2149,12 @@
         setLoading(true);
         clearError();
         clearNotice();
+        const recordId = getQueryParam('recordId');
+        const apiError = getQueryParam('apiError');
+        applyPendingFormContext(recordId);
         await waitStaticConfigReady();
         initializeIssueDatePicker();
         attachFormEvents();
-        const recordId = getQueryParam('recordId');
-        const apiError = getQueryParam('apiError');
 
         if (isAppsScriptRuntime()) {
           google.script.run

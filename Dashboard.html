@@ -1861,7 +1861,21 @@
       }
 
       function openLedgerSheet() {
-        openUrl(appLinks.ledgerUrl);
+        const url = appLinks.ledgerUrl;
+        if (!url) {
+          showError('ยังไม่พบลิงก์ทะเบียนลูกหนี้');
+          return;
+        }
+        const popup = window.open(url, '_blank', 'noopener');
+        if (!popup) {
+          showError('เบราว์เซอร์บล็อกการเปิดแท็บใหม่ กรุณาอนุญาต Pop-up สำหรับเว็บไซต์นี้');
+          return;
+        }
+        try {
+          popup.focus();
+        } catch (error) {
+          console.warn(error);
+        }
       }
 
       function openRecordDetail(recordId) {

@@ -175,6 +175,11 @@
         background: linear-gradient(135deg, #dc2626, #f97316);
       }
 
+      .button.success {
+        color: #ffffff;
+        background: linear-gradient(135deg, #0f766e, #22c55e);
+      }
+
       .button.ghost {
         color: var(--text);
         background: rgba(255, 255, 255, 0.58);
@@ -312,6 +317,216 @@
         color: var(--muted);
       }
 
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 2600;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+        background: rgba(15, 23, 42, 0.28);
+        backdrop-filter: blur(12px);
+      }
+
+      .modal-backdrop.is-open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(560px, 100%);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
+        padding: 24px;
+      }
+
+      .modal-card.wide {
+        width: min(700px, 100%);
+      }
+
+      .modal-title {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .modal-sub {
+        margin-top: 10px;
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .modal-field {
+        margin-top: 18px;
+      }
+
+      .modal-field label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .modal-field input,
+      .modal-field textarea {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        border-radius: 18px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        font-size: 16px;
+        padding: 14px 16px;
+        outline: none;
+      }
+
+      .modal-field textarea {
+        min-height: 112px;
+        resize: vertical;
+      }
+
+      .paid-date-selected {
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        padding: 12px 14px;
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        border-radius: 16px;
+        background: #ffffff;
+        color: var(--text);
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .paid-date-selects {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .paid-date-select-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .paid-date-select-field label {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .paid-date-select-field select {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        border-radius: 14px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        font-size: 16px;
+        padding: 10px 12px;
+        outline: none;
+      }
+
+      .paid-date-calendar {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid rgba(148, 163, 184, 0.16);
+      }
+
+      .paid-date-weekdays,
+      .paid-date-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .paid-date-weekdays {
+        margin-bottom: 10px;
+      }
+
+      .paid-date-weekday {
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .paid-date-day,
+      .paid-date-empty {
+        min-height: 42px;
+      }
+
+      .paid-date-day {
+        appearance: none;
+        border: 1px solid rgba(226, 232, 240, 0.86);
+        border-radius: 12px;
+        background: #ffffff;
+        color: var(--text);
+        font: inherit;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .paid-date-day.is-selected {
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        border-color: transparent;
+        color: #ffffff;
+        box-shadow: 0 12px 22px rgba(15, 118, 110, 0.22);
+      }
+
+      .paid-date-day.is-today:not(.is-selected) {
+        border-color: rgba(15, 118, 110, 0.34);
+        color: var(--brand-strong);
+      }
+
+      .paid-date-actions-inline {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .paid-date-ghost {
+        appearance: none;
+        border: 0;
+        background: none;
+        color: var(--brand-strong);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .modal-note {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(236, 253, 245, 0.85);
+        color: #166534;
+        font-size: 13px;
+        line-height: 1.65;
+        white-space: pre-wrap;
+      }
+
+      .modal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
       .loading {
         opacity: 0.72;
         pointer-events: none;
@@ -408,6 +623,22 @@
         .hero-title {
           font-size: 28px;
         }
+
+        .modal-card {
+          padding: 20px;
+        }
+
+        .modal-card.wide {
+          width: 100%;
+        }
+
+        .modal-title {
+          font-size: 24px;
+        }
+
+        .paid-date-selects {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
     <script>
@@ -455,10 +686,11 @@
         </div>
         <div class="action-row">
           <button class="button primary" id="editBtn" onclick="editRecord()">แก้ไขข้อมูล</button>
+          <button class="button secondary" id="paidDateBtn" onclick="openPaidDateModal()">เพิ่มวันที่ชำระหนี้</button>
           <button class="button secondary" id="printRateBtn" onclick="printDocument('rateStatement')">พิมพ์ใบแจ้งอัตราค่าบริการ</button>
           <button class="button secondary" id="printInvoiceBtn" onclick="printDocument('serviceInvoice')">พิมพ์ใบแจ้งค่าบริการ</button>
-          <button class="button danger" id="cancelBtn" onclick="cancelRecord()" hidden>ยกเลิกใบแจ้งหนี้</button>
-          <button class="button ghost" onclick="openLedgerSheet()">เปิดทะเบียนลูกหนี้</button>
+          <button class="button danger" id="cancelBtn" onclick="openStatusModal()">ยกเลิกใบแจ้งหนี้</button>
+          <button class="button ghost" id="openLedgerBtn" onclick="openLedgerSheet()">เปิดทะเบียนลูกหนี้</button>
         </div>
       </section>
 
@@ -522,9 +754,216 @@
       </section>
     </div>
 
+    <div class="modal-backdrop" id="statusModal" aria-hidden="true" onclick="handleModalBackdropClick(event, 'statusModal')">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="statusModalTitle">
+        <div class="modal-title" id="statusModalTitle">ยกเลิกใบแจ้งหนี้</div>
+        <div class="modal-sub" id="statusModalSubtitle">ระบุเหตุผลการยกเลิก แล้วกดยืนยันเพื่ออัปเดตสถานะเอกสาร</div>
+        <div class="modal-field" id="statusReasonField">
+          <label for="statusReasonInput">เหตุผลยกเลิก</label>
+          <textarea id="statusReasonInput" placeholder="ระบุเหตุผลการยกเลิกเอกสาร (เว้นว่างได้)"></textarea>
+        </div>
+        <div class="modal-note" id="statusModalNote">ระบบจะเก็บเหตุผลยกเลิกไว้ในประวัติเอกสารใบนี้</div>
+        <div class="modal-actions">
+          <button class="button ghost" type="button" id="statusModalCancelBtn" onclick="closeStatusModal()">ยกเลิก</button>
+          <button class="button danger" type="button" id="statusModalConfirmBtn" onclick="submitStatusAction()">ยืนยันยกเลิก</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="paidDateModal" aria-hidden="true" onclick="handleModalBackdropClick(event, 'paidDateModal')">
+      <div class="modal-card wide" role="dialog" aria-modal="true" aria-labelledby="paidDateModalTitle">
+        <div class="modal-title" id="paidDateModalTitle">จัดการวันที่ชำระหนี้</div>
+        <div class="modal-sub">เลือกเดือน ปี พ.ศ. แล้วกดวันที่จากปฏิทิน ระบบจะบันทึกเวลาให้อัตโนมัติ</div>
+        <div class="modal-field">
+          <label>วันที่ชำระหนี้</label>
+          <div class="paid-date-selected" id="paidDateDisplayText">วัน เดือน ปี</div>
+          <input id="paidDateInput" type="hidden" />
+        </div>
+        <div class="paid-date-selects">
+          <div class="paid-date-select-field">
+            <label for="paidDateMonth">เดือน</label>
+            <select id="paidDateMonth" onchange="handlePaidDateMonthYearChange()"></select>
+          </div>
+          <div class="paid-date-select-field">
+            <label for="paidDateYear">ปี พ.ศ.</label>
+            <select id="paidDateYear" onchange="handlePaidDateMonthYearChange()"></select>
+          </div>
+        </div>
+        <div class="paid-date-calendar">
+          <div class="paid-date-weekdays">
+            <div class="paid-date-weekday">อา</div>
+            <div class="paid-date-weekday">จ</div>
+            <div class="paid-date-weekday">อ</div>
+            <div class="paid-date-weekday">พ</div>
+            <div class="paid-date-weekday">พฤ</div>
+            <div class="paid-date-weekday">ศ</div>
+            <div class="paid-date-weekday">ส</div>
+          </div>
+          <div class="paid-date-grid" id="paidDateCalendarGrid"></div>
+          <div class="paid-date-actions-inline">
+            <button class="paid-date-ghost" type="button" id="paidDateClearBtn" onclick="clearPaidDateInput()">ล้างวันที่</button>
+            <button class="paid-date-ghost" type="button" onclick="setPaidDateToday()">วันนี้</button>
+          </div>
+        </div>
+        <div class="modal-note" id="paidDateModalNote">ยังไม่มีการบันทึกวันที่ชำระหนี้สำหรับเอกสารใบนี้</div>
+        <div class="modal-actions">
+          <button class="button ghost" type="button" id="paidDateModalCloseBtn" onclick="closePaidDateModal()">ยกเลิก</button>
+          <button class="button primary" type="button" id="paidDateSaveBtn" onclick="submitPaidDate()">บันทึกวันที่ชำระหนี้</button>
+        </div>
+      </div>
+    </div>
+
     <script>
       let appLinks = {};
       let currentRecord = null;
+      let statusModalMode = 'cancel';
+      const THAI_MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+      const THAI_YEAR_OFFSET = 543;
+      let paidDatePickerState = {
+        selected: null,
+        viewYear: new Date().getFullYear(),
+        viewMonth: new Date().getMonth()
+      };
+
+      function pad2(value) {
+        return String(value).padStart(2, '0');
+      }
+
+      function parseIsoDateParts(value) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || '').trim());
+        if (!match) {
+          return null;
+        }
+        const year = Number(match[1]);
+        const month = Number(match[2]) - 1;
+        const day = Number(match[3]);
+        if (!year || month < 0 || month > 11 || !day) {
+          return null;
+        }
+        return { year, month, day };
+      }
+
+      function buildIsoDateString(year, month, day) {
+        return `${year}-${pad2(month + 1)}-${pad2(day)}`;
+      }
+
+      function getDaysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+      }
+
+      function getTodayDateParts() {
+        const now = new Date();
+        return {
+          year: now.getFullYear(),
+          month: now.getMonth(),
+          day: now.getDate()
+        };
+      }
+
+      function formatThaiDateParts(parts) {
+        if (!parts) {
+          return '';
+        }
+        return `${parts.day} ${THAI_MONTHS[parts.month]} พ.ศ. ${parts.year + THAI_YEAR_OFFSET}`;
+      }
+
+      function getPaidDateYearRange(selectedYear) {
+        const currentBe = new Date().getFullYear() + THAI_YEAR_OFFSET;
+        const selectedBe = (selectedYear || new Date().getFullYear()) + THAI_YEAR_OFFSET;
+        const startBe = Math.min(currentBe - 25, selectedBe - 10);
+        const endBe = Math.max(currentBe + 25, selectedBe + 10);
+        return { startBe, endBe };
+      }
+
+      function updatePaidDateDisplay(parts) {
+        const target = document.getElementById('paidDateDisplayText');
+        if (!target) {
+          return;
+        }
+        target.textContent = parts ? formatThaiDateParts(parts) : 'วัน เดือน ปี';
+      }
+
+      function renderPaidDatePicker() {
+        const hiddenInput = document.getElementById('paidDateInput');
+        const monthSelect = document.getElementById('paidDateMonth');
+        const yearSelect = document.getElementById('paidDateYear');
+        const grid = document.getElementById('paidDateCalendarGrid');
+        if (!hiddenInput || !monthSelect || !yearSelect || !grid) {
+          return;
+        }
+
+        const selected = paidDatePickerState.selected;
+        const viewYear = paidDatePickerState.viewYear;
+        const viewMonth = paidDatePickerState.viewMonth;
+        const today = getTodayDateParts();
+        const yearRange = getPaidDateYearRange(viewYear);
+
+        monthSelect.innerHTML = THAI_MONTHS.map((label, index) => `<option value="${index}" ${index === viewMonth ? 'selected' : ''}>${label}</option>`).join('');
+        yearSelect.innerHTML = Array.from({ length: yearRange.endBe - yearRange.startBe + 1 }, (_, index) => {
+          const beYear = yearRange.startBe + index;
+          const gregorianYear = beYear - THAI_YEAR_OFFSET;
+          return `<option value="${gregorianYear}" ${gregorianYear === viewYear ? 'selected' : ''}>${beYear}</option>`;
+        }).join('');
+
+        const daysInMonth = getDaysInMonth(viewYear, viewMonth);
+        const firstWeekDay = new Date(viewYear, viewMonth, 1).getDay();
+        const gridItems = [];
+        for (let i = 0; i < firstWeekDay; i += 1) {
+          gridItems.push('<span class="paid-date-empty"></span>');
+        }
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const isSelected = selected && selected.year === viewYear && selected.month === viewMonth && selected.day === day;
+          const isToday = today.year === viewYear && today.month === viewMonth && today.day === day;
+          gridItems.push(
+            `<button type="button" class="paid-date-day${isSelected ? ' is-selected' : ''}${isToday ? ' is-today' : ''}" onclick="selectPaidDateDay(${day})">${day}</button>`
+          );
+        }
+        grid.innerHTML = gridItems.join('');
+
+        hiddenInput.value = selected ? buildIsoDateString(selected.year, selected.month, selected.day) : '';
+        updatePaidDateDisplay(selected);
+      }
+
+      function setPaidDateValue(isoValue) {
+        paidDatePickerState.selected = parseIsoDateParts(isoValue);
+        if (paidDatePickerState.selected) {
+          paidDatePickerState.viewYear = paidDatePickerState.selected.year;
+          paidDatePickerState.viewMonth = paidDatePickerState.selected.month;
+        }
+        renderPaidDatePicker();
+      }
+
+      function handlePaidDateMonthYearChange() {
+        const month = Number(document.getElementById('paidDateMonth').value);
+        const year = Number(document.getElementById('paidDateYear').value);
+        const selectedDay = paidDatePickerState.selected ? Number(paidDatePickerState.selected.day || 0) : 0;
+        paidDatePickerState.viewMonth = month;
+        paidDatePickerState.viewYear = year;
+        if (selectedDay) {
+          const safeDay = Math.min(selectedDay, getDaysInMonth(year, month));
+          setPaidDateValue(buildIsoDateString(year, month, safeDay));
+          return;
+        }
+        paidDatePickerState.selected = null;
+        renderPaidDatePicker();
+      }
+
+      function selectPaidDateDay(day) {
+        setPaidDateValue(buildIsoDateString(paidDatePickerState.viewYear, paidDatePickerState.viewMonth, day));
+        const note = document.getElementById('paidDateModalNote');
+        if (note && paidDatePickerState.selected) {
+          note.textContent = `วันที่ชำระหนี้ที่เลือก: ${formatThaiDateParts(paidDatePickerState.selected)}`;
+        }
+      }
+
+      function setPaidDateToday() {
+        const today = getTodayDateParts();
+        setPaidDateValue(buildIsoDateString(today.year, today.month, today.day));
+        const note = document.getElementById('paidDateModalNote');
+        if (note) {
+          note.textContent = `วันที่ชำระหนี้ที่เลือก: ${formatThaiDateParts(paidDatePickerState.selected)}`;
+        }
+      }
 
       function formatMoney(value) {
         return Number(value || 0).toLocaleString('th-TH', {
@@ -533,15 +972,158 @@
         });
       }
 
+      function parseDisplayDateTimeParts(value) {
+        const text = String(value || '').trim();
+        if (!text || text === '-') {
+          return null;
+        }
+
+        const slashPattern = /^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?$/;
+        const slashMatch = slashPattern.exec(text);
+        if (slashMatch) {
+          const day = Number(slashMatch[1]);
+          const month = Number(slashMatch[2]) - 1;
+          let year = Number(slashMatch[3]);
+          if (year > 2400) {
+            year -= THAI_YEAR_OFFSET;
+          }
+          const hour = Number(slashMatch[4]);
+          const minute = Number(slashMatch[5]);
+          if (month >= 0 && month <= 11) {
+            return {
+              day,
+              month,
+              yearBe: year + THAI_YEAR_OFFSET,
+              hour,
+              minute
+            };
+          }
+        }
+
+        const thaiPattern = /^(\d{1,2})\s+([^\s]+)\s+(?:พ\.ศ\.\s*)?(\d{4})\s+เวลา(?:ไทย)?\s*(\d{1,2}):(\d{2})/;
+        const thaiMatch = thaiPattern.exec(text);
+        if (thaiMatch) {
+          const day = Number(thaiMatch[1]);
+          const monthName = thaiMatch[2].trim();
+          const month = THAI_MONTHS.findIndex((item) => item === monthName);
+          const yearBe = Number(thaiMatch[3]);
+          const hour = Number(thaiMatch[4]);
+          const minute = Number(thaiMatch[5]);
+          if (month >= 0) {
+            return {
+              day,
+              month,
+              yearBe,
+              hour,
+              minute
+            };
+          }
+        }
+
+        return null;
+      }
+
+      function formatSystemDateTimeForDisplay(value) {
+        const parts = parseDisplayDateTimeParts(value);
+        if (!parts) {
+          return String(value || '-');
+        }
+        return `${parts.day} ${THAI_MONTHS[parts.month]} พ.ศ. ${parts.yearBe} เวลา ${pad2(parts.hour)}:${pad2(parts.minute)} น.`;
+      }
+
+      function refreshActionButtonLabels() {
+        const cancelBtn = document.getElementById('cancelBtn');
+        const paidDateBtn = document.getElementById('paidDateBtn');
+        const isCancelled = Boolean(
+          currentRecord && (currentRecord.displayStatus === 'ยกเลิกใบแจ้งหนี้' || currentRecord.systemStatus === 'CANCELLED')
+        );
+        const hasPaidDate = Boolean(currentRecord && currentRecord.paidDate);
+
+        if (cancelBtn) {
+          cancelBtn.textContent = isCancelled ? 'ย้อนสถานะใบแจ้งหนี้' : 'ยกเลิกใบแจ้งหนี้';
+          cancelBtn.className = `button ${isCancelled ? 'success' : 'danger'}`;
+          cancelBtn.hidden = false;
+        }
+
+        if (paidDateBtn) {
+          paidDateBtn.textContent = hasPaidDate ? 'แก้ไขวันที่ชำระหนี้' : 'เพิ่มวันที่ชำระหนี้';
+        }
+      }
+
+      function syncActionButtons(loading) {
+        const hasRecord = Boolean(currentRecord && currentRecord.recordId);
+        refreshActionButtonLabels();
+
+        [
+          { id: 'editBtn', requiresRecord: true },
+          { id: 'paidDateBtn', requiresRecord: true },
+          { id: 'printRateBtn', requiresRecord: true },
+          { id: 'printInvoiceBtn', requiresRecord: true },
+          { id: 'cancelBtn', requiresRecord: true },
+          { id: 'openLedgerBtn', requiresRecord: false },
+          { id: 'statusModalCancelBtn', requiresRecord: false },
+          { id: 'statusModalConfirmBtn', requiresRecord: false },
+          { id: 'paidDateModalCloseBtn', requiresRecord: false },
+          { id: 'paidDateClearBtn', requiresRecord: false },
+          { id: 'paidDateSaveBtn', requiresRecord: false }
+        ].forEach((item) => {
+          const button = document.getElementById(item.id);
+          if (!button) {
+            return;
+          }
+
+          const shouldDisable = loading || (item.requiresRecord && !hasRecord);
+          button.disabled = shouldDisable;
+        });
+
+      }
+
+      function updateModalOpenState() {
+        const hasOpenModal = ['statusModal', 'paidDateModal'].some((id) => {
+          const modal = document.getElementById(id);
+          return Boolean(modal && modal.classList.contains('is-open'));
+        });
+        document.body.classList.toggle('modal-open', hasOpenModal);
+      }
+
+      function setModalVisibility(id, isOpen) {
+        const modal = document.getElementById(id);
+        if (!modal) {
+          return;
+        }
+        modal.classList.toggle('is-open', isOpen);
+        modal.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        updateModalOpenState();
+      }
+
+      function handleModalBackdropClick(event, modalId) {
+        if (document.body.classList.contains('is-busy')) {
+          return;
+        }
+        if (!event || event.target.id !== modalId) {
+          return;
+        }
+        if (modalId === 'statusModal') {
+          closeStatusModal();
+          return;
+        }
+        if (modalId === 'paidDateModal') {
+          closePaidDateModal();
+        }
+      }
+
+      function closeStatusModal() {
+        setModalVisibility('statusModal', false);
+      }
+
+      function closePaidDateModal() {
+        setModalVisibility('paidDateModal', false);
+      }
+
       function setLoading(loading) {
         document.getElementById('app').classList.toggle('loading', loading);
         document.body.classList.toggle('is-busy', loading);
-        ['editBtn', 'printRateBtn', 'printInvoiceBtn', 'cancelBtn'].forEach((id) => {
-          const button = document.getElementById(id);
-          if (button) {
-            button.disabled = loading;
-          }
-        });
+        syncActionButtons(loading);
       }
 
       function showError(message) {
@@ -698,20 +1280,45 @@
         return url.toString();
       }
 
+      function buildRuntimePageUrl(page, params) {
+        const url = new URL(window.location.href);
+        url.search = '';
+        url.hash = '';
+        url.searchParams.set('page', page);
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+
+        return url.toString();
+      }
+
       function buildDashboardPageUrl() {
-        return isAppsScriptRuntime() ? appLinks.dashboardUrl : buildStaticPageUrl('Dashboard.html');
+        if (isAppsScriptRuntime()) {
+          return appLinks.dashboardUrl || buildRuntimePageUrl('dashboard');
+        }
+        return buildStaticPageUrl('Dashboard.html');
       }
 
       function buildFormPageUrl(recordId) {
-        return isAppsScriptRuntime()
-          ? `${currentRecord.links.editUrl}`
-          : buildStaticPageUrl('InvoiceForm.html', { recordId });
+        if (isAppsScriptRuntime()) {
+          return (currentRecord && currentRecord.links && currentRecord.links.editUrl) || buildRuntimePageUrl('form', { recordId });
+        }
+        return buildStaticPageUrl('InvoiceForm.html', { recordId });
       }
 
       function buildDetailPageUrl(recordId) {
-        return isAppsScriptRuntime()
-          ? `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`
-          : buildStaticPageUrl('DocumentDetail.html', { recordId });
+        if (isAppsScriptRuntime()) {
+          if (appLinks.detailUrl) {
+            return `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`;
+          }
+          return buildRuntimePageUrl('detail', { recordId });
+        }
+        return buildStaticPageUrl('DocumentDetail.html', { recordId });
       }
 
       function parseApiPayload(text) {
@@ -800,9 +1407,7 @@
           return payload.data;
         } catch (error) {
           if (error instanceof TypeError) {
-            const blockedError = new Error(
-              'เบราว์เซอร์ไม่สามารถส่งคำขอยกเลิกไปยัง Apps Script API ได้ อาจติดข้อจำกัด CORS ของการเปิดผ่าน GitHub Pages'
-            );
+            const blockedError = new Error('เบราว์เซอร์ไม่สามารถส่งคำขอไปยัง Apps Script API ได้ อาจติดข้อจำกัด CORS ของการเปิดผ่าน GitHub Pages');
             blockedError.code = 'cors_post_blocked';
             throw blockedError;
           }
@@ -810,8 +1415,8 @@
         }
       }
 
-      function submitCancelThroughForm(recordId, reason) {
-        const actionUrl = buildApiUrl('cancel', {
+      function submitActionThroughForm(action, recordId, fields) {
+        const actionUrl = buildApiUrl(action, {
           responseMode: 'redirect',
           returnTo: buildStaticPageUrl('DocumentDetail.html', { recordId }),
           errorTo: buildStaticPageUrl('DocumentDetail.html', { recordId })
@@ -822,15 +1427,19 @@
         form.action = actionUrl;
         form.style.display = 'none';
 
-        [
-          { name: 'recordId', value: recordId || '' },
-          { name: 'reason', value: reason || '' }
-        ].forEach((field) => {
+        [{ name: 'recordId', value: recordId || '' }]
+          .concat(
+            Object.keys(fields || {}).map((key) => ({
+              name: key,
+              value: fields[key]
+            }))
+          )
+          .forEach((field) => {
           const input = document.createElement('textarea');
           input.name = field.name;
-          input.value = field.value;
+          input.value = field.value == null ? '' : String(field.value);
           form.appendChild(input);
-        });
+          });
 
         document.body.appendChild(form);
         form.submit();
@@ -865,12 +1474,86 @@
         window.addEventListener('pageshow', ready);
       }
 
-      function openUrl(url) {
+      function openUrl(url, targetWindow) {
         if (!url) {
           showError('ยังไม่พบลิงก์เอกสารที่ต้องการใช้งาน');
           return;
         }
-        window.open(url, '_blank', 'noopener');
+
+        if (targetWindow && !targetWindow.closed) {
+          try {
+            targetWindow.location.replace(url);
+            if (typeof targetWindow.focus === 'function') {
+              targetWindow.focus();
+            }
+            return;
+          } catch (error) {
+            console.warn(error);
+          }
+        }
+
+        const popup = window.open(url, '_blank', 'noopener');
+        if (!popup) {
+          window.location.assign(url);
+        }
+      }
+
+      function openPendingPrintWindow() {
+        const popup = window.open('', '_blank');
+        if (!popup) {
+          return null;
+        }
+
+        try {
+          popup.document.open();
+          popup.document.write(`
+            <!DOCTYPE html>
+            <html lang="th">
+              <head>
+                <meta charset="UTF-8" />
+                <title>กำลังเปิดเอกสาร PDF</title>
+                <style>
+                  body {
+                    margin: 0;
+                    min-height: 100vh;
+                    display: grid;
+                    place-items: center;
+                    background: #f8fafc;
+                    color: #1f2937;
+                    font-family: Taviraj, serif;
+                  }
+                  .card {
+                    padding: 28px 32px;
+                    border-radius: 22px;
+                    background: #ffffff;
+                    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.10);
+                    text-align: center;
+                  }
+                  .title {
+                    font-size: 24px;
+                    font-weight: 700;
+                  }
+                  .sub {
+                    margin-top: 8px;
+                    font-size: 14px;
+                    color: #64748b;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="card">
+                  <div class="title">กำลังเปิดไฟล์ PDF</div>
+                  <div class="sub">กรุณารอสักครู่ ระบบกำลังพาไปยังเอกสารสำหรับพิมพ์</div>
+                </div>
+              </body>
+            </html>
+          `);
+          popup.document.close();
+        } catch (error) {
+          console.warn(error);
+        }
+
+        return popup;
       }
 
       function openDashboard() {
@@ -878,7 +1561,21 @@
       }
 
       function openLedgerSheet() {
-        openUrl(appLinks.ledgerUrl);
+        const url = appLinks.ledgerUrl;
+        if (!url) {
+          showError('ยังไม่พบลิงก์ทะเบียนลูกหนี้ กรุณา Deploy ใหม่อีกครั้ง');
+          return;
+        }
+        const popup = window.open(url, '_blank', 'noopener');
+        if (!popup) {
+          showError('เบราว์เซอร์บล็อกการเปิดแท็บใหม่ กรุณาอนุญาต Pop-up สำหรับเว็บไซต์นี้');
+          return;
+        }
+        try {
+          popup.focus();
+        } catch (error) {
+          console.warn(error);
+        }
       }
 
       function editRecord() {
@@ -889,28 +1586,136 @@
         navigateTo(buildFormPageUrl(currentRecord.recordId));
       }
 
-      async function cancelRecord() {
+      function openStatusModal() {
         if (!currentRecord || !currentRecord.recordId) {
-          showError('ไม่พบข้อมูลเอกสารที่ต้องการยกเลิก');
+          showError('ไม่พบข้อมูลเอกสารที่ต้องการจัดการสถานะ');
           return;
         }
 
-        if (currentRecord.displayStatus === 'ยกเลิกใบแจ้งหนี้' || currentRecord.systemStatus === 'CANCELLED') {
-          showError('เอกสารนี้ถูกยกเลิกไปแล้ว');
+        const isCancelled = currentRecord.displayStatus === 'ยกเลิกใบแจ้งหนี้' || currentRecord.systemStatus === 'CANCELLED';
+        const title = document.getElementById('statusModalTitle');
+        const subtitle = document.getElementById('statusModalSubtitle');
+        const note = document.getElementById('statusModalNote');
+        const reasonField = document.getElementById('statusReasonField');
+        const reasonInput = document.getElementById('statusReasonInput');
+        const confirmBtn = document.getElementById('statusModalConfirmBtn');
+
+        statusModalMode = isCancelled ? 'restore' : 'cancel';
+
+        if (isCancelled) {
+          title.textContent = 'ย้อนสถานะใบแจ้งหนี้';
+          subtitle.textContent = `ยืนยันเพื่อเปิดใช้งานเอกสารเลขที่ ${currentRecord.invoiceNumber || '-'} อีกครั้ง`;
+          note.textContent = currentRecord.cancelReason
+            ? `เหตุผลที่เคยยกเลิก: ${currentRecord.cancelReason}`
+            : 'เอกสารนี้ไม่มีเหตุผลยกเลิกที่บันทึกไว้';
+          reasonField.style.display = 'none';
+          reasonInput.value = currentRecord.cancelReason || '';
+          confirmBtn.textContent = 'ยืนยันย้อนสถานะ';
+          confirmBtn.className = 'button success';
+        } else {
+          title.textContent = 'ยกเลิกใบแจ้งหนี้';
+          subtitle.textContent = `กรอกเหตุผลการยกเลิกของเลขที่ ${currentRecord.invoiceNumber || '-'} แล้วกดยืนยัน`;
+          note.textContent = 'เมื่อยกเลิกแล้ว คุณยังสามารถย้อนสถานะกลับมาเปิดใช้งานเอกสารใบนี้ได้ภายหลัง';
+          reasonField.style.display = 'block';
+          reasonInput.value = currentRecord.cancelReason || '';
+          confirmBtn.textContent = 'ยืนยันยกเลิก';
+          confirmBtn.className = 'button danger';
+        }
+
+        setModalVisibility('statusModal', true);
+      }
+
+      async function submitStatusAction() {
+        if (!currentRecord || !currentRecord.recordId) {
+          showError('ไม่พบข้อมูลเอกสารที่ต้องการจัดการสถานะ');
           return;
         }
 
-        const confirmed = window.confirm(`ต้องการยกเลิกใบแจ้งหนี้เลขที่ ${currentRecord.invoiceNumber || '-'} ใช่หรือไม่`);
-        if (!confirmed) {
+        const isRestore = statusModalMode === 'restore';
+        const action = isRestore ? 'restore' : 'cancel';
+        const reason = String(document.getElementById('statusReasonInput').value || '').trim();
+        setLoading(true);
+        clearError();
+        clearNotice();
+
+        if (isAppsScriptRuntime()) {
+          const runner = google.script.run
+            .withSuccessHandler(() => {
+              closeStatusModal();
+              setLoading(false);
+              navigateTo(buildDetailPageUrl(currentRecord.recordId));
+            })
+            .withFailureHandler((error) => {
+              setLoading(false);
+              showError(error.message || String(error));
+            });
+
+          if (isRestore) {
+            runner.restoreInvoiceFromWeb(currentRecord.recordId);
+          } else {
+            runner.cancelInvoiceFromWeb(currentRecord.recordId, reason);
+          }
           return;
         }
 
-        const reasonInput = window.prompt('ระบุเหตุผลการยกเลิก (เว้นว่างได้)', currentRecord.cancelReason || '');
-        if (reasonInput === null) {
+        try {
+          await apiPost(action, Object.assign({ recordId: currentRecord.recordId }, isRestore ? {} : { reason }));
+          closeStatusModal();
+          setLoading(false);
+          navigateTo(buildDetailPageUrl(currentRecord.recordId));
+        } catch (error) {
+          if (error && error.code === 'cors_post_blocked') {
+            showNotice(`กำลังสลับไป${isRestore ? 'ย้อนสถานะ' : 'ยกเลิกเอกสาร'}ผ่าน Apps Script โดยตรง`);
+            submitActionThroughForm(action, currentRecord.recordId, isRestore ? {} : { reason });
+            return;
+          }
+          setLoading(false);
+          showError(error.message || String(error));
+        }
+      }
+
+      function openPaidDateModal() {
+        if (!currentRecord || !currentRecord.recordId) {
+          showError('ไม่พบข้อมูลเอกสารที่ต้องการอัปเดตวันที่ชำระหนี้');
           return;
         }
 
-        const reason = String(reasonInput || '').trim();
+        const note = document.getElementById('paidDateModalNote');
+        const initialDate = currentRecord.paidDateValue || '';
+        if (initialDate) {
+          setPaidDateValue(initialDate);
+          note.textContent = `วันที่ชำระหนี้ปัจจุบัน: ${currentRecord.paidDate}`;
+        } else {
+          paidDatePickerState.selected = null;
+          const today = getTodayDateParts();
+          paidDatePickerState.viewYear = today.year;
+          paidDatePickerState.viewMonth = today.month;
+          renderPaidDatePicker();
+          note.textContent = 'ยังไม่มีการบันทึกวันที่ชำระหนี้สำหรับเอกสารใบนี้';
+        }
+        setModalVisibility('paidDateModal', true);
+        window.setTimeout(() => {
+          const monthSelect = document.getElementById('paidDateMonth');
+          if (monthSelect) {
+            monthSelect.focus();
+          }
+        }, 0);
+      }
+
+      function clearPaidDateInput() {
+        const note = document.getElementById('paidDateModalNote');
+        paidDatePickerState.selected = null;
+        renderPaidDatePicker();
+        note.textContent = 'เมื่อล้างวันที่แล้วบันทึก เอกสารจะกลับไปคำนวณสถานะตามยอดค้างชำระอีกครั้ง';
+      }
+
+      async function submitPaidDate() {
+        if (!currentRecord || !currentRecord.recordId) {
+          showError('ไม่พบข้อมูลเอกสารที่ต้องการอัปเดตวันที่ชำระหนี้');
+          return;
+        }
+
+        const paidDate = document.getElementById('paidDateInput').value || '';
         setLoading(true);
         clearError();
         clearNotice();
@@ -918,6 +1723,7 @@
         if (isAppsScriptRuntime()) {
           google.script.run
             .withSuccessHandler(() => {
+              closePaidDateModal();
               setLoading(false);
               navigateTo(buildDetailPageUrl(currentRecord.recordId));
             })
@@ -925,21 +1731,22 @@
               setLoading(false);
               showError(error.message || String(error));
             })
-            .cancelInvoiceFromWeb(currentRecord.recordId, reason);
+            .updateInvoicePaidDateFromWeb(currentRecord.recordId, paidDate);
           return;
         }
 
         try {
-          await apiPost('cancel', {
+          await apiPost('paidDate', {
             recordId: currentRecord.recordId,
-            reason
+            paidDate
           });
+          closePaidDateModal();
           setLoading(false);
           navigateTo(buildDetailPageUrl(currentRecord.recordId));
         } catch (error) {
           if (error && error.code === 'cors_post_blocked') {
-            showNotice('กำลังสลับไปยกเลิกเอกสารผ่าน Apps Script โดยตรง');
-            submitCancelThroughForm(currentRecord.recordId, reason);
+            showNotice('กำลังสลับไปอัปเดตวันที่ชำระหนี้ผ่าน Apps Script โดยตรง');
+            submitActionThroughForm('paidDate', currentRecord.recordId, { paidDate });
             return;
           }
           setLoading(false);
@@ -952,6 +1759,8 @@
           showError('ไม่พบข้อมูลเอกสารสำหรับพิมพ์');
           return;
         }
+
+        const pendingWindow = openPendingPrintWindow();
         setLoading(true);
         clearError();
         clearNotice();
@@ -959,11 +1768,13 @@
           google.script.run
             .withSuccessHandler((url) => {
               setLoading(false);
-              showNotice('เปิดไฟล์ PDF สำหรับพิมพ์เรียบร้อย');
-              openUrl(url);
+              openUrl(url, pendingWindow);
             })
             .withFailureHandler((error) => {
               setLoading(false);
+              if (pendingWindow && !pendingWindow.closed) {
+                pendingWindow.close();
+              }
               showError(error.message || String(error));
             })
             .getStoredDocumentUrl(currentRecord.recordId, type);
@@ -976,10 +1787,12 @@
             type
           });
           setLoading(false);
-          showNotice('เปิดไฟล์ PDF สำหรับพิมพ์เรียบร้อย');
-          openUrl(data.url);
+          openUrl(data.url, pendingWindow);
         } catch (error) {
           setLoading(false);
+          if (pendingWindow && !pendingWindow.closed) {
+            pendingWindow.close();
+          }
           showError(error.message || String(error));
         }
       }
@@ -1065,17 +1878,19 @@
         appLinks = links || record.links || {};
         clearError();
         clearNotice();
+        closeStatusModal();
+        closePaidDateModal();
 
         document.getElementById('heroTitle').textContent = record.invoiceNumber || 'รายละเอียดเอกสาร';
         document.getElementById('heroSubtitle').textContent =
-          'เอกสารนี้ถูกสร้างและเก็บ PDF ไว้ในระบบแล้ว คุณสามารถตรวจสอบรายละเอียด แก้ไขข้อมูล และพิมพ์เอกสารจากหน้านี้ได้ทันที';
+          record.systemStatus === 'CANCELLED'
+            ? 'เอกสารใบนี้ถูกยกเลิกอยู่ในระบบ คุณยังตรวจสอบข้อมูลเดิม พิมพ์ไฟล์เดิม อัปเดตวันที่ชำระหนี้ หรือย้อนสถานะกลับมาใช้งานได้จากหน้านี้'
+            : 'เอกสารนี้ถูกสร้างและเก็บ PDF ไว้ในระบบแล้ว คุณสามารถตรวจสอบรายละเอียด แก้ไขข้อมูล อัปเดตวันที่ชำระหนี้ และพิมพ์เอกสารจากหน้านี้ได้ทันที';
 
         const statusChip = document.getElementById('statusChip');
         statusChip.className = 'chip ' + statusClass(record.displayStatus);
         statusChip.textContent = record.displayStatus || 'ไม่ระบุสถานะ';
-        const cancelBtn = document.getElementById('cancelBtn');
-        cancelBtn.hidden = record.displayStatus === 'ยกเลิกใบแจ้งหนี้' || record.systemStatus === 'CANCELLED';
-
+        refreshActionButtonLabels();
         renderMetricCards(record);
         renderDetailList('headerDetailList', [
           { label: 'ชื่อผู้ใช้บริการ', value: record.customerName },
@@ -1088,15 +1903,16 @@
         renderDetailList('systemDetailList', [
           { label: 'รหัสรายการ', value: record.recordId },
           { label: 'สถานะเอกสาร', value: record.displayStatus },
-          { label: 'สร้างเมื่อ', value: record.createdAt || '-' },
-          { label: 'แก้ไขล่าสุด', value: record.updatedAt || '-' },
-          { label: 'ยกเลิกเมื่อ', value: record.cancelledAt || '-' },
+          { label: 'สร้างเมื่อ', value: formatSystemDateTimeForDisplay(record.createdAt || '-') },
+          { label: 'แก้ไขล่าสุด', value: formatSystemDateTimeForDisplay(record.updatedAt || '-') },
+          { label: 'ยกเลิกเมื่อ', value: formatSystemDateTimeForDisplay(record.cancelledAt || '-') },
           { label: 'หมายเหตุยกเลิก', value: record.cancelReason || '-' }
         ]);
         renderItems('rateItemsBody', record.rateItems || []);
         renderItems('invoiceItemsBody', record.invoiceItems || []);
 
-        document.getElementById('updatedAt').textContent = 'อัปเดตล่าสุด: ' + (record.updatedAt || record.createdAt || '-');
+        document.getElementById('updatedAt').textContent =
+          'อัปเดตล่าสุด: ' + formatSystemDateTimeForDisplay(record.updatedAt || record.createdAt || '-');
         setLoading(false);
       }
 
