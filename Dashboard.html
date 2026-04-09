@@ -136,41 +136,47 @@
         border: 1px solid rgba(148, 163, 184, 0.24);
       }
 
-      .fab-create {
+      .fab-back {
         position: fixed;
-        right: 36px;
-        bottom: 28px;
-        z-index: 2000;
-        width: 72px;
-        height: 72px;
+        left: 18px;
+        top: 18px;
+        z-index: 2100;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--text);
+        box-shadow: 0 14px 26px rgba(148, 163, 184, 0.18);
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 700;
+        transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+      }
+
+      .fab-back:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 18px 32px rgba(148, 163, 184, 0.22);
+      }
+
+      .fab-back:active {
+        transform: translateY(0);
+      }
+
+      .fab-back .arrow {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border: 0;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--brand), #14b8a6);
-        color: #ffffff;
-        box-shadow: 0 20px 36px rgba(15, 118, 110, 0.28);
-        cursor: pointer;
-        transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
-      }
-
-      .fab-create:hover {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 24px 42px rgba(15, 118, 110, 0.32);
-      }
-
-      .fab-create:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      .fab-create .plus {
-        font-size: 42px;
+        background: rgba(15, 118, 110, 0.12);
+        color: var(--brand-strong);
+        flex: 0 0 auto;
+        font-size: 18px;
         line-height: 1;
-        font-weight: 400;
-        transform: translateY(-2px);
       }
 
       .search {
@@ -1164,12 +1170,77 @@
         pointer-events: none;
       }
 
+      .loader-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 3400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.24);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .loader-overlay[hidden] {
+        display: none;
+      }
+
+      .loader-card {
+        width: min(320px, 100%);
+        display: grid;
+        place-items: center;
+        gap: 14px;
+        padding: 28px 24px;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
+        text-align: center;
+      }
+
+      .loader-spinner {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 4px solid rgba(15, 118, 110, 0.14);
+        border-top-color: var(--brand);
+        animation: page-spin 0.78s linear infinite;
+      }
+
+      .loader-title {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .loader-sub {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
       html {
         scroll-behavior: smooth;
       }
 
       body {
         overflow-x: hidden;
+      }
+
+      body.ui-overlay-open {
+        overflow: hidden;
+      }
+
+      @keyframes page-spin {
+        from {
+          transform: rotate(0deg);
+        }
+
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       .page,
@@ -1195,7 +1266,6 @@
       }
 
       .button,
-      .fab-create,
       .action-link,
       .search {
         transition:
@@ -1207,7 +1277,6 @@
       }
 
       body.is-busy .button,
-      body.is-busy .fab-create,
       body.is-busy .action-link,
       body.is-busy button {
         cursor: progress !important;
@@ -1221,7 +1290,6 @@
         .page,
         #app,
         .button,
-        .fab-create,
         .action-link,
         .chip {
           transition: none !important;
@@ -1317,15 +1385,10 @@
             "metrics";
         }
 
-        .fab-create {
-          right: 26px;
-          bottom: 24px;
-          width: 64px;
-          height: 64px;
-        }
-
-        .fab-create .plus {
-          font-size: 38px;
+        .fab-back {
+          left: 12px;
+          top: 12px;
+          padding: 9px 12px;
         }
       }
 
@@ -1387,19 +1450,6 @@
       <section class="hero">
         <div class="eyebrow">ระบบทะเบียนคุมลูกหนี้เงินบำรุง</div>
         <h1>Dashboard ภาพรวมลูกหนี้</h1>
-
-        <div class="hero-actions">
-          <button class="button secondary" onclick="openLedgerSheet()">เปิดทะเบียนลูกหนี้</button>
-          <button class="button ghost" onclick="refreshData()">รีเฟรช</button>
-        </div>
-
-        <input
-          id="searchInput"
-          class="search"
-          type="text"
-          placeholder="ค้นหาจากชื่อลูกหนี้, เลขที่ใบแจ้ง, สถานะ"
-          oninput="handleSearch(event)"
-        />
 
         <div class="notice" id="noticeBox"></div>
         <div class="error" id="errorBox"></div>
@@ -1505,7 +1555,7 @@
           <div class="panel-header">
             <div>
               <div class="panel-title">ลูกหนี้ค้างชำระ</div>
-              <div class="panel-sub">เปิดฟอร์มเพื่อแก้ไขหรือพิมพ์ซ้ำได้จากปุ่มในตาราง</div>
+              <div class="panel-sub">สรุปรายการค้างชำระจากข้อมูลล่าสุดในระบบ</div>
             </div>
           </div>
           <div class="panel-body">
@@ -1516,7 +1566,6 @@
                     <th>ลูกหนี้</th>
                     <th>เลขที่</th>
                     <th>ยอดค้าง</th>
-                    <th>เปิดฟอร์ม</th>
                   </tr>
                 </thead>
                 <tbody id="outstandingBody"></tbody>
@@ -1529,7 +1578,7 @@
           <div class="panel-header">
             <div>
               <div class="panel-title">รายการล่าสุด</div>
-              <div class="panel-sub">ตรวจสอบสถานะและเปิดไปยังหน้าฟอร์มได้ทันที</div>
+              <div class="panel-sub">สรุปรายการล่าสุดเพื่อดูภาพรวมการเคลื่อนไหว</div>
             </div>
           </div>
           <div class="panel-body">
@@ -1541,7 +1590,6 @@
                     <th>เลขที่</th>
                     <th>สถานะ</th>
                     <th>ชำระ</th>
-                    <th>เปิดฟอร์ม</th>
                   </tr>
                 </thead>
                 <tbody id="recentBody"></tbody>
@@ -1553,19 +1601,20 @@
 
     </div>
 
-    <button
-      id="createFab"
-      class="fab-create"
-      type="button"
-      title="เพิ่มใบแจ้งหนี้"
-      aria-label="เพิ่มใบแจ้งหนี้"
-      onclick="openCreateForm()"
-    >
-      <span class="plus">+</span>
+    <div class="loader-overlay" id="loadingOverlay" hidden aria-hidden="true">
+      <div class="loader-card">
+        <div class="loader-spinner" aria-hidden="true"></div>
+        <div class="loader-title" id="loadingOverlayTitle">กำลังโหลดแดชบอร์ด</div>
+        <div class="loader-sub" id="loadingOverlayText">ระบบกำลังดึงข้อมูลจาก API กรุณารอสักครู่</div>
+      </div>
+    </div>
+
+    <button class="fab-back" type="button" aria-label="กลับไปหน้ารายการติดตาม" title="กลับไปหน้ารายการติดตาม" onclick="goIndex()">
+      <span class="arrow">‹</span>
+      <span>กลับ</span>
     </button>
 
     <script>
-      let searchTimer = null;
       let appLinks = {};
 
       function formatMoney(value) {
@@ -1581,10 +1630,19 @@
         return 'pending';
       }
 
-      function setLoading(loading) {
+      function setLoading(loading, message) {
         document.getElementById('app').classList.toggle('loading', loading);
         document.body.classList.toggle('is-busy', loading);
-        document.getElementById('createFab').disabled = loading;
+        document.body.classList.toggle('ui-overlay-open', loading);
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingOverlayText');
+        if (loadingOverlay) {
+          loadingOverlay.hidden = !loading;
+          loadingOverlay.setAttribute('aria-hidden', loading ? 'false' : 'true');
+        }
+        if (loadingText) {
+          loadingText.textContent = message || 'ระบบกำลังดึงข้อมูลจาก API กรุณารอสักครู่';
+        }
       }
 
       function showError(message) {
@@ -1658,6 +1716,10 @@
         }
       }
 
+      function isFileProtocol() {
+        return window.location.protocol === 'file:';
+      }
+
       function getConfigApiBaseUrl() {
         const configValue = normalizeApiBase(window.APP_STATIC_CONFIG && window.APP_STATIC_CONFIG.apiBase);
         if (configValue) {
@@ -1724,6 +1786,23 @@
       }
 
       function buildStaticPageUrl(fileName, params) {
+        if (isFileProtocol()) {
+          const searchParams = new URLSearchParams();
+          const apiBase = getApiBaseUrl();
+          if (apiBase) {
+            searchParams.set('apiBase', apiBase);
+          }
+          Object.keys(params || {}).forEach((key) => {
+            const value = params[key];
+            if (value === '' || value === null || typeof value === 'undefined') {
+              return;
+            }
+            searchParams.set(key, String(value));
+          });
+          const query = searchParams.toString();
+          return query ? `${fileName}?${query}` : fileName;
+        }
+
         const url = new URL(fileName, window.location.href);
         const apiBase = getApiBaseUrl();
         if (apiBase) {
@@ -1741,14 +1820,15 @@
         return url.toString();
       }
 
-      function buildFormPageUrl() {
-        return isAppsScriptRuntime() ? appLinks.formUrl : buildStaticPageUrl('InvoiceForm.html');
+      function buildIndexPageUrl() {
+        if (isAppsScriptRuntime()) {
+          return appLinks.indexUrl || '';
+        }
+        return buildStaticPageUrl('index.html');
       }
 
-      function buildDetailPageUrl(recordId) {
-        return isAppsScriptRuntime()
-          ? `${appLinks.detailUrl}${appLinks.detailUrl.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId)}`
-          : buildStaticPageUrl('DocumentDetail.html', { recordId });
+      function goIndex() {
+        navigateTo(buildIndexPageUrl());
       }
 
       function parseApiPayload(text) {
@@ -1824,12 +1904,19 @@
           showError('ยังไม่พบ URL ที่ต้องการใช้งาน');
           return;
         }
-        window.open(url, '_blank', 'noopener');
+        const popup = window.open(url, '_blank', 'noopener');
+        if (!popup) {
+          window.location.assign(url);
+        }
       }
 
       function navigateTo(url) {
         if (!url) {
           showError('ยังไม่พบ URL ที่ต้องการใช้งาน');
+          return;
+        }
+        if (isFileProtocol()) {
+          window.location.href = url;
           return;
         }
         if (document.body.classList.contains('page-leaving')) {
@@ -1854,39 +1941,6 @@
 
         ready();
         window.addEventListener('pageshow', ready);
-      }
-
-      function openCreateForm() {
-        navigateTo(buildFormPageUrl());
-      }
-
-      function openLedgerSheet() {
-        const url = appLinks.ledgerUrl;
-        if (!url) {
-          showError('ยังไม่พบลิงก์ทะเบียนลูกหนี้');
-          return;
-        }
-        const popup = window.open(url, '_blank', 'noopener');
-        if (!popup) {
-          showError('เบราว์เซอร์บล็อกการเปิดแท็บใหม่ กรุณาอนุญาต Pop-up สำหรับเว็บไซต์นี้');
-          return;
-        }
-        try {
-          popup.focus();
-        } catch (error) {
-          console.warn(error);
-        }
-      }
-
-      function openRecordDetail(recordId) {
-        navigateTo(buildDetailPageUrl(recordId));
-      }
-
-      function handleSearch(event) {
-        window.clearTimeout(searchTimer);
-        searchTimer = window.setTimeout(() => {
-          refreshData(event.target.value);
-        }, 250);
       }
 
       function iconSvg(name) {
@@ -2005,7 +2059,7 @@
         return formatMoney(amount);
       }
 
-      function renderDashboardEmpty(title, subtitle, actionLabel, action) {
+      function renderDashboardEmpty(title, subtitle) {
         return `
           <div class="dashboard-empty">
             <div class="dashboard-empty-icon" aria-hidden="true">
@@ -2050,9 +2104,7 @@
           }
           donut.innerHTML = renderDashboardEmpty(
             'ยังไม่มีข้อมูลสถานะ',
-            'เพิ่มหรือบันทึกใบแจ้งหนี้ก่อน แล้วระบบจะสรุปสัดส่วนสถานะของเอกสารให้อัตโนมัติ',
-            'เพิ่มใบแจ้งหนี้',
-            'openCreateForm()'
+            'เมื่อมีใบแจ้งหนี้ในระบบ ส่วนนี้จะแสดงสัดส่วนสถานะของเอกสารให้อัตโนมัติ'
           );
           return;
         }
@@ -2123,9 +2175,7 @@
         if (!Array.isArray(items) || !items.length) {
           return renderDashboardEmpty(
             'ยังไม่มีข้อมูลแนวโน้มรายเดือน',
-            'เมื่อมีการออกเอกสารหลายเดือน ระบบจะแสดงกราฟเปรียบเทียบยอดออกใบแจ้ง ยอดรับชำระ และยอดค้างในส่วนนี้',
-            'เพิ่มใบแจ้งหนี้',
-            'openCreateForm()'
+            'เมื่อมีการออกเอกสารหลายเดือน ระบบจะแสดงกราฟเปรียบเทียบยอดออกใบแจ้ง ยอดรับชำระ และยอดค้างในส่วนนี้'
           );
         }
 
@@ -2238,9 +2288,7 @@
               .join('')
           : renderDashboardEmpty(
               'ยังไม่มีจำนวนรายการรายเดือน',
-              'เพิ่มเอกสารในระบบเพื่อเริ่มสร้างกราฟจำนวนรายการรายเดือน',
-              'เพิ่มใบแจ้งหนี้',
-              'openCreateForm()'
+              'เมื่อมีเอกสารในระบบ ส่วนนี้จะแสดงกราฟจำนวนรายการรายเดือน'
             );
       }
 
@@ -2272,9 +2320,7 @@
           .join('')
           : renderDashboardEmpty(
               'ยังไม่มีอัตราสำคัญของระบบ',
-              'เมื่อมีข้อมูลใบแจ้งหนี้ในระบบ ส่วนนี้จะแสดงอัตราการเก็บหนี้และสัดส่วนสำคัญให้อัตโนมัติ',
-              'เพิ่มใบแจ้งหนี้',
-              'openCreateForm()'
+              'เมื่อมีข้อมูลใบแจ้งหนี้ในระบบ ส่วนนี้จะแสดงอัตราการเก็บหนี้และสัดส่วนสำคัญให้อัตโนมัติ'
             );
       }
 
@@ -2298,9 +2344,6 @@
                   <div class="value">${escapeHtml(latestRecord.updatedAt || latestRecord.invoiceDate || '-')}</div>
                 </div>
               </div>
-              <div class="highlight-actions">
-                <button class="action-link" onclick="openRecordDetail('${latestRecord.recordId}')">เปิดรายการล่าสุด</button>
-              </div>
             </div>
           `);
         }
@@ -2321,11 +2364,6 @@
                   <div class="value">${escapeHtml(topDebtor.latestInvoiceNumber || '-')}</div>
                 </div>
               </div>
-              ${topDebtor.latestRecordId ? `
-                <div class="highlight-actions">
-                  <button class="action-link" onclick="openRecordDetail('${topDebtor.latestRecordId}')">เปิดรายการค้างล่าสุด</button>
-                </div>
-              ` : ''}
             </div>
           `);
         }
@@ -2334,9 +2372,7 @@
           ? blocks.join('')
           : renderDashboardEmpty(
               'ยังไม่มีบล็อกสรุปสำคัญ',
-              'เมื่อมีรายการล่าสุดหรือลูกหนี้ค้างชำระ ระบบจะแสดงกล่องสรุปในส่วนนี้',
-              'เพิ่มใบแจ้งหนี้',
-              'openCreateForm()'
+              'เมื่อมีรายการล่าสุดหรือลูกหนี้ค้างชำระ ระบบจะแสดงกล่องสรุปในส่วนนี้'
             );
       }
 
@@ -2362,16 +2398,14 @@
               .join('')
           : renderDashboardEmpty(
               'ยังไม่มีอันดับลูกหนี้ค้างชำระ',
-              'เมื่อมีรายการค้างชำระ ระบบจะจัดอันดับลูกหนี้ที่ต้องติดตามในส่วนนี้',
-              'เพิ่มใบแจ้งหนี้',
-              'openCreateForm()'
+              'เมื่อมีรายการค้างชำระ ระบบจะจัดอันดับลูกหนี้ที่ต้องติดตามในส่วนนี้'
             );
       }
 
       function renderOutstanding(rows) {
         const body = document.getElementById('outstandingBody');
         if (!rows.length) {
-          body.innerHTML = `<tr><td colspan="4" class="empty">ไม่มีรายการค้างชำระ</td></tr>`;
+          body.innerHTML = `<tr><td colspan="3" class="empty">ไม่มีรายการค้างชำระ</td></tr>`;
           return;
         }
 
@@ -2385,7 +2419,6 @@
                 </td>
                 <td>${escapeHtml(row.invoiceNumber)}</td>
                 <td>${formatMoney(row.outstandingAmount)}</td>
-                <td><button class="action-link" onclick="openRecordDetail('${row.recordId}')">ดูรายละเอียด</button></td>
               </tr>
             `
           )
@@ -2395,7 +2428,7 @@
       function renderRecent(rows) {
         const body = document.getElementById('recentBody');
         if (!rows.length) {
-          body.innerHTML = `<tr><td colspan="5" class="empty">ยังไม่มีรายการในระบบ</td></tr>`;
+          body.innerHTML = `<tr><td colspan="4" class="empty">ยังไม่มีรายการในระบบ</td></tr>`;
           return;
         }
 
@@ -2407,7 +2440,6 @@
                 <td>${escapeHtml(row.invoiceNumber)}</td>
                 <td><span class="chip ${statusClass(row.displayStatus)}">${escapeHtml(row.displayStatus)}</span></td>
                 <td>${escapeHtml(row.paidDate || '-')}</td>
-                <td><button class="action-link" onclick="openRecordDetail('${row.recordId}')">ดูเอกสาร</button></td>
               </tr>
             `
           )
@@ -2427,14 +2459,13 @@
         renderRanking(data.topDebtors || []);
         renderOutstanding(data.outstanding || []);
         renderRecent(data.recent || []);
-        document.getElementById('updatedAt').textContent = 'อัปเดตล่าสุด: ' + (data.lastUpdated || '-');
+        document.getElementById('updatedAt').textContent = 'อัปเดตล่าสุด: ' + formatLastUpdated(data.lastUpdated || '-');
         setLoading(false);
       }
 
-      async function refreshData(query) {
-        setLoading(true);
+      async function refreshData() {
+        setLoading(true, 'กำลังโหลดข้อมูลแดชบอร์ด...');
         clearError();
-        const search = typeof query === 'string' ? query : document.getElementById('searchInput').value;
         if (isAppsScriptRuntime()) {
           google.script.run
             .withSuccessHandler(render)
@@ -2442,12 +2473,12 @@
               setLoading(false);
               showError(error.message || String(error));
             })
-            .getDashboardData(search);
+            .getDashboardData('');
           return;
         }
 
         try {
-          const data = await apiGet('dashboard', { query: search });
+          const data = await apiGet('dashboard', { query: '' });
           render(data);
         } catch (error) {
           setLoading(false);
@@ -2464,9 +2495,89 @@
           .replace(/'/g, '&#39;');
       }
 
+      function parseLastUpdatedParts(value) {
+        const text = String(value || '').trim();
+        if (!text || text === '-') {
+          return null;
+        }
+
+        const slashPattern = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/;
+        const slashMatch = slashPattern.exec(text);
+        if (slashMatch) {
+          const day = Number(slashMatch[1]);
+          const month = Number(slashMatch[2]) - 1;
+          let year = Number(slashMatch[3]);
+          if (year > 2400) {
+            year -= 543;
+          }
+          const hour = slashMatch[4] ? Number(slashMatch[4]) : null;
+          const minute = slashMatch[5] ? Number(slashMatch[5]) : null;
+          if (month >= 0 && month <= 11) {
+            return { day, month, yearBe: year + 543, hour, minute };
+          }
+        }
+
+        const thaiPattern = /^(\d{1,2})\s+([^\s]+)\s+(?:พ\.ศ\.\s*)?(\d{4})(?:\s+เวลา(?:ไทย)?\s*(\d{1,2}):(\d{2}))?/;
+        const thaiMatch = thaiPattern.exec(text);
+        if (thaiMatch) {
+          const day = Number(thaiMatch[1]);
+          const monthName = thaiMatch[2].trim();
+          const months = [
+            'มกราคม',
+            'กุมภาพันธ์',
+            'มีนาคม',
+            'เมษายน',
+            'พฤษภาคม',
+            'มิถุนายน',
+            'กรกฎาคม',
+            'สิงหาคม',
+            'กันยายน',
+            'ตุลาคม',
+            'พฤศจิกายน',
+            'ธันวาคม'
+          ];
+          const month = months.findIndex((m) => m === monthName);
+          const yearBe = Number(thaiMatch[3]);
+          const hour = thaiMatch[4] ? Number(thaiMatch[4]) : null;
+          const minute = thaiMatch[5] ? Number(thaiMatch[5]) : null;
+          if (month >= 0) {
+            return { day, month, yearBe, hour, minute };
+          }
+        }
+
+        return null;
+      }
+
+      function formatLastUpdated(value) {
+        const parts = parseLastUpdatedParts(value);
+        if (!parts) {
+          return String(value || '-');
+        }
+        const months = [
+          'มกราคม',
+          'กุมภาพันธ์',
+          'มีนาคม',
+          'เมษายน',
+          'พฤษภาคม',
+          'มิถุนายน',
+          'กรกฎาคม',
+          'สิงหาคม',
+          'กันยายน',
+          'ตุลาคม',
+          'พฤศจิกายน',
+          'ธันวาคม'
+        ];
+        if (parts.hour == null || parts.minute == null) {
+          return `${parts.day} ${months[parts.month]} ${parts.yearBe}`;
+        }
+        const hh = String(parts.hour).padStart(2, '0');
+        const mm = String(parts.minute).padStart(2, '0');
+        return `${parts.day} ${months[parts.month]} ${parts.yearBe} เวลา ${hh}:${mm} น.`;
+      }
+
       async function bootstrap() {
         await waitStaticConfigReady();
-        refreshData('');
+        refreshData();
       }
 
       initializePageMotion();

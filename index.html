@@ -3,20 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>กำลังเปิด Dashboard</title>
-    <meta http-equiv="refresh" content="0; url=Dashboard.html" />
+    <title>ศูนย์ติดตามลูกหนี้</title>
+    <base target="_top" />
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600;700&display=swap');
 
       :root {
-        --bg: linear-gradient(180deg, #f8f5ef 0%, #eef6f5 100%);
-        --surface: rgba(255, 255, 255, 0.92);
+        --page-bg: #f6f1e8;
+        --surface: rgba(255, 252, 247, 0.95);
+        --line: rgba(148, 163, 184, 0.22);
         --text: #1f2937;
         --muted: #64748b;
         --brand: #0f766e;
+        --brand-strong: #115e59;
         --brand-soft: #ccfbf1;
-        --line: rgba(148, 163, 184, 0.18);
-        --shadow: 0 22px 48px rgba(15, 23, 42, 0.10);
+        --warn: #c2410c;
+        --warn-soft: #ffedd5;
+        --ok: #15803d;
+        --ok-soft: #dcfce7;
+        --danger: #b91c1c;
+        --danger-soft: #fee2e2;
+        --violet: #7c3aed;
+        --violet-soft: #ede9fe;
+        --blue: #2563eb;
+        --blue-soft: #dbeafe;
+        --shadow: 0 18px 36px rgba(148, 163, 184, 0.16);
       }
 
       * {
@@ -25,99 +36,1696 @@
 
       body {
         margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
-        font-family: 'Taviraj', serif;
         color: var(--text);
+        font-family: 'Taviraj', serif;
         background:
-          radial-gradient(circle at top left, rgba(20, 184, 166, 0.12), transparent 28%),
-          radial-gradient(circle at top right, rgba(59, 130, 246, 0.10), transparent 24%),
-          var(--bg);
+          radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 28%),
+          radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 22%),
+          linear-gradient(180deg, #f8f5ef 0%, #f4efe6 100%);
       }
 
-      .card {
-        width: min(100%, 560px);
-        padding: 28px 24px;
-        border-radius: 28px;
-        border: 1px solid rgba(255, 255, 255, 0.72);
+      body.is-busy {
+        cursor: progress;
+      }
+
+      .page {
+        max-width: 1360px;
+        margin: 0 auto;
+        padding: 20px 16px 34px;
+      }
+
+      .hero,
+      .panel,
+      .stat-card,
+      .record-card,
+      .latest-card {
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
         background: var(--surface);
         box-shadow: var(--shadow);
-        text-align: center;
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 26px;
+        margin-bottom: 14px;
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(247, 250, 252, 0.9)),
+          linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(194, 65, 12, 0.08));
+      }
+
+      .hero::after {
+        content: '';
+        position: absolute;
+        right: -38px;
+        bottom: -72px;
+        width: 190px;
+        height: 190px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(20, 184, 166, 0.2), transparent 70%);
+        pointer-events: none;
       }
 
       .eyebrow {
         display: inline-flex;
         align-items: center;
-        padding: 6px 12px;
+        padding: 7px 12px;
         border-radius: 999px;
         background: var(--brand-soft);
-        color: var(--brand);
+        color: var(--brand-strong);
         font-size: 12px;
         font-weight: 700;
       }
 
       h1 {
-        margin: 14px 0 8px;
-        font-size: 32px;
-        line-height: 1.2;
+        margin: 12px 0 8px;
+        font-size: clamp(28px, 3.6vw, 44px);
+        line-height: 1.08;
       }
 
-      p {
-        margin: 0;
+      .hero p,
+      .panel-sub,
+      .updated-at,
+      .empty,
+      .meta {
         color: var(--muted);
+      }
+
+      .hero p {
+        margin: 0;
+        max-width: 720px;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .hero-side {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px;
+        border-radius: 20px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        background: rgba(255, 255, 255, 0.62);
+      }
+
+      .hero-side .label {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .hero-side .value {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .button,
+      .mini-btn,
+      .filter-chip {
+        appearance: none;
+        border-radius: 999px;
+        border: 0;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .button {
+        padding: 11px 16px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .button.primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+      }
+
+      .button.secondary {
+        color: var(--brand-strong);
+        background: #ffffff;
+        border: 1px solid rgba(15, 118, 110, 0.18);
+      }
+
+      .button.ghost {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.58);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+      }
+
+      .button:hover,
+      .mini-btn:hover,
+      .filter-chip:hover {
+        transform: translateY(-1px);
+      }
+
+      .button:active,
+      .mini-btn:active,
+      .filter-chip:active {
+        transform: translateY(0);
+      }
+
+      .button,
+      .mini-btn,
+      .filter-chip,
+      .stat-card,
+      .record-card {
+        transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+      }
+
+      .search {
+        width: 100%;
+        margin-top: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--text);
+        padding: 12px 15px;
+        outline: none;
+      }
+
+      .search:focus {
+        border-color: rgba(15, 118, 110, 0.45);
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+      }
+
+      .filter-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .filter-chip {
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #4b5563;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(255, 255, 255, 0.86);
+      }
+
+      .filter-chip .count {
+        margin-left: 6px;
+        color: #334155;
+      }
+
+      .filter-chip.active {
+        color: #ffffff;
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        box-shadow: 0 10px 20px rgba(15, 118, 110, 0.2);
+      }
+
+      .filter-chip.active .count {
+        color: rgba(255, 255, 255, 0.92);
+      }
+
+      .notice,
+      .error,
+      .updated-at {
+        margin-top: 10px;
+        font-size: 12px;
+      }
+
+      .notice,
+      .error {
+        display: none;
+        padding: 11px 12px;
+        border-radius: 14px;
+        font-weight: 600;
+      }
+
+      .notice {
+        background: var(--brand-soft);
+        color: var(--brand-strong);
+      }
+
+      .error {
+        background: var(--danger-soft);
+        color: var(--danger);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .stat-card {
+        padding: 16px;
+        min-height: 124px;
+      }
+
+      .stat-card .label {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .stat-card .value {
+        margin-top: 8px;
+        font-size: clamp(32px, 3.2vw, 46px);
+        line-height: 1;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+
+      .stat-card .note {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #60758a;
+      }
+
+      .stat-card.total {
+        background: linear-gradient(145deg, rgba(232, 241, 255, 0.98), rgba(255, 255, 255, 0.95));
+        border-color: rgba(59, 130, 246, 0.2);
+      }
+
+      .stat-card.total .value {
+        color: #2563eb;
+      }
+
+      .stat-card.outstanding {
+        background: linear-gradient(145deg, rgba(255, 237, 213, 0.98), rgba(255, 255, 255, 0.95));
+        border-color: rgba(234, 88, 12, 0.22);
+      }
+
+      .stat-card.outstanding .value {
+        color: #ea580c;
+      }
+
+      .stat-card.pending {
+        background: linear-gradient(145deg, rgba(255, 247, 237, 0.98), rgba(255, 255, 255, 0.95));
+        border-color: rgba(249, 115, 22, 0.22);
+      }
+
+      .stat-card.pending .value {
+        color: #d97706;
+      }
+
+      .stat-card.paid {
+        background: linear-gradient(145deg, rgba(219, 252, 231, 0.98), rgba(255, 255, 255, 0.95));
+        border-color: rgba(34, 197, 94, 0.2);
+      }
+
+      .stat-card.paid .value {
+        color: #16a34a;
+      }
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .panel {
+        overflow: hidden;
+      }
+
+      .panel-head {
+        padding: 18px 18px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .panel-title {
+        margin: 0;
+        font-size: clamp(24px, 2.9vw, 34px);
+        line-height: 1.08;
+      }
+
+      .panel-sub {
+        margin-top: 6px;
+        font-size: 13px;
+      }
+
+      .panel-body {
+        padding: 16px;
+      }
+
+      .record-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .record-card {
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .record-card:hover {
+        box-shadow: 0 14px 24px rgba(148, 163, 184, 0.2);
+      }
+
+      .record-card.pending {
+        border-color: rgba(249, 115, 22, 0.26);
+        background: linear-gradient(145deg, rgba(255, 247, 237, 0.98), rgba(255, 255, 255, 0.96));
+      }
+
+      .record-card.paid {
+        border-color: rgba(34, 197, 94, 0.24);
+        background: linear-gradient(145deg, rgba(236, 253, 245, 0.98), rgba(255, 255, 255, 0.96));
+      }
+
+      .record-card.cancelled {
+        border-color: rgba(239, 68, 68, 0.24);
+        background: linear-gradient(145deg, rgba(254, 242, 242, 0.98), rgba(255, 255, 255, 0.96));
+      }
+
+      .record-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .record-customer {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.12;
+      }
+
+      .record-number {
+        margin-top: 3px;
+        font-size: 14px;
+        color: #475569;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .status-chip.pending {
+        color: #b45309;
+        background: #ffedd5;
+      }
+
+      .status-chip.paid {
+        color: #166534;
+        background: #dcfce7;
+      }
+
+      .status-chip.cancelled {
+        color: #b91c1c;
+        background: #fee2e2;
+      }
+
+      .record-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .record-meta-item {
+        padding: 9px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(255, 255, 255, 0.74);
+      }
+
+      .record-meta-item .meta-label {
+        font-size: 11px;
+        color: #64748b;
+      }
+
+      .record-meta-item .meta-value {
+        margin-top: 3px;
         font-size: 15px;
-        line-height: 1.7;
+        font-weight: 700;
+        line-height: 1.15;
       }
 
-      .spinner {
-        width: 56px;
-        height: 56px;
-        margin: 22px auto 18px;
-        border-radius: 50%;
-        border: 4px solid rgba(15, 118, 110, 0.14);
-        border-top-color: var(--brand);
-        animation: spin 0.9s linear infinite;
+      .record-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 11px;
       }
 
-      .link {
+      .mini-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        color: #1f2937;
+        background: rgba(255, 255, 255, 0.82);
+      }
+
+      .mini-btn.primary {
+        color: #ffffff;
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+      }
+
+      .mini-btn.warn {
+        color: #ffffff;
+        border-color: transparent;
+        background: linear-gradient(135deg, #ea580c, #f97316);
+      }
+
+      .fab-create {
+        position: fixed;
+        right: 36px;
+        bottom: 28px;
+        z-index: 2000;
+        width: 72px;
+        height: 72px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        margin-top: 14px;
-        color: var(--brand);
-        font-weight: 700;
-        text-decoration: none;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--brand), #14b8a6);
+        color: #ffffff;
+        box-shadow: 0 20px 36px rgba(15, 118, 110, 0.28);
+        cursor: pointer;
+        transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
       }
 
-      @keyframes spin {
+      .fab-create:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 24px 42px rgba(15, 118, 110, 0.32);
+      }
+
+      .fab-create .plus {
+        font-size: 42px;
+        line-height: 1;
+        font-weight: 400;
+        transform: translateY(-2px);
+      }
+
+      .side-stack {
+        display: grid;
+        gap: 12px;
+      }
+
+      .tracker-list {
+        display: grid;
+        gap: 9px;
+      }
+
+      .tracker-item {
+        padding: 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(255, 255, 255, 0.78);
+      }
+
+      .tracker-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .tracker-label-wrap {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .tracker-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .tracker-label {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .tracker-count {
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .tracker-sub {
+        margin-top: 4px;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      .tracker-bar {
+        margin-top: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: rgba(226, 232, 240, 0.7);
+        overflow: hidden;
+      }
+
+      .tracker-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        transition: width 0.24s ease;
+      }
+
+      .debtor-list {
+        display: grid;
+        gap: 9px;
+      }
+
+      .debtor-item {
+        padding: 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .debtor-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: baseline;
+      }
+
+      .debtor-name {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .debtor-amount {
+        font-size: 18px;
+        font-weight: 700;
+        color: #ea580c;
+      }
+
+      .debtor-meta {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      .debtor-bar {
+        margin-top: 7px;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(226, 232, 240, 0.76);
+        overflow: hidden;
+      }
+
+      .debtor-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(135deg, #60a5fa, #2563eb);
+        transition: width 0.24s ease;
+      }
+
+      .latest-card {
+        padding: 14px;
+        border-radius: 16px;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .latest-number {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1;
+      }
+
+      .latest-customer {
+        margin-top: 8px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .latest-meta {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      .empty-state {
+        border: 1px dashed rgba(148, 163, 184, 0.32);
+        border-radius: 14px;
+        padding: 18px;
+        text-align: center;
+        color: #64748b;
+        background: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+      }
+
+      .loading .record-list,
+      .loading .debtor-list,
+      .loading .tracker-list,
+      .loading .latest-wrap {
+        opacity: 0.72;
+      }
+
+      .loader-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 3400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.24);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .loader-overlay[hidden] {
+        display: none;
+      }
+
+      .loader-card {
+        width: min(320px, 100%);
+        display: grid;
+        place-items: center;
+        gap: 14px;
+        padding: 28px 24px;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
+        text-align: center;
+      }
+
+      .loader-spinner {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 4px solid rgba(15, 118, 110, 0.14);
+        border-top-color: var(--brand);
+        animation: page-spin 0.78s linear infinite;
+      }
+
+      .loader-title {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .loader-sub {
+        font-size: 13px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      body.ui-overlay-open {
+        overflow: hidden;
+      }
+
+      @keyframes page-spin {
+        from {
+          transform: rotate(0deg);
+        }
+
         to {
           transform: rotate(360deg);
         }
       }
+
+      @media (max-width: 1180px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 820px) {
+        .record-meta-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 560px) {
+        .page {
+          padding: 14px 10px 22px;
+        }
+
+        .hero,
+        .panel {
+          border-radius: 20px;
+        }
+
+        .panel-title {
+          font-size: 26px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .record-meta-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .fab-create {
+          right: 26px;
+          bottom: 24px;
+          width: 64px;
+          height: 64px;
+        }
+
+        .fab-create .plus {
+          font-size: 38px;
+        }
+      }
     </style>
+    <script>
+      (function bootstrapStaticAssets() {
+        window.APP_STATIC_CONFIG = window.APP_STATIC_CONFIG || {};
+        window.__staticConfigReady = Promise.resolve();
+
+        const host = window.location.hostname || '';
+        const isAppsScriptHost = host.includes('script.google');
+        if (isAppsScriptHost) {
+          return;
+        }
+
+        const themeLink = document.createElement('link');
+        themeLink.rel = 'stylesheet';
+        themeLink.href = 'site.css';
+        document.head.appendChild(themeLink);
+
+        window.__staticConfigReady = new Promise((resolve) => {
+          const configScript = document.createElement('script');
+          configScript.src = 'config.js';
+          configScript.onload = resolve;
+          configScript.onerror = resolve;
+          document.head.appendChild(configScript);
+        });
+      })();
+    </script>
   </head>
   <body>
-    <main class="card">
-      <div class="eyebrow">ระบบทะเบียนคุมลูกหนี้</div>
-      <h1>กำลังเปิดหน้า Dashboard</h1>
-      <p>ถ้าเว็บยังไม่เปลี่ยนหน้าอัตโนมัติ ให้กดปุ่มด้านล่างเพื่อเข้าสู่หน้าหลักของระบบ</p>
-      <div class="spinner" aria-hidden="true"></div>
-      <a class="link" id="dashboardLink" href="Dashboard.html">เปิด Dashboard</a>
-    </main>
+    <div class="page" id="app">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">ระบบทะเบียนคุมลูกหนี้เงินบำรุง</div>
+          <h1>ศูนย์ติดตามลูกหนี้</h1>
+          <p>
+            ดูสถานะลูกหนี้และรายการใบแจ้งหนี้จากหน้าเดียว เลือกรายการเพื่อเปิดหน้ารายละเอียด แก้ไขข้อมูล หรือพิมพ์เอกสารซ้ำได้ทันที
+          </p>
+
+          <div class="hero-actions">
+            <button class="button primary" type="button" onclick="openDashboardPage()">เข้า Dashboard</button>
+            <button class="button secondary" type="button" onclick="openLedgerSheet()">เปิดทะเบียนลูกหนี้</button>
+            <button class="button ghost" type="button" onclick="refreshData()">รีเฟรช</button>
+          </div>
+
+          <input
+            id="searchInput"
+            class="search"
+            type="text"
+            placeholder="ค้นหาจากชื่อลูกหนี้, เลขที่ใบแจ้ง, สถานะ"
+            oninput="handleSearchInput(event)"
+          />
+
+          <div class="filter-row" id="filterRow">
+            <button type="button" class="filter-chip active" data-filter="all" onclick="setStatusFilter('all')">
+              ทั้งหมด <span class="count" id="count-all">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-filter="pending" onclick="setStatusFilter('pending')">
+              รอชำระ <span class="count" id="count-pending">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-filter="paid" onclick="setStatusFilter('paid')">
+              ชำระแล้ว <span class="count" id="count-paid">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-filter="cancelled" onclick="setStatusFilter('cancelled')">
+              ยกเลิก <span class="count" id="count-cancelled">0</span>
+            </button>
+          </div>
+
+          <div class="notice" id="noticeBox"></div>
+          <div class="error" id="errorBox"></div>
+          <div class="updated-at" id="updatedAt">กำลังโหลดข้อมูล...</div>
+        </div>
+      </section>
+
+      <section class="stats-grid" id="statsGrid"></section>
+
+      <section class="main-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <h2 class="panel-title">รายการใบแจ้งหนี้</h2>
+            <div class="panel-sub">เลือกรายการที่ต้องการติดตาม แล้วเปิดหน้าเอกสารได้ทันที</div>
+          </div>
+          <div class="panel-body">
+            <div class="record-list" id="recordList"></div>
+          </div>
+        </section>
+
+        <section class="side-stack">
+          <section class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">สถานะติดตาม</h2>
+              <div class="panel-sub">สรุปจำนวนและมูลค่าตามสถานะเอกสาร</div>
+            </div>
+            <div class="panel-body">
+              <div class="tracker-list" id="trackerList"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">อันดับลูกหนี้ค้างชำระ</h2>
+              <div class="panel-sub">เรียงจากยอดค้างสูงสุดเพื่อช่วยติดตามงาน</div>
+            </div>
+            <div class="panel-body">
+              <div class="debtor-list" id="topDebtorList"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">รายการล่าสุด</h2>
+              <div class="panel-sub">อัปเดตเอกสารล่าสุดในระบบ</div>
+            </div>
+            <div class="panel-body latest-wrap" id="latestWrap"></div>
+          </section>
+        </section>
+      </section>
+    </div>
+
+    <div class="loader-overlay" id="loadingOverlay" hidden aria-hidden="true">
+      <div class="loader-card">
+        <div class="loader-spinner" aria-hidden="true"></div>
+        <div class="loader-title" id="loadingOverlayTitle">กำลังโหลดข้อมูล</div>
+        <div class="loader-sub" id="loadingOverlayText">ระบบกำลังดึงข้อมูลจาก API กรุณารอสักครู่</div>
+      </div>
+    </div>
+
+    <button class="fab-create" type="button" title="เพิ่มใบแจ้งหนี้" aria-label="เพิ่มใบแจ้งหนี้" onclick="openCreateForm()">
+      <span class="plus">+</span>
+    </button>
 
     <script>
-      (function redirectToDashboard() {
-        const target = new URL('Dashboard.html', window.location.href);
-        target.search = window.location.search;
-        target.hash = window.location.hash;
-        const link = document.getElementById('dashboardLink');
-        if (link) {
-          link.href = target.toString();
+      let searchTimer = 0;
+      let appLinks = {};
+      const state = {
+        data: null,
+        statusFilter: 'all'
+      };
+
+      function formatMoney(value) {
+        return Number(value || 0).toLocaleString('th-TH', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      function formatCount(value) {
+        return Number(value || 0).toLocaleString('th-TH', {
+          maximumFractionDigits: 0
+        });
+      }
+
+      function statusToKey(displayStatus) {
+        if (displayStatus === 'ชำระแล้ว') {
+          return 'paid';
         }
-        window.location.replace(target.toString());
-      })();
+        if (displayStatus === 'ยกเลิกใบแจ้งหนี้') {
+          return 'cancelled';
+        }
+        return 'pending';
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function parseLastUpdatedParts(value) {
+        const text = String(value || '').trim();
+        if (!text || text === '-') {
+          return null;
+        }
+
+        const slashPattern = /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/;
+        const slashMatch = slashPattern.exec(text);
+        if (slashMatch) {
+          const day = Number(slashMatch[1]);
+          const month = Number(slashMatch[2]) - 1;
+          let year = Number(slashMatch[3]);
+          if (year > 2400) {
+            year -= 543;
+          }
+          const hour = slashMatch[4] ? Number(slashMatch[4]) : null;
+          const minute = slashMatch[5] ? Number(slashMatch[5]) : null;
+          if (month >= 0 && month <= 11) {
+            return { day, month, yearBe: year + 543, hour, minute };
+          }
+        }
+
+        const thaiPattern = /^(\d{1,2})\s+([^\s]+)\s+(?:พ\.ศ\.\s*)?(\d{4})(?:\s+เวลา(?:ไทย)?\s*(\d{1,2}):(\d{2}))?/;
+        const thaiMatch = thaiPattern.exec(text);
+        if (thaiMatch) {
+          const day = Number(thaiMatch[1]);
+          const monthName = thaiMatch[2].trim();
+          const months = [
+            'มกราคม',
+            'กุมภาพันธ์',
+            'มีนาคม',
+            'เมษายน',
+            'พฤษภาคม',
+            'มิถุนายน',
+            'กรกฎาคม',
+            'สิงหาคม',
+            'กันยายน',
+            'ตุลาคม',
+            'พฤศจิกายน',
+            'ธันวาคม'
+          ];
+          const month = months.findIndex((m) => m === monthName);
+          const yearBe = Number(thaiMatch[3]);
+          const hour = thaiMatch[4] ? Number(thaiMatch[4]) : null;
+          const minute = thaiMatch[5] ? Number(thaiMatch[5]) : null;
+          if (month >= 0) {
+            return { day, month, yearBe, hour, minute };
+          }
+        }
+
+        return null;
+      }
+
+      function formatLastUpdated(value) {
+        const parts = parseLastUpdatedParts(value);
+        if (!parts) {
+          return String(value || '-');
+        }
+        const months = [
+          'มกราคม',
+          'กุมภาพันธ์',
+          'มีนาคม',
+          'เมษายน',
+          'พฤษภาคม',
+          'มิถุนายน',
+          'กรกฎาคม',
+          'สิงหาคม',
+          'กันยายน',
+          'ตุลาคม',
+          'พฤศจิกายน',
+          'ธันวาคม'
+        ];
+        if (parts.hour == null || parts.minute == null) {
+          return `${parts.day} ${months[parts.month]} ${parts.yearBe}`;
+        }
+        const hh = String(parts.hour).padStart(2, '0');
+        const mm = String(parts.minute).padStart(2, '0');
+        return `${parts.day} ${months[parts.month]} ${parts.yearBe} เวลา ${hh}:${mm} น.`;
+      }
+
+      function setBusy(loading, message) {
+        document.getElementById('app').classList.toggle('loading', loading);
+        document.body.classList.toggle('is-busy', loading);
+        document.body.classList.toggle('ui-overlay-open', loading);
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingOverlayText');
+        if (loadingOverlay) {
+          loadingOverlay.hidden = !loading;
+          loadingOverlay.setAttribute('aria-hidden', loading ? 'false' : 'true');
+        }
+        if (loadingText) {
+          loadingText.textContent = message || 'ระบบกำลังดึงข้อมูลจาก API กรุณารอสักครู่';
+        }
+      }
+
+      function showError(message) {
+        const box = document.getElementById('errorBox');
+        box.textContent = message || '';
+        box.style.display = message ? 'block' : 'none';
+      }
+
+      function clearError() {
+        showError('');
+      }
+
+      function showNotice(message) {
+        const box = document.getElementById('noticeBox');
+        box.textContent = message || '';
+        box.style.display = message ? 'block' : 'none';
+      }
+
+      function clearNotice() {
+        showNotice('');
+      }
+
+      function isAppsScriptRuntime() {
+        return Boolean(window.google && google.script && google.script.run);
+      }
+
+      function getQueryParam(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name) || '';
+      }
+
+      function readStoredApiBase() {
+        try {
+          return window.localStorage.getItem('debtor_api_base') || '';
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function writeStoredApiBase(value) {
+        try {
+          window.localStorage.setItem('debtor_api_base', value);
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+
+      async function waitStaticConfigReady() {
+        if (window.__staticConfigReady) {
+          await window.__staticConfigReady;
+        }
+      }
+
+      function normalizeApiBase(value) {
+        const raw = String(value || '').trim();
+        if (!raw || raw.includes('PASTE_YOUR_DEPLOYMENT_ID')) {
+          return '';
+        }
+
+        try {
+          const url = new URL(raw, window.location.href);
+          url.searchParams.set('mode', 'api');
+          url.hash = '';
+          return url.toString();
+        } catch (error) {
+          return '';
+        }
+      }
+
+      function isFileProtocol() {
+        return window.location.protocol === 'file:';
+      }
+
+      function getConfigApiBaseUrl() {
+        const configValue = normalizeApiBase(window.APP_STATIC_CONFIG && window.APP_STATIC_CONFIG.apiBase);
+        if (configValue) {
+          writeStoredApiBase(configValue);
+          return configValue;
+        }
+        return '';
+      }
+
+      function getApiBaseUrl() {
+        const queryValue = normalizeApiBase(getQueryParam('apiBase'));
+        if (queryValue) {
+          writeStoredApiBase(queryValue);
+          return queryValue;
+        }
+
+        const configValue = getConfigApiBaseUrl();
+        if (configValue) {
+          return configValue;
+        }
+
+        const storedValue = normalizeApiBase(readStoredApiBase());
+        if (storedValue) {
+          return storedValue;
+        }
+        return '';
+      }
+
+      function ensureApiBaseUrl() {
+        const base = getApiBaseUrl();
+        if (base) {
+          return base;
+        }
+        throw new Error('ยังไม่พบ API URL กรุณากำหนดค่า apiBase ในไฟล์ config.js');
+      }
+
+      function buildApiUrl(action, params) {
+        const url = new URL(ensureApiBaseUrl());
+        url.searchParams.set('mode', 'api');
+        if (action) {
+          url.searchParams.set('action', action);
+        }
+
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+        return url.toString();
+      }
+
+      function buildStaticPageUrl(fileName, params) {
+        if (isFileProtocol()) {
+          const searchParams = new URLSearchParams();
+          const apiBase = getApiBaseUrl();
+          if (apiBase) {
+            searchParams.set('apiBase', apiBase);
+          }
+          Object.keys(params || {}).forEach((key) => {
+            const value = params[key];
+            if (value === '' || value === null || typeof value === 'undefined') {
+              return;
+            }
+            searchParams.set(key, String(value));
+          });
+          const query = searchParams.toString();
+          return query ? `${fileName}?${query}` : fileName;
+        }
+
+        const url = new URL(fileName, window.location.href);
+        const apiBase = getApiBaseUrl();
+        if (apiBase) {
+          url.searchParams.set('apiBase', apiBase);
+        }
+        Object.keys(params || {}).forEach((key) => {
+          const value = params[key];
+          if (value === '' || value === null || typeof value === 'undefined') {
+            return;
+          }
+          url.searchParams.set(key, String(value));
+        });
+        return url.toString();
+      }
+
+      function buildDashboardPageUrl() {
+        if (isAppsScriptRuntime()) {
+          return appLinks.dashboardUrl || '';
+        }
+        return buildStaticPageUrl('Dashboard.html');
+      }
+
+      function buildFormPageUrl() {
+        if (isAppsScriptRuntime()) {
+          return appLinks.formUrl || '';
+        }
+        return buildStaticPageUrl('InvoiceForm.html');
+      }
+
+      function buildDetailPageUrl(recordId) {
+        if (isAppsScriptRuntime()) {
+          const base = appLinks.detailUrl || '';
+          return base ? `${base}${base.includes('?') ? '&' : '?'}recordId=${encodeURIComponent(recordId || '')}` : '';
+        }
+        return buildStaticPageUrl('DocumentDetail.html', { recordId });
+      }
+
+      function parseApiPayload(text) {
+        try {
+          return JSON.parse(text);
+        } catch (error) {
+          throw new Error('API ตอบกลับไม่ถูกต้อง');
+        }
+      }
+
+      async function apiGetViaFetch(url) {
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'omit'
+        });
+        const payload = parseApiPayload(await response.text());
+        if (!response.ok || !payload.ok) {
+          throw new Error((payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้');
+        }
+        return payload.data;
+      }
+
+      function apiGetViaJsonp(url) {
+        return new Promise((resolve, reject) => {
+          const callbackName = '__debtorIndexCb' + Date.now() + Math.floor(Math.random() * 1000);
+          const script = document.createElement('script');
+          let timeoutId = 0;
+
+          function cleanup() {
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            if (script.parentNode) {
+              script.parentNode.removeChild(script);
+            }
+          }
+
+          window[callbackName] = (payload) => {
+            cleanup();
+            if (!payload || !payload.ok) {
+              reject(new Error((payload && payload.error && payload.error.message) || 'ไม่สามารถอ่านข้อมูลจาก API ได้'));
+              return;
+            }
+            resolve(payload.data);
+          };
+
+          script.onerror = () => {
+            cleanup();
+            reject(new Error('ไม่สามารถเชื่อมต่อ API ได้'));
+          };
+
+          timeoutId = window.setTimeout(() => {
+            cleanup();
+            reject(new Error('หมดเวลารอการตอบกลับจาก API'));
+          }, 20000);
+
+          const separator = url.includes('?') ? '&' : '?';
+          script.src = `${url}${separator}callback=${encodeURIComponent(callbackName)}`;
+          document.head.appendChild(script);
+        });
+      }
+
+      async function apiGet(action, params) {
+        const url = buildApiUrl(action, params);
+        try {
+          return await apiGetViaFetch(url);
+        } catch (error) {
+          return apiGetViaJsonp(url);
+        }
+      }
+
+      function navigateTo(url) {
+        if (!url) {
+          showError('ยังไม่พบ URL ที่ต้องการใช้งาน');
+          return;
+        }
+        if (isFileProtocol()) {
+          window.location.href = url;
+          return;
+        }
+        if (document.body.classList.contains('page-leaving')) {
+          return;
+        }
+        document.body.classList.remove('page-ready');
+        document.body.classList.add('page-leaving');
+        window.setTimeout(() => {
+          window.location.assign(url);
+        }, 130);
+      }
+
+      function openUrl(url) {
+        if (!url) {
+          showError('ยังไม่พบลิงก์ที่ต้องการเปิด');
+          return;
+        }
+        const popup = window.open(url, '_blank', 'noopener');
+        if (!popup) {
+          window.location.assign(url);
+          return;
+        }
+        try {
+          popup.focus();
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+
+      function openDashboardPage() {
+        navigateTo(buildDashboardPageUrl());
+      }
+
+      function openCreateForm() {
+        navigateTo(buildFormPageUrl());
+      }
+
+      function openRecordDetail(recordId) {
+        navigateTo(buildDetailPageUrl(recordId));
+      }
+
+      function openLedgerSheet() {
+        const url = appLinks.ledgerUrl;
+        if (!url) {
+          showError('ยังไม่พบลิงก์ทะเบียนลูกหนี้');
+          return;
+        }
+        openUrl(url);
+      }
+
+      function getStatusCounts(summary) {
+        const pending = Number(summary && summary.pendingCount ? summary.pendingCount : 0);
+        const paid = Number(summary && summary.paidCount ? summary.paidCount : 0);
+        const cancelled = Number(summary && summary.cancelledCount ? summary.cancelledCount : 0);
+        return {
+          all: pending + paid + cancelled,
+          pending,
+          paid,
+          cancelled
+        };
+      }
+
+      function renderStatusFilterCounts(summary) {
+        const counts = getStatusCounts(summary || {});
+        document.getElementById('count-all').textContent = formatCount(counts.all);
+        document.getElementById('count-pending').textContent = formatCount(counts.pending);
+        document.getElementById('count-paid').textContent = formatCount(counts.paid);
+        document.getElementById('count-cancelled').textContent = formatCount(counts.cancelled);
+      }
+
+      function setStatusFilter(filterKey) {
+        state.statusFilter = filterKey;
+        const chips = Array.from(document.querySelectorAll('#filterRow [data-filter]'));
+        chips.forEach((chip) => {
+          chip.classList.toggle('active', chip.getAttribute('data-filter') === filterKey);
+        });
+        renderRecordList();
+      }
+
+      function mergeRecords(data) {
+        const source = []
+          .concat(Array.isArray(data && data.recent) ? data.recent : [])
+          .concat(Array.isArray(data && data.outstanding) ? data.outstanding : []);
+        const map = {};
+
+        source.forEach((item) => {
+          const key = String((item && item.recordId) || '').trim();
+          if (!key || map[key]) {
+            return;
+          }
+          map[key] = item;
+        });
+        return Object.keys(map).map((key) => map[key]);
+      }
+
+      function filterRecords(rows) {
+        const activeFilter = state.statusFilter;
+        if (!activeFilter || activeFilter === 'all') {
+          return rows;
+        }
+        return rows.filter((row) => statusToKey(row.displayStatus) === activeFilter);
+      }
+
+      function renderStats(summary) {
+        const cards = [
+          {
+            key: 'total',
+            label: 'ยอดลูกหนี้รวม',
+            value: formatMoney(summary.totalAmount),
+            note: 'ยอดรวมใบแจ้งค่าบริการที่ยังใช้งาน',
+            className: 'total'
+          },
+          {
+            key: 'outstanding',
+            label: 'ยอดค้างชำระ',
+            value: formatMoney(summary.outstandingAmount),
+            note: 'ยอดค้างที่ต้องติดตาม',
+            className: 'outstanding'
+          },
+          {
+            key: 'pending',
+            label: 'รายการรอชำระ',
+            value: formatCount(summary.pendingCount),
+            note: 'จำนวนเอกสารที่ยังไม่ชำระ',
+            className: 'pending'
+          },
+          {
+            key: 'paid',
+            label: 'รายการชำระแล้ว',
+            value: formatCount(summary.paidCount),
+            note: 'จำนวนเอกสารที่ชำระเรียบร้อย',
+            className: 'paid'
+          }
+        ];
+
+        document.getElementById('statsGrid').innerHTML = cards
+          .map((card) => {
+            return `
+              <article class="stat-card ${card.className}">
+                <div class="label">${escapeHtml(card.label)}</div>
+                <div class="value">${escapeHtml(card.value)}</div>
+                <div class="note">${escapeHtml(card.note)}</div>
+              </article>
+            `;
+          })
+          .join('');
+      }
+
+      function renderRecordList() {
+        const container = document.getElementById('recordList');
+        const data = state.data || {};
+        const merged = mergeRecords(data);
+        const rows = filterRecords(merged);
+
+        if (!rows.length) {
+          container.innerHTML = `
+            <div class="empty-state">
+              ยังไม่มีรายการตามเงื่อนไขที่เลือก
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = rows
+          .map((row) => {
+            const statusKey = statusToKey(row.displayStatus);
+            const statusLabel = row.displayStatus || 'รอชำระ';
+            return `
+              <article class="record-card ${statusKey}">
+                <div class="record-head">
+                  <div>
+                    <h3 class="record-customer">${escapeHtml(row.customerName || 'ไม่ระบุชื่อ')}</h3>
+                    <div class="record-number">เลขที่ใบแจ้ง ${escapeHtml(row.invoiceNumber || '-')}</div>
+                  </div>
+                  <span class="status-chip ${statusKey}">${escapeHtml(statusLabel)}</span>
+                </div>
+                <div class="record-meta-grid">
+                  <div class="record-meta-item">
+                    <div class="meta-label">ยอดใบแจ้ง</div>
+                    <div class="meta-value">${formatMoney(row.amount)}</div>
+                  </div>
+                  <div class="record-meta-item">
+                    <div class="meta-label">ยอดค้าง</div>
+                    <div class="meta-value">${formatMoney(row.outstandingAmount)}</div>
+                  </div>
+                  <div class="record-meta-item">
+                    <div class="meta-label">วันที่เอกสาร</div>
+                    <div class="meta-value">${escapeHtml(row.invoiceDate || '-')}</div>
+                  </div>
+                  <div class="record-meta-item">
+                    <div class="meta-label">วันที่ชำระ</div>
+                    <div class="meta-value">${escapeHtml(row.paidDate || '-')}</div>
+                  </div>
+                </div>
+                <div class="record-actions">
+                  <button class="mini-btn primary" type="button" onclick='openRecordDetail(${JSON.stringify(row.recordId || '')})'>
+                    ดูรายละเอียด
+                  </button>
+                  ${
+                    row.invoicePdfUrl
+                      ? `<button class="mini-btn" type="button" onclick='openUrl(${JSON.stringify(row.invoicePdfUrl)})'>พิมพ์ใบแจ้งค่าบริการ</button>`
+                      : ''
+                  }
+                  ${
+                    row.ratePdfUrl
+                      ? `<button class="mini-btn" type="button" onclick='openUrl(${JSON.stringify(row.ratePdfUrl)})'>พิมพ์ใบแจ้งอัตราค่าบริการ</button>`
+                      : ''
+                  }
+                </div>
+              </article>
+            `;
+          })
+          .join('');
+      }
+
+      function renderStatusTracker(statusBreakdown) {
+        const container = document.getElementById('trackerList');
+        const breakdown = statusBreakdown || {};
+        const items = Array.isArray(breakdown.items) ? breakdown.items : [];
+        const totalCount = Number(breakdown.totalCount || 0);
+
+        if (!items.length) {
+          container.innerHTML = '<div class="empty-state">ยังไม่มีข้อมูลสถานะเอกสาร</div>';
+          return;
+        }
+
+        container.innerHTML = items
+          .map((item) => {
+            const percent = totalCount > 0 ? (Number(item.count || 0) / totalCount) * 100 : 0;
+            return `
+              <div class="tracker-item">
+                <div class="tracker-head">
+                  <div class="tracker-label-wrap">
+                    <span class="tracker-dot" style="background:${escapeHtml(item.color || '#94a3b8')}"></span>
+                    <span class="tracker-label">${escapeHtml(item.label || '-')}</span>
+                  </div>
+                  <span class="tracker-count">${formatCount(item.count)}</span>
+                </div>
+                <div class="tracker-sub">
+                  <span>ยอด ${formatMoney(item.amount)}</span>
+                  <span>${percent.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 1 })}%</span>
+                </div>
+                <div class="tracker-bar">
+                  <div class="tracker-fill" style="width:${percent.toFixed(2)}%;background:${escapeHtml(item.color || '#94a3b8')}"></div>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      function renderTopDebtors(topDebtors) {
+        const container = document.getElementById('topDebtorList');
+        const rows = Array.isArray(topDebtors) ? topDebtors : [];
+
+        if (!rows.length) {
+          container.innerHTML = '<div class="empty-state">ยังไม่มีอันดับลูกหนี้ค้างชำระ</div>';
+          return;
+        }
+
+        const maxAmount = Number(rows[0].outstandingAmount || 0);
+        container.innerHTML = rows
+          .map((row, index) => {
+            const width = maxAmount > 0 ? (Number(row.outstandingAmount || 0) / maxAmount) * 100 : 0;
+            return `
+              <div class="debtor-item">
+                <div class="debtor-head">
+                  <div class="debtor-name">${index + 1}. ${escapeHtml(row.customerName || '-')}</div>
+                  <div class="debtor-amount">${formatMoney(row.outstandingAmount)}</div>
+                </div>
+                <div class="debtor-meta">ค้าง ${formatCount(row.documentCount)} รายการ | ล่าสุด ${escapeHtml(row.latestInvoiceDate || '-')}</div>
+                <div class="debtor-bar">
+                  <div class="debtor-fill" style="width:${width.toFixed(2)}%"></div>
+                </div>
+                ${
+                  row.latestRecordId
+                    ? `<div class="record-actions"><button class="mini-btn warn" type="button" onclick='openRecordDetail(${JSON.stringify(
+                        row.latestRecordId
+                      )})'>เปิดรายการล่าสุด</button></div>`
+                    : ''
+                }
+              </div>
+            `;
+          })
+          .join('');
+      }
+
+      function renderLatestRecord(latestRecord) {
+        const container = document.getElementById('latestWrap');
+        const record = latestRecord || null;
+
+        if (!record) {
+          container.innerHTML = '<div class="empty-state">ยังไม่มีรายการล่าสุดในระบบ</div>';
+          return;
+        }
+
+        container.innerHTML = `
+          <article class="latest-card">
+            <h3 class="latest-number">${escapeHtml(record.invoiceNumber || '-')}</h3>
+            <div class="latest-customer">${escapeHtml(record.customerName || 'ไม่ระบุชื่อ')}</div>
+            <div class="latest-meta">สถานะ ${escapeHtml(record.displayStatus || '-')}</div>
+            <div class="latest-meta">วันที่เอกสาร ${escapeHtml(record.invoiceDate || '-')}</div>
+            <div class="latest-meta">อัปเดต ${escapeHtml(record.updatedAt || '-')}</div>
+            <div class="record-actions">
+              <button class="mini-btn primary" type="button" onclick='openRecordDetail(${JSON.stringify(record.recordId || '')})'>ดูรายละเอียด</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderAll() {
+        const data = state.data || {};
+        const summary = data.summary || {
+          totalAmount: 0,
+          outstandingAmount: 0,
+          pendingCount: 0,
+          paidCount: 0,
+          cancelledCount: 0,
+          invoiceCount: 0
+        };
+
+        renderStats(summary);
+        renderStatusFilterCounts(summary);
+        renderRecordList();
+        renderStatusTracker(data.statusBreakdown || {});
+        renderTopDebtors(data.topDebtors || []);
+        renderLatestRecord(data.latestRecord || null);
+        document.getElementById('updatedAt').textContent = 'อัปเดตล่าสุด: ' + formatLastUpdated(data.lastUpdated || '-');
+      }
+
+      async function refreshData(queryOverride) {
+        setBusy(true, 'กำลังโหลดข้อมูลรายการลูกหนี้...');
+        clearError();
+        clearNotice();
+
+        const search = typeof queryOverride === 'string' ? queryOverride : document.getElementById('searchInput').value;
+        if (isAppsScriptRuntime()) {
+          google.script.run
+            .withSuccessHandler((data) => {
+              appLinks = (data && data.links) || {};
+              state.data = data || null;
+              renderAll();
+              setBusy(false);
+            })
+            .withFailureHandler((error) => {
+              setBusy(false);
+              showError((error && error.message) || String(error || 'ไม่สามารถโหลดข้อมูลได้'));
+            })
+            .getDashboardData(search);
+          return;
+        }
+
+        try {
+          const data = await apiGet('dashboard', { query: search });
+          appLinks = (data && data.links) || {};
+          state.data = data || null;
+          renderAll();
+          setBusy(false);
+        } catch (error) {
+          setBusy(false);
+          showError(error && error.message ? error.message : 'ไม่สามารถโหลดข้อมูลได้');
+        }
+      }
+
+      function handleSearchInput(event) {
+        window.clearTimeout(searchTimer);
+        searchTimer = window.setTimeout(() => {
+          refreshData(event.target.value || '');
+        }, 280);
+      }
+
+      function initializeMotion() {
+        const ready = () => {
+          document.body.classList.remove('page-leaving');
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+              document.body.classList.add('page-ready');
+            });
+          });
+        };
+
+        ready();
+        window.addEventListener('pageshow', ready);
+      }
+
+      async function bootstrap() {
+        await waitStaticConfigReady();
+        refreshData('');
+      }
+
+      initializeMotion();
+      bootstrap();
     </script>
   </body>
 </html>

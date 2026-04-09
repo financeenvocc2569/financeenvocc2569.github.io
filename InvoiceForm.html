@@ -32,7 +32,7 @@
         font-family: "Taviraj", serif;
         background:
           radial-gradient(circle at top left, rgba(20, 184, 166, 0.14), transparent 28%),
-          radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 20%),
+          radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 22%),
           linear-gradient(180deg, #f8f5ef 0%, #f4efe6 100%);
       }
 
@@ -142,28 +142,47 @@
         overflow: hidden;
       }
 
-      .floating-back {
+      .fab-back {
         position: fixed;
-        left: 22px;
+        left: 18px;
         top: 18px;
-        z-index: 2400;
-        appearance: none;
-        border: 0;
+        z-index: 2100;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
         border-radius: 999px;
-        min-width: 88px;
-        min-height: 56px;
-        padding: 12px 18px;
-        color: #ffffff;
-        background: linear-gradient(135deg, var(--brand), #14b8a6);
-        box-shadow: 0 18px 32px rgba(15, 118, 110, 0.28);
-        font: inherit;
-        font-size: 14px;
-        font-weight: 700;
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--text);
+        box-shadow: 0 14px 26px rgba(148, 163, 184, 0.18);
         cursor: pointer;
+        font-family: inherit;
+        font-weight: 700;
+        transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease, background 0.14s ease;
       }
 
-      .floating-back:hover {
+      .fab-back:hover {
         transform: translateY(-1px);
+        box-shadow: 0 18px 32px rgba(148, 163, 184, 0.22);
+      }
+
+      .fab-back:active {
+        transform: translateY(0);
+      }
+
+      .fab-back .arrow {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 118, 110, 0.12);
+        color: var(--brand-strong);
+        flex: 0 0 auto;
+        font-size: 18px;
+        line-height: 1;
       }
 
       .form-hero {
@@ -225,7 +244,7 @@
         margin-top: 10px;
         max-width: 48ch;
         font-size: 14px;
-        line-height: 1.7;
+        line-height: 1.6;
         color: var(--muted);
       }
 
@@ -699,6 +718,30 @@
         border-collapse: collapse;
       }
 
+      .items-table {
+        table-layout: fixed;
+      }
+
+      .items-table col.col-line {
+        width: 84px;
+      }
+
+      .items-table col.col-code {
+        width: auto;
+      }
+
+      .items-table col.col-detail {
+        width: auto;
+      }
+
+      .items-table col.col-quantity {
+        width: 148px;
+      }
+
+      .items-table col.col-actions {
+        width: 154px;
+      }
+
       th,
       td {
         padding: 10px 12px;
@@ -717,6 +760,10 @@
         font-size: 12px;
       }
 
+      .items-table th {
+        white-space: nowrap;
+      }
+
       td select,
       td input {
         width: 100%;
@@ -725,6 +772,26 @@
         padding: 10px 11px;
         font: inherit;
         background: #ffffff;
+      }
+
+      .items-table th.quantity-col,
+      .items-table td.quantity-col {
+        text-align: center;
+      }
+
+      .items-table td.quantity-col input {
+        text-align: center;
+      }
+
+      .quantity-input {
+        appearance: textfield;
+        -moz-appearance: textfield;
+      }
+
+      .quantity-input::-webkit-outer-spin-button,
+      .quantity-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
       }
 
       .line-no {
@@ -810,6 +877,103 @@
         pointer-events: none;
       }
 
+      .loader-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 3400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(15, 23, 42, 0.24);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .loader-overlay[hidden] {
+        display: none;
+      }
+
+      .loader-card {
+        width: min(320px, 100%);
+        display: grid;
+        place-items: center;
+        gap: 14px;
+        padding: 28px 24px;
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
+        text-align: center;
+      }
+
+      .loader-spinner {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 4px solid rgba(15, 118, 110, 0.14);
+        border-top-color: var(--brand);
+        animation: form-spin 0.78s linear infinite;
+      }
+
+      .loader-title {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.15;
+      }
+
+      .loader-sub {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 3350;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 22px;
+        background: rgba(15, 23, 42, 0.24);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .modal-backdrop.is-open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: min(520px, 100%);
+        border-radius: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.18);
+        padding: 24px;
+      }
+
+      .modal-title {
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.12;
+      }
+
+      .modal-sub {
+        margin-top: 10px;
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
       .link-row {
         margin-top: 8px;
         display: flex;
@@ -829,6 +993,11 @@
 
       body {
         overflow-x: hidden;
+      }
+
+      body.is-date-picker-open,
+      body.ui-overlay-open {
+        overflow: hidden;
       }
 
       .page,
@@ -855,7 +1024,7 @@
       }
 
       .button,
-      .floating-back,
+      .fab-back,
       .row-remove,
       input,
       textarea,
@@ -869,7 +1038,7 @@
       }
 
       body.is-busy .button,
-      body.is-busy .floating-back,
+      body.is-busy .fab-back,
       body.is-busy .row-remove,
       body.is-busy button {
         cursor: progress !important;
@@ -890,6 +1059,10 @@
           transition: none !important;
           transform: none !important;
         }
+
+        .loader-spinner {
+          animation: none !important;
+        }
       }
 
       @media (max-width: 1100px) {
@@ -903,12 +1076,10 @@
       }
 
       @media (max-width: 720px) {
-        .floating-back {
-          left: 14px;
-          top: 14px;
-          padding: 11px 14px;
-          min-width: 82px;
-          min-height: 52px;
+        .fab-back {
+          left: 12px;
+          top: 12px;
+          padding: 9px 12px;
         }
 
         .form-hero {
@@ -950,6 +1121,15 @@
           justify-content: space-between;
         }
       }
+
+      @keyframes form-spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
     <script>
       (function bootstrapStaticAssets() {
@@ -978,7 +1158,10 @@
     </script>
   </head>
   <body>
-    <button class="floating-back" onclick="handleBack()">กลับ</button>
+    <button class="fab-back" onclick="handleBack()" aria-label="กลับ" title="กลับไปหน้ารายละเอียดเอกสาร">
+      <span class="arrow">‹</span>
+      <span>กลับ</span>
+    </button>
 
     <div class="page" id="app">
       <section class="panel form-hero">
@@ -986,7 +1169,7 @@
           <div class="form-hero-copy">
             <div class="form-hero-eyebrow">ระบบออกใบแจ้งหนี้</div>
             <div class="form-hero-title" id="formHeroTitle">แบบฟอร์มเพิ่มใบแจ้งหนี้</div>
-            <div class="form-hero-subtitle" id="formHeroSubtitle">กรอกข้อมูลหัวเอกสาร รายการบริการ และบันทึกเพื่อสร้าง PDF ตามแม่แบบอัตโนมัติ</div>
+            <div class="form-hero-subtitle" id="formHeroSubtitle">กรอกข้อมูลหลัก เพิ่มรายการ และบันทึกเพื่อสร้างเอกสารทันที</div>
           </div>
           <div class="form-hero-side">
             <div class="hero-badge">
@@ -1011,7 +1194,7 @@
         <div class="panel-header">
           <div>
             <div class="panel-title">ข้อมูลหัวเอกสาร</div>
-            <div class="panel-sub">กรอกข้อมูลหลักของผู้ใช้บริการและเลขที่เอกสาร</div>
+            <div class="panel-sub">ระบุข้อมูลผู้ใช้บริการและวันที่เอกสาร</div>
           </div>
           <div class="inline-actions">
             <span class="chip pending" id="modeChip">โหมดเพิ่มรายการใหม่</span>
@@ -1082,12 +1265,12 @@
             <div class="summary-card rate">
               <div class="label">ยอดประมาณการใบแจ้งอัตราค่าบริการ</div>
               <div class="big" id="rateTotalPreview">0.00</div>
-              <div class="helper">ใช้ประกอบเอกสารอัตราค่าบริการเท่านั้น ไม่นำไปเป็นยอดลูกหนี้</div>
+              <div class="helper">สำหรับใบแจ้งอัตราค่าบริการ</div>
             </div>
             <div class="summary-card invoice">
               <div class="label">ยอดประมาณการใบแจ้งค่าบริการ</div>
               <div class="big" id="invoiceTotalPreview">0.00</div>
-              <div class="helper">ยอดนี้จะถูกใช้เป็นยอดลูกหนี้ในระบบทะเบียนลูกหนี้</div>
+              <div class="helper">ยอดนี้ใช้เป็นยอดลูกหนี้ในระบบ</div>
             </div>
           </div>
         </div>
@@ -1098,7 +1281,7 @@
           <div class="table-card-header">
             <div class="table-head-main">
               <div class="table-title">ใบแจ้งอัตราค่าบริการ</div>
-              <div class="table-sub">รายการฝั่งซ้ายของเอกสารพิมพ์</div>
+              <div class="table-sub">รายการสำหรับใบแจ้งอัตราค่าบริการ</div>
             </div>
             <div class="table-head-actions">
               <div class="count-badge" id="rateCountBadge">0 / 20</div>
@@ -1106,13 +1289,20 @@
             </div>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="items-table">
+              <colgroup>
+                <col class="col-line" />
+                <col class="col-code" />
+                <col class="col-detail" />
+                <col class="col-quantity" />
+                <col class="col-actions" />
+              </colgroup>
               <thead>
                 <tr>
                   <th class="line-no">ลำดับ</th>
                   <th>Test No.</th>
                   <th>รายละเอียด</th>
-                  <th style="width:120px">จำนวน</th>
+                  <th class="quantity-col">จำนวน</th>
                   <th class="row-actions">จัดการ</th>
                 </tr>
               </thead>
@@ -1125,7 +1315,7 @@
           <div class="table-card-header">
             <div class="table-head-main">
               <div class="table-title">ใบแจ้งค่าบริการ</div>
-              <div class="table-sub">รายการฝั่งขวาของเอกสารพิมพ์</div>
+              <div class="table-sub">รายการสำหรับใบแจ้งค่าบริการ</div>
             </div>
             <div class="table-head-actions">
               <div class="count-badge" id="invoiceCountBadge">0 / 20</div>
@@ -1133,13 +1323,20 @@
             </div>
           </div>
           <div class="table-wrap">
-            <table>
+            <table class="items-table">
+              <colgroup>
+                <col class="col-line" />
+                <col class="col-code" />
+                <col class="col-detail" />
+                <col class="col-quantity" />
+                <col class="col-actions" />
+              </colgroup>
               <thead>
                 <tr>
                   <th class="line-no">ลำดับ</th>
                   <th>Test No.</th>
                   <th>รายละเอียด</th>
-                  <th style="width:120px">จำนวน</th>
+                  <th class="quantity-col">จำนวน</th>
                   <th class="row-actions">จัดการ</th>
                 </tr>
               </thead>
@@ -1153,7 +1350,7 @@
         <div class="panel-header">
           <div>
             <div class="panel-title" id="savePanelTitle">บันทึกเอกสาร</div>
-            <div class="panel-sub" id="savePanelSubtitle">เมื่อบันทึก ระบบจะสร้าง PDF ตามแม่แบบทันที แล้วพาไปหน้ารายละเอียดเอกสารเพื่อดูข้อมูล แก้ไข และพิมพ์เอกสาร</div>
+            <div class="panel-sub" id="savePanelSubtitle">บันทึกแล้วระบบจะสร้างเอกสารและพาไปหน้ารายละเอียดอัตโนมัติ</div>
           </div>
         </div>
         <div class="panel-body">
@@ -1206,12 +1403,31 @@
       </div>
     </div>
 
+    <div class="loader-overlay" id="loadingOverlay" hidden aria-hidden="true">
+      <div class="loader-card">
+        <div class="loader-spinner" aria-hidden="true"></div>
+        <div class="loader-title" id="loadingOverlayTitle">กำลังประมวลผล</div>
+        <div class="loader-sub" id="loadingOverlayText">ระบบกำลังดำเนินการ กรุณารอสักครู่</div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="alertModal" aria-hidden="true" onclick="handleAlertBackdropClick(event)">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="alertModalTitle">
+        <div class="modal-title" id="alertModalTitle">แจ้งเตือน</div>
+        <div class="modal-sub" id="alertModalMessage">โปรดตรวจสอบข้อมูลอีกครั้ง</div>
+        <div class="modal-actions">
+          <button class="button primary" id="alertModalOkButton" type="button" onclick="closeAlertModal()">ตกลง</button>
+        </div>
+      </div>
+    </div>
+
     <script>
       let maxRows = 20;
       let catalogOptions = [];
       let catalogByCode = {};
       let appLinks = {};
       let currentDraft = null;
+      let alertModalCloseHandler = null;
       const THAI_MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
       const THAI_YEAR_OFFSET = 543;
       let issueDatePickerState = {
@@ -1266,7 +1482,7 @@
         if (!parts) {
           return '';
         }
-        return `${parts.day} ${THAI_MONTHS[parts.month]} พ.ศ. ${parts.year + THAI_YEAR_OFFSET}`;
+        return `${parts.day} ${THAI_MONTHS[parts.month]} ${parts.year + THAI_YEAR_OFFSET}`;
       }
 
       function getIssueDateYearRange(selectedYear) {
@@ -1351,6 +1567,11 @@
 
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape') {
+            const alertModal = document.getElementById('alertModal');
+            if (alertModal && alertModal.classList.contains('is-open')) {
+              closeAlertModal();
+              return;
+            }
             closeIssueDatePicker();
           }
         });
@@ -1425,10 +1646,20 @@
         }
       }
 
-      function setLoading(loading) {
+      function syncUiOverlayState() {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const alertModal = document.getElementById('alertModal');
+        const hasLoadingOverlay = Boolean(loadingOverlay && !loadingOverlay.hidden);
+        const hasAlertModal = Boolean(alertModal && alertModal.classList.contains('is-open'));
+        document.body.classList.toggle('ui-overlay-open', hasLoadingOverlay || hasAlertModal);
+      }
+
+      function setLoading(loading, message) {
         document.getElementById('app').classList.toggle('loading', loading);
         document.body.classList.toggle('is-busy', loading);
         const saveButton = document.getElementById('saveBtnMain');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingOverlayText');
         const isCancelled = Boolean(
           currentDraft &&
             (currentDraft.systemStatus === 'CANCELLED' || currentDraft.displayStatus === 'ยกเลิกใบแจ้งหนี้')
@@ -1436,18 +1667,73 @@
         if (saveButton) {
           saveButton.disabled = loading || isCancelled;
         }
+        if (loadingOverlay) {
+          loadingOverlay.hidden = !loading;
+          loadingOverlay.setAttribute('aria-hidden', loading ? 'false' : 'true');
+        }
+        if (loadingText && message) {
+          loadingText.textContent = message;
+        }
+        syncUiOverlayState();
       }
 
-      function showError(message) {
+      function openAlertModal(title, message, options) {
+        const settings = Object.assign({ afterClose: null }, options || {});
+        const modal = document.getElementById('alertModal');
+        const titleNode = document.getElementById('alertModalTitle');
+        const messageNode = document.getElementById('alertModalMessage');
+        const okButton = document.getElementById('alertModalOkButton');
+
+        alertModalCloseHandler = typeof settings.afterClose === 'function' ? settings.afterClose : null;
+        titleNode.textContent = title || 'แจ้งเตือน';
+        messageNode.textContent = message || '';
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        syncUiOverlayState();
+        window.setTimeout(() => {
+          if (okButton) {
+            okButton.focus();
+          }
+        }, 0);
+      }
+
+      function closeAlertModal() {
+        const modal = document.getElementById('alertModal');
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        syncUiOverlayState();
+        const callback = alertModalCloseHandler;
+        alertModalCloseHandler = null;
+        if (typeof callback === 'function') {
+          callback();
+        }
+      }
+
+      function handleAlertBackdropClick(event) {
+        if (event && event.target && event.target.id === 'alertModal') {
+          closeAlertModal();
+        }
+      }
+
+      function showError(message, options) {
         const box = document.getElementById('errorBox');
-        box.textContent = message;
-        box.style.display = 'block';
+        box.textContent = message || '';
+        box.style.display = 'none';
+        if (message) {
+          openAlertModal((options && options.title) || 'ตรวจสอบข้อมูลอีกครั้ง', message, options);
+        }
       }
 
       function clearError() {
         const box = document.getElementById('errorBox');
         box.textContent = '';
         box.style.display = 'none';
+      }
+
+      function delay(ms) {
+        return new Promise((resolve) => {
+          window.setTimeout(resolve, ms);
+        });
       }
 
       function showNotice(message, links) {
@@ -1471,6 +1757,10 @@
       function navigateTo(url) {
         if (!url) {
           showError('ยังไม่พบ URL ที่ต้องการใช้งาน กรุณา Deploy ใหม่อีกครั้ง');
+          return;
+        }
+        if (window.location.protocol === 'file:') {
+          window.location.href = url;
           return;
         }
         if (document.body.classList.contains('page-leaving')) {
@@ -1502,7 +1792,10 @@
           showError('ยังไม่พบ URL ที่ต้องการใช้งาน กรุณา Deploy ใหม่อีกครั้ง');
           return;
         }
-        window.open(url, '_blank', 'noopener');
+        const popup = window.open(url, '_blank', 'noopener');
+        if (!popup) {
+          window.location.assign(url);
+        }
       }
 
       function buildRuntimePageUrl(page, params) {
@@ -1567,6 +1860,10 @@
         } catch (error) {
           return '';
         }
+      }
+
+      function isFileProtocol() {
+        return window.location.protocol === 'file:';
       }
 
       function getConfigApiBaseUrl() {
@@ -1635,6 +1932,25 @@
       }
 
       function buildStaticPageUrl(fileName, params) {
+        if (isFileProtocol()) {
+          const searchParams = new URLSearchParams();
+          const apiBase = getApiBaseUrl();
+          if (apiBase) {
+            searchParams.set('apiBase', apiBase);
+          }
+
+          Object.keys(params || {}).forEach((key) => {
+            const value = params[key];
+            if (value === '' || value === null || typeof value === 'undefined') {
+              return;
+            }
+            searchParams.set(key, String(value));
+          });
+
+          const query = searchParams.toString();
+          return query ? `${fileName}?${query}` : fileName;
+        }
+
         const url = new URL(fileName, window.location.href);
         const apiBase = getApiBaseUrl();
         if (apiBase) {
@@ -1652,11 +1968,11 @@
         return url.toString();
       }
 
-      function buildDashboardPageUrl() {
+      function buildIndexPageUrl() {
         if (isAppsScriptRuntime()) {
-          return appLinks.dashboardUrl || buildRuntimePageUrl('dashboard');
+          return appLinks.indexUrl || buildRuntimePageUrl('index');
         }
-        return buildStaticPageUrl('Dashboard.html');
+        return buildStaticPageUrl('index.html');
       }
 
       function buildDetailPageUrl(recordId) {
@@ -1675,7 +1991,7 @@
           navigateTo(buildDetailPageUrl(recordId));
           return;
         }
-        navigateTo(buildDashboardPageUrl());
+        navigateTo(buildIndexPageUrl());
       }
 
       function applyPendingFormContext(recordId) {
@@ -1689,7 +2005,7 @@
 
         if (isEditing) {
           heroTitle.textContent = 'หน้าแก้ไขใบแจ้งหนี้';
-          heroSubtitle.textContent = 'กำลังโหลดข้อมูลเอกสารเดิมจากระบบ เพื่อให้คุณตรวจสอบและแก้ไขข้อมูลล่าสุดได้ทันที';
+          heroSubtitle.textContent = 'กำลังโหลดข้อมูลเดิม เพื่อให้แก้ไขได้ทันที';
           heroModeText.textContent = 'กำลังโหลดรายการเดิม';
           modeChip.className = 'chip edit';
           modeChip.textContent = 'โหมดแก้ไขรายการเดิม';
@@ -1699,7 +2015,7 @@
         }
 
         heroTitle.textContent = 'แบบฟอร์มเพิ่มใบแจ้งหนี้';
-        heroSubtitle.textContent = 'กรอกข้อมูลหัวเอกสาร รายการบริการ และบันทึกเพื่อสร้าง PDF ตามแม่แบบอัตโนมัติ';
+        heroSubtitle.textContent = 'กรอกข้อมูลหลัก เพิ่มรายการ และบันทึกเอกสาร';
         heroModeText.textContent = 'เพิ่มรายการใหม่';
         modeChip.className = 'chip pending';
         modeChip.textContent = 'โหมดเพิ่มรายการใหม่';
@@ -1923,11 +2239,12 @@
                     placeholder="รายละเอียด"
                   />
                 </td>
-                <td>
+                <td class="quantity-col">
                   <input
-                    type="number"
-                    min="0"
-                    step="0.01"
+                    type="text"
+                    inputmode="decimal"
+                    autocomplete="off"
+                    class="quantity-input"
                     data-section="${sectionKey}"
                     data-row="${index}"
                     data-field="quantity"
@@ -1971,17 +2288,17 @@
             : 'แบบฟอร์มเพิ่มใบแจ้งหนี้';
         document.getElementById('formHeroSubtitle').textContent = isEditing
           ? isCancelled
-            ? 'เอกสารรายการนี้ถูกยกเลิกแล้ว คุณยังเปิดดูข้อมูลเดิมได้ แต่ระบบจะไม่อนุญาตให้บันทึกทับหรือยกเลิกซ้ำ'
-            : 'ปรับปรุงข้อมูลเอกสารและรายการบริการได้จากหน้านี้ เมื่อบันทึกแล้วระบบจะสร้าง PDF เวอร์ชันใหม่แทนข้อมูลเดิมทันที'
-          : 'กรอกข้อมูลหัวเอกสาร รายการบริการ และบันทึกเพื่อสร้าง PDF ตามแม่แบบอัตโนมัติ';
+            ? 'เอกสารถูกยกเลิกแล้ว จึงไม่สามารถบันทึกทับได้'
+            : 'แก้ไขข้อมูลและบันทึกเพื่ออัปเดตเอกสารฉบับล่าสุด'
+          : 'กรอกข้อมูลหลัก เพิ่มรายการ และบันทึกเอกสาร';
         document.getElementById('heroInvoiceNumber').textContent = draft.invoiceNumber || '-';
         document.getElementById('heroModeText').textContent = isCancelled ? 'เอกสารถูกยกเลิก' : isEditing ? 'แก้ไขรายการเดิม' : 'เพิ่มรายการใหม่';
         document.getElementById('savePanelTitle').textContent = isEditing ? 'จัดการเอกสารนี้' : 'บันทึกเอกสาร';
         document.getElementById('savePanelSubtitle').textContent = isEditing
           ? isCancelled
-            ? 'เอกสารนี้ถูกยกเลิกแล้ว ระบบปิดการบันทึกแก้ไข แต่คุณยังตรวจสอบข้อมูลเดิมได้จากหน้านี้'
-            : 'เมื่อบันทึกการแก้ไข ระบบจะสร้าง PDF เวอร์ชันใหม่แทนไฟล์เดิมทันที และเก็บข้อมูลล่าสุดไว้ในระบบ'
-          : 'เมื่อบันทึก ระบบจะสร้าง PDF ตามแม่แบบทันที แล้วพาไปหน้ารายละเอียดเอกสารเพื่อดูข้อมูล แก้ไข และพิมพ์เอกสาร';
+            ? 'เอกสารนี้ถูกยกเลิกแล้ว จึงปิดการบันทึกแก้ไข'
+            : 'บันทึกแล้วระบบจะสร้างเอกสารฉบับใหม่แทนข้อมูลเดิม'
+          : 'บันทึกแล้วระบบจะสร้างเอกสารและพาไปหน้ารายละเอียดอัตโนมัติ';
         saveButton.textContent = isEditing ? 'บันทึกการแก้ไข' : 'บันทึกข้อมูล';
         saveButton.disabled = isCancelled;
         editContextNote.style.display = isEditing ? 'block' : 'none';
@@ -2011,6 +2328,94 @@
         return draft;
       }
 
+      function focusLineField(sectionKey, rowIndex, field) {
+        window.setTimeout(() => {
+          const target = document.querySelector(
+            `[data-section="${sectionKey}"][data-row="${rowIndex}"][data-field="${field}"]`
+          );
+          if (target && typeof target.focus === 'function') {
+            target.focus();
+          }
+        }, 40);
+      }
+
+      function getFilledItems(items) {
+        return (Array.isArray(items) ? items : []).filter((item) => {
+          return Boolean(
+            String((item && item.code) || '').trim() ||
+            String((item && item.detail) || '').trim() ||
+            String((item && item.quantity) || '').trim()
+          );
+        });
+      }
+
+      function getDraftValidationError(draft) {
+        if (!draft.issueDate) {
+          return {
+            title: 'กรอกข้อมูลไม่ครบ',
+            message: 'กรุณาเลือกวันที่ออกใบแจ้งหนี้ก่อนบันทึกข้อมูล',
+            afterClose: () => openIssueDatePicker()
+          };
+        }
+        if (!draft.customerName) {
+          return {
+            title: 'กรอกข้อมูลไม่ครบ',
+            message: 'กรุณากรอกชื่อผู้ใช้บริการ',
+            afterClose: () => document.getElementById('customerName').focus()
+          };
+        }
+        if (!draft.customerAddress) {
+          return {
+            title: 'กรอกข้อมูลไม่ครบ',
+            message: 'กรุณากรอกที่อยู่',
+            afterClose: () => document.getElementById('customerAddress').focus()
+          };
+        }
+        if (!draft.invoiceNumber) {
+          return {
+            title: 'ไม่พบเลขที่เอกสาร',
+            message: 'ไม่พบเลขที่ใบแจ้งอัตราค่าบริการ กรุณารีเฟรชหน้าแล้วลองใหม่อีกครั้ง'
+          };
+        }
+
+        const rateItems = getFilledItems(draft.rateItems);
+        const invoiceItems = getFilledItems(draft.invoiceItems);
+        if (!rateItems.length && !invoiceItems.length) {
+          return {
+            title: 'ยังไม่มีรายการเอกสาร',
+            message: 'กรุณากรอกรายการอย่างน้อย 1 รายการก่อนบันทึก'
+          };
+        }
+
+        const sections = [
+          { key: 'rate', label: 'ใบแจ้งอัตราค่าบริการ', items: rateItems },
+          { key: 'invoice', label: 'ใบแจ้งค่าบริการ', items: invoiceItems }
+        ];
+
+        for (const section of sections) {
+          for (const item of section.items) {
+            const rowIndex = Math.max(0, Number(item.line || 1) - 1);
+            if (!String(item.code || '').trim()) {
+              return {
+                title: 'กรอกข้อมูลไม่ครบ',
+                message: `${section.label} แถวที่ ${item.line}: กรุณาเลือก Test No.`,
+                afterClose: () => focusLineField(section.key, rowIndex, 'code')
+              };
+            }
+
+            if (!(Number(item.quantity) > 0)) {
+              return {
+                title: 'กรอกข้อมูลไม่ครบ',
+                message: `${section.label} แถวที่ ${item.line}: จำนวนต้องมากกว่า 0`,
+                afterClose: () => focusLineField(section.key, rowIndex, 'quantity')
+              };
+            }
+          }
+        }
+
+        return null;
+      }
+
       function calculateSectionTotal(sectionKey) {
         let total = 0;
         getSectionItems(sectionKey).forEach((item) => {
@@ -2032,18 +2437,55 @@
         document.getElementById('invoiceTotalPreview').textContent = formatMoney(invoiceTotal);
       }
 
+      function normalizeQuantityInputValue(value) {
+        const raw = String(value || '').replace(/,/g, '.');
+        let result = '';
+        let hasDot = false;
+
+        for (const char of raw) {
+          if (/[0-9]/.test(char)) {
+            result += char;
+            continue;
+          }
+          if (char === '.' && !hasDot) {
+            result += char;
+            hasDot = true;
+          }
+        }
+
+        if (result.startsWith('.')) {
+          result = `0${result}`;
+        }
+
+        return result;
+      }
+
       function attachFormEvents() {
         document.body.addEventListener('input', (event) => {
           const target = event.target;
           if (target && target.dataset && target.dataset.section) {
-            updateDraftItem(target.dataset.section, Number(target.dataset.row), target.dataset.field, target.value);
+            let nextValue = target.value;
+            if (target.dataset.field === 'quantity') {
+              nextValue = normalizeQuantityInputValue(target.value);
+              if (target.value !== nextValue) {
+                target.value = nextValue;
+              }
+            }
+            updateDraftItem(target.dataset.section, Number(target.dataset.row), target.dataset.field, nextValue);
             updateTotalsPreview();
           }
         });
         document.body.addEventListener('change', (event) => {
           const target = event.target;
           if (target && target.dataset && target.dataset.section) {
-            updateDraftItem(target.dataset.section, Number(target.dataset.row), target.dataset.field, target.value);
+            let nextValue = target.value;
+            if (target.dataset.field === 'quantity') {
+              nextValue = normalizeQuantityInputValue(target.value);
+              if (target.value !== nextValue) {
+                target.value = nextValue;
+              }
+            }
+            updateDraftItem(target.dataset.section, Number(target.dataset.row), target.dataset.field, nextValue);
             updateTotalsPreview();
           }
         });
@@ -2057,18 +2499,22 @@
         items[rowIndex][field] = value;
       }
 
-      function addLineItem(sectionKey) {
+      async function addLineItem(sectionKey) {
         clearError();
         clearNotice();
         const items = getSectionItems(sectionKey);
         if (items.length >= maxRows) {
-          showError(`เพิ่มได้สูงสุด ${maxRows} รายการต่อเอกสาร`);
+          showError(`เพิ่มได้สูงสุด ${maxRows} รายการต่อเอกสาร`, { title: 'เพิ่มรายการไม่สำเร็จ' });
           return;
         }
+        setLoading(true, 'กำลังเพิ่มรายการใหม่...');
+        await delay(180);
         items.push(createEmptyItem(items.length + 1));
         currentDraft[sectionKey === 'rate' ? 'rateItems' : 'invoiceItems'] = reindexItems(items);
         renderLineRows(sectionKey, getSectionItems(sectionKey));
         updateTotalsPreview();
+        setLoading(false);
+        focusLineField(sectionKey, items.length - 1, 'code');
       }
 
       function removeLineItem(sectionKey, rowIndex) {
@@ -2087,17 +2533,15 @@
       }
 
       async function saveInvoice() {
-        setLoading(true);
+        const payload = collectDraftFromForm();
+        const validationError = getDraftValidationError(payload);
         clearError();
         clearNotice();
-        const payload = collectDraftFromForm();
-
-        if (!payload.issueDate) {
-          setLoading(false);
-          showError('กรุณาเลือกวันที่ออกใบแจ้งหนี้เป็น วัน เดือน ปี พ.ศ. ก่อนบันทึกข้อมูล');
-          openIssueDatePicker();
+        if (validationError) {
+          showError(validationError.message, validationError);
           return;
         }
+        setLoading(true, 'กำลังบันทึกข้อมูลและสร้างเอกสาร...');
 
         if (isAppsScriptRuntime()) {
           google.script.run
@@ -2107,11 +2551,11 @@
                 navigateTo(result.detailUrl);
                 return;
               }
-              showError('บันทึกข้อมูลแล้ว แต่ไม่พบหน้ารายละเอียดเอกสาร');
+              showError('บันทึกข้อมูลแล้ว แต่ไม่พบหน้ารายละเอียดเอกสาร', { title: 'เปิดหน้าถัดไปไม่สำเร็จ' });
             })
             .withFailureHandler((error) => {
               setLoading(false);
-              showError(error.message || String(error));
+              showError(error.message || String(error), { title: 'บันทึกข้อมูลไม่สำเร็จ' });
             })
             .saveInvoiceAndOpenDetailFromWeb(payload);
           return;
@@ -2124,7 +2568,9 @@
             navigateTo(buildDetailPageUrl(result.recordId));
             return;
           }
-          showError('บันทึกข้อมูลแล้ว แต่ไม่พบรหัสเอกสารสำหรับเปิดหน้ารายละเอียด');
+          showError('บันทึกข้อมูลแล้ว แต่ไม่พบรหัสเอกสารสำหรับเปิดหน้ารายละเอียด', {
+            title: 'เปิดหน้าถัดไปไม่สำเร็จ'
+          });
         } catch (error) {
           if (error && error.code === 'cors_post_blocked') {
             showNotice('กำลังสลับไปบันทึกผ่าน Apps Script โดยตรง');
@@ -2132,7 +2578,7 @@
             return;
           }
           setLoading(false);
-          showError(error.message || String(error));
+          showError(error.message || String(error), { title: 'บันทึกข้อมูลไม่สำเร็จ' });
         }
       }
 
@@ -2146,7 +2592,7 @@
       }
 
       async function bootstrap() {
-        setLoading(true);
+        setLoading(true, 'กำลังเตรียมแบบฟอร์ม...');
         clearError();
         clearNotice();
         const recordId = getQueryParam('recordId');
@@ -2174,7 +2620,7 @@
             })
             .withFailureHandler((error) => {
               setLoading(false);
-              showError(error.message || String(error));
+              showError(error.message || String(error), { title: 'โหลดข้อมูลไม่สำเร็จ' });
             })
             .getInvoiceFormBootstrap(recordId);
           return;
@@ -2194,12 +2640,12 @@
             ? 'เปิดฟอร์มแก้ไขข้อมูลเรียบร้อย'
             : 'เปิดฟอร์มเพิ่มใบแจ้งหนี้ใหม่เรียบร้อย';
           if (apiError) {
-            showError(apiError);
+            showError(apiError, { title: 'เกิดข้อผิดพลาดจากการบันทึกก่อนหน้า' });
           }
           setLoading(false);
         } catch (error) {
           setLoading(false);
-          showError(error.message || String(error));
+          showError(error.message || String(error), { title: 'โหลดข้อมูลไม่สำเร็จ' });
         }
       }
 
